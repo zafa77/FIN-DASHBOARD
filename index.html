@@ -118,6 +118,21 @@ const safeGet=(k,def)=>{try{return JSON.parse(localStorage.getItem(k))??def}catc
 const f=(v,n=3)=>(v>0?'+':'')+Number(v).toLocaleString('ro-RO',{minimumFractionDigits:n,maximumFractionDigits:n});
 const tbody=document.querySelector('#sectors-tbody'), prices={}, stored=safeGet('atlas-sector-moves',{});
 let autoMode=false, refreshBusy=false, lastFetched=null, lastError=null, currentWeightsDate='2026-11-20';
+const PACE_KEY='atlas-api-pace-v5',BUDGET_KEY='atlas-budget-v5',LOCK_KEY='atlas-api-lock-v5',QUOTE_CACHE='atlas-quotes-v5',HIST_CACHE='atlas-history-v5';
+const instance='tab-'+Math.random().toString(36).slice(2);let historical={};let historyAsOf='',historyBusy=false;const udate=()=>new Date().toISOString().slice(0,10);
+function budget(){let x=safeGet(BUDGET_KEY,{});return x.day===udate()?x:{day:udate(),used:0};}
+function takeLock(){const x=safeGet(LOCK_KEY,null);if(x&&Date.now()-x.at<15*60*1000&&x.id!==instance)return false;localStorage.setItem(LOCK_KEY,JSON.stringify({at:Date.now(),id:instance}));return safeGet(LOCK_KEY,{}).id===instance;}
+function freeLock(){if(safeGet(LOCK_KEY,{}).id===instance)localStorage.removeItem(LOCK_KEY);}
+async function pace(n){
+ const last=Number(localStorage.getItem(PACE_KEY)||0),lag=Date.now()-last;
+ if(lag<75000)await pause(75000-lag+100);
+ const b=budget();if(b.used+n>480)throw new Error('Plafon local 480 credite/zi atins; se păstrează cache-ul');
+ b.used+=n;localStorage.setItem(BUDGET_KEY,JSON.stringify(b));localStorage.setItem(PACE_KEY,String(Date.now()));
+ document.getElementById('feed-budget').textContent='API: '+b.used+' / 480 credite estimate în browser azi · Twelve Data Basic 800 / zi, 8 / minut · lot maxim 6 / 75 secunde.';
+}
+const qc=safeGet(QUOTE_CACHE,null);if(qc&&qc.at&&qc.data){Object.assign(prices,qc.data);lastFetched=new Date(qc.at);}
+const hc=safeGet(HIST_CACHE,null);if(hc&&hc.data){historical=hc.data;historyAsOf=hc.date||'';}
+
 sectors.forEach(([name,ticker,weight],index)=>{
  const tr=document.createElement('tr');
  tr.innerHTML=`<td><b>${name}</b></td><td><a target="_blank" rel="noopener" href="https://www.tradingview.com/symbols/${ticker}/">${ticker}</a></td><td class="num" id="w${index}">${weight.toFixed(2)}</td><td class="num"><input class="inp" type="number" step="0.01" id="move${index}" aria-label="Variația ${ticker}" placeholder="—"></td><td class="num contrib" id="c${index}">—</td>`;
@@ -171,7 +186,7 @@ async function loadWeights(){
   const fallback=obj.type==='dated-fallback';
   document.getElementById('weights-status').textContent=(fallback?'Snapshot de rezervă':'Ponderi calculate din SPY')+' · Data sursei: '+currentWeightsDate+' · '+(fallback?'workflow încă neconfirmat':'actualizare publicată automat');
   document.getElementById('weights-status').style.color=fallback?'#f7c46c':'#b8decf';
-  compute();
+  compute();renderNative();
  }catch(e){document.getElementById('weights-status').textContent='Ponderi de rezervă: 20 nov. 2026 · sursa automată indisponibilă';document.getElementById('weights-status').style.color='#f7c46c';}
 }
 loadWeights();
@@ -189,6 +204,7 @@ function updateTiles(){
   b.textContent=q&&base?f(q.change-base.change,2)+' pp':'—';
   b.className='num '+(q&&base?(q.change-base.change>=0?'pos':'neg'):'');
  }
+ renderNative();renderHistory();
 }
 updateTiles();
 function showStatus(message,isError=false){
@@ -239,14 +255,16 @@ async function fetchChunk(chunk,key){
 async function refreshMarket(){
  const key=getKey();if(!key){setMode(false);showStatus('Nu există cheie API. Widgeturile TradingView funcționează în continuare.');return;}
  if(refreshBusy)return;
+ if(lastFetched&&Date.now()-lastFetched.getTime()<60*60*1000){showStatus('Cotații în cache, verificare mai nouă de 60 de minute. Nu consumăm credite API.');return;}
+ if(!takeLock()){showStatus('Alt tab ATLAS face deja actualizarea. Nu duplicăm apelurile API.');return;}
  refreshBusy=true;setMode(true);showStatus('Se încarcă cotațiile pentru '+tickers.length+' simboluri, în tranșe de maximum 7/minut...');
  let loaded=0, errors=[];
  try{
-  for(let i=0;i<tickers.length;i+=7){
-   if(i)await pause(65000);
+  for(let i=0;i<tickers.length;i+=6){
    if(!getKey()){errors.push('Cheia a fost eliminată');break;}
-   const batch=tickers.slice(i,i+7);
+   const batch=tickers.slice(i,i+6);
    try{
+    await pace(batch.length);
     const res=await fetchChunk(batch,key);
     Object.assign(prices,res);loaded+=Object.keys(res).length;
     if(!Object.keys(res).length)errors.push('Nicio cotație pentru '+batch.join(','));
@@ -259,10 +277,10 @@ async function refreshMarket(){
    showStatus('Încărcate '+loaded+' / '+tickers.length+' simboluri. '+(errors.length?'Erori: '+errors.join('; ').slice(0,120):'Actualizare progresivă...'),errors.length>0);
   }
   if(loaded){
-   lastFetched=new Date();document.getElementById('auto-updated').textContent='Ultima verificare: '+lastFetched.toLocaleString('ro-RO',{timeZone:'Europe/Bucharest'});
+   lastFetched=new Date();localStorage.setItem(QUOTE_CACHE,JSON.stringify({at:lastFetched.toISOString(),data:prices}));document.getElementById('auto-updated').textContent='Ultima verificare: '+lastFetched.toLocaleString('ro-RO',{timeZone:'Europe/Bucharest'});
    showStatus('Date API pentru '+loaded+' / '+tickers.length+' simboluri · actualizat '+lastFetched.toLocaleTimeString('ro-RO',{timeZone:'Europe/Bucharest'})+' · '+(errors.length?'Unele simboluri lipsesc: '+errors.join('; ').slice(0,100):'verifică ora ultimei sesiuni.'));
   }else showStatus('Nu au fost primite cotații. '+errors.join('; ').slice(0,150)+'. Păstrăm datele din widgeturi, nu inventăm valori.',true);
- }finally{refreshBusy=false;showStatus(document.getElementById('feed-message').textContent,loaded===0);}
+ }finally{refreshBusy=false;freeLock();showStatus(document.getElementById('feed-message').textContent,loaded===0);}
 }
 document.getElementById('save-key').addEventListener('click',()=>{
  const key=document.getElementById('td-key').value.trim();
@@ -272,11 +290,106 @@ document.getElementById('save-key').addEventListener('click',()=>{
 document.getElementById('clear-key').addEventListener('click',()=>{
  localStorage.removeItem(API_KEY_STORE);setMode(false);showStatus('Cheia a fost ștearsă. Calculatorul revine în modul manual.');
 });
-document.getElementById('refresh-feed').addEventListener('click',()=>refreshMarket());
-if(getKey()){setMode(true);refreshMarket();}else showStatus('Date TradingView automate. Pentru calculatorul numeric, introdu cheia Twelve Data o singură dată.');
+document.getElementById('refresh-feed').addEventListener('click',()=>refreshMarket().then(loadHistory));
+if(getKey()){setMode(true);refreshMarket().then(loadHistory);}else showStatus('Date TradingView automate. Pentru calculatorul numeric, introdu cheia Twelve Data o singură dată.');
 // No background polling on a closed page. Fetch when opened and periodically while user is viewing.
-setInterval(()=>{if(getKey()&&isUsMarketOpen()&&!document.hidden&&!refreshBusy)refreshMarket();},30*60*1000);
-document.addEventListener('visibilitychange',()=>{if(!document.hidden&&getKey()&&isUsMarketOpen()&&!refreshBusy&&(!lastFetched||Date.now()-lastFetched.getTime()>35*60*1000))refreshMarket();});
+setInterval(()=>{if(getKey()&&isUsMarketOpen()&&!document.hidden&&!refreshBusy)refreshMarket().then(loadHistory);},30*60*1000);
+document.addEventListener('visibilitychange',()=>{if(!document.hidden&&getKey()&&isUsMarketOpen()&&!refreshBusy&&(!lastFetched||Date.now()-lastFetched.getTime()>60*60*1000))refreshMarket();});
+
+function histReturn(t,n){
+ const arr=historical[t];if(!Array.isArray(arr)||arr.length<=n)return NaN;
+ const a=arr[0].close,b=arr[n].close;return a>0&&b>0?(a/b-1)*100:NaN;
+}
+const showReturn=(v,n=2)=>Number.isFinite(v)?f(v,n)+'%':'—';
+const colour=v=>!Number.isFinite(v)?'#192638':v>=0?'rgba(29,149,101,'+(0.2+Math.min(Math.abs(v)/6,.48))+')':'rgba(200,65,78,'+(0.2+Math.min(Math.abs(v)/6,.48))+')';
+function renderNative(){
+ const make=(host,items,weighted)=>{
+  const e=document.getElementById(host);if(!e)return;e.replaceChildren();
+  for(const [name,ticker,weight] of items){
+   const q=prices[ticker],v=q?Number(q.change):NaN,a=document.createElement('a');
+   a.className='heat-cell';a.href='https://www.tradingview.com/symbols/'+ticker+'/';a.target='_blank';a.rel='noopener';
+   a.style.background=colour(v);a.style.flexBasis=(weighted?Math.max(12,weight*2.25):23)+'%';
+   const h=document.createElement('strong');h.textContent=ticker;
+   const b=document.createElement('b');b.textContent=showReturn(v);
+   const detail=document.createElement('small');detail.textContent=name+(weighted?' · '+weight.toFixed(1)+'% SPX':' · 5D '+showReturn(histReturn(ticker,5)));
+   a.append(h,b,detail);e.append(a);
+  }
+ };
+ make('spx-heat',sectors,true);
+ make('growth-heat',[
+  ['Nasdaq proxy','QQQ',0],['Semiconductori','SMH',0],['Semiconductori','SOXX',0],['Software','IGV',0],
+  ['Robotică AI','BOTZ',0],['Cloud','SKYY',0],['Cybersecurity','CIBR',0],['Energy uranium','URA',0],
+  ['Equal weight','RSP',0],['Small caps','IWM',0]
+ ],false);
+}
+function renderHistory(){
+ const tbody=document.getElementById('history-tbody');if(!tbody)return;tbody.replaceChildren();
+ const symbols=[...new Set([...sectors.map(x=>x[1]),...themes.map(x=>x[1])])];
+ for(const t of symbols){
+  const tr=document.createElement('tr'),one=prices[t]?Number(prices[t].change):NaN,rv=one-(prices.SPY?Number(prices.SPY.change):NaN);
+  const cols=[t,showReturn(one),showReturn(histReturn(t,5)),showReturn(histReturn(t,20)),Number.isFinite(rv)?f(rv,2)+' pp':'—'];
+  cols.forEach((val,i)=>{
+   const cell=document.createElement('td');cell.className=i?'num '+(i===1?one>=0?'pos':'neg':i===4?rv>=0?'pos':'neg':''):'';
+   if(i===0){const a=document.createElement('a');a.textContent=t;a.href='https://www.tradingview.com/symbols/'+t+'/';a.target='_blank';a.rel='noopener';cell.append(a);}
+   else cell.textContent=val;
+   tr.append(cell);
+  });tbody.append(tr);
+ }
+}
+async function loadHistory(){
+ if(historyBusy||!getKey())return;
+ const day=new Date().toLocaleDateString('en-CA',{timeZone:'America/New_York'});
+ if(historyAsOf===day && Object.keys(historical).length>=18)return;
+ if(!takeLock()){showStatus('Un alt tab folosește API-ul. Istoricul rămâne în cache.');return;}
+ historyBusy=true;const key=getKey();let count=0,fail=[];
+ try{
+  for(let i=0;i<tickers.length;i+=6){
+   const batch=tickers.slice(i,i+6);await pace(batch.length);
+   const params=new URLSearchParams({symbol:batch.join(','),apikey:key,interval:'1day',outputsize:'35'});
+   const res=await fetch('https://api.twelvedata.com/time_series?'+params.toString(),{cache:'no-store'});
+   if(!res.ok)throw Error('Istoric HTTP '+res.status);
+   const out=await res.json();
+   if(out.status==='error'||out.code)throw Error(out.message||'Istoric indisponibil');
+   for(const t of batch){
+    const q=out[t]||(batch.length===1?out:null);
+    const v=Array.isArray(q?.values)?q.values:[];
+    const arr=v.map(x=>({date:String(x.datetime||x.date||'').slice(0,10),close:Number(x.close)})).filter(x=>x.close>0 && x.date).sort((a,b)=>b.date.localeCompare(a.date));
+    if(arr.length>=21){historical[t]=arr;count++;}else fail.push(t);
+   }
+   renderNative();renderHistory();localStorage.setItem(HIST_CACHE,JSON.stringify({date:day,data:historical}));
+   showStatus('Istoric ETF 5D/20D: '+Math.min(i+6,tickers.length)+' / '+tickers.length+' verificate. Lipsesc: '+(fail.join(', ')||'niciunul'));
+  }
+  historyAsOf=day;localStorage.setItem(HIST_CACHE,JSON.stringify({date:day,data:historical}));
+  showStatus('Istoric 5D/20D: '+count+'/'+tickers.length+' · '+(fail.length?'Unele ETF-uri nu au istoric disponibil: '+fail.join(', '):'Actualizare completă.'));
+ }catch(e){showStatus('Istoric parțial: '+e.message+' · păstrăm valorile disponibile.',true);}
+ finally{historyBusy=false;freeLock();}
+}
+async function loadVix(){
+ try{
+  const r=await fetch('./data/vix_30d.json?v='+Date.now(),{cache:'no-store'});if(!r.ok)throw Error('HTTP '+r.status);
+  const p=await r.json(),rows=Array.isArray(p.observations)?p.observations:[];
+  if(rows.length<15)throw Error('Datele Cboe nu au fost publicate încă.');
+  rows.sort((a,b)=>a.date.localeCompare(b.date));
+  const last=rows.at(-1),cutoff=new Date(last.date+'T00:00:00Z');cutoff.setUTCDate(cutoff.getUTCDate()-30);
+  const sample=rows.filter(x=>new Date(x.date+'T00:00:00Z')>=cutoff),vals=sample.map(x=>Number(x.close)).filter(x=>x>0);
+  if(vals.length<10)throw Error('Prea puține ședințe istorice');
+  const value=vals.at(-1),low=Math.min(...vals),high=Math.max(...vals),avg=vals.reduce((s,v)=>s+v,0)/vals.length;
+  document.getElementById('vix-current').textContent=value.toLocaleString('ro-RO',{minimumFractionDigits:2,maximumFractionDigits:2});
+  document.getElementById('vix-date').textContent='Ultima închidere '+last.date+' · '+vals.length+' ședințe / 30 zile calendaristice';
+  document.getElementById('vix-range-position').textContent=high>low?Math.round((value-low)/(high-low)*100)+'/100':'—';
+  const metrics=document.getElementById('vix-metrics');metrics.replaceChildren();
+  for(const [label,val] of [['Min 30D',low.toFixed(2)],['Medie 30D',avg.toFixed(2)],['Max 30D',high.toFixed(2)],['Față de medie',(value-avg>0?'+':'')+(value-avg).toFixed(2)],['Față de prima zi',(value-vals[0]>0?'+':'')+(value-vals[0]).toFixed(2)],['Ședințe',String(vals.length)]]){
+   const cell=document.createElement('div'),b=document.createElement('b'),small=document.createElement('small');b.textContent=val;small.textContent=label;cell.append(b,small);metrics.append(cell);
+  }
+  const svg=document.getElementById('vix-spark'),NS='http://www.w3.org/2000/svg';svg.replaceChildren();
+  const xy=(v,i)=>(14+i/(vals.length-1)*570)+','+(12+(high-v)/Math.max(0.5,high-low)*142);
+  const line=document.createElementNS(NS,'polyline');line.setAttribute('points',vals.map(xy).join(' '));line.setAttribute('stroke','#82baff');line.setAttribute('stroke-width','3');line.setAttribute('fill','none');svg.append(line);
+  const age=(Date.now()-new Date(last.date+'T23:59:59Z').getTime())/86400000;
+  const status=document.getElementById('vix-status');status.textContent=(age>5?'⚠ VIX istoric poate fi învechit. ':'')+'Cotație oficială de închidere, NU real-time. Date: Cboe / '+last.date+'.';status.style.color=age>5?'#f7c46c':'#9abed1';
+ }catch(e){document.getElementById('vix-status').textContent='Istoric VIX indisponibil: '+e.message+' · verifică GitHub Actions.';}
+}
+renderNative();renderHistory();loadVix();
+
 // Keep a visible warning if the last successful API refresh is old.
 setInterval(()=>{if(lastFetched&&Date.now()-lastFetched.getTime()>60*60*1000){document.getElementById('feed-status').textContent='Date API > 60 min';document.getElementById('feed-status').style.color='#f7c46c';}},5*60*1000);
 </script>
