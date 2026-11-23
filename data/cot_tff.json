@@ -1,0 +1,961 @@
+{
+  "report": "CFTC Traders in Financial Futures (TFF) — Futures Only",
+  "asOf": "2026-11-17",
+  "updatedAt": "2026-11-23T17:22:13+00:00",
+  "sourceUrls": [
+    "https://www.cftc.gov/files/dea/history/fut_fin_txt_2026.zip",
+    "https://www.cftc.gov/dea/newcot/FinFutWk.txt"
+  ],
+  "disclaimer": "Positions as of Tuesday, generally released Friday. Weekly changes in holdings are not executed trading volume.",
+  "markets": {
+    "NQ": {
+      "code": "20974+",
+      "name": "NASDAQ-100 Consolidated",
+      "observations": [
+        {
+          "date": "2026-05-26",
+          "openInterest": 330617,
+          "assetManagers": {
+            "long": 118790,
+            "short": 32331,
+            "spreading": 4495,
+            "net": 86459,
+            "netPctOI": 26.151
+          },
+          "leveragedFunds": {
+            "long": 36340,
+            "short": 107016,
+            "spreading": 25363,
+            "net": -70676,
+            "netPctOI": -21.377
+          }
+        },
+        {
+          "date": "2026-06-02",
+          "openInterest": 345837,
+          "assetManagers": {
+            "long": 117527,
+            "short": 37247,
+            "spreading": 4698,
+            "net": 80280,
+            "netPctOI": 23.213
+          },
+          "leveragedFunds": {
+            "long": 38413,
+            "short": 113251,
+            "spreading": 28860,
+            "net": -74838,
+            "netPctOI": -21.64
+          }
+        },
+        {
+          "date": "2026-06-09",
+          "openInterest": 334790,
+          "assetManagers": {
+            "long": 115987,
+            "short": 31550,
+            "spreading": 3443,
+            "net": 84437,
+            "netPctOI": 25.221
+          },
+          "leveragedFunds": {
+            "long": 46901,
+            "short": 103655,
+            "spreading": 33872,
+            "net": -56754,
+            "netPctOI": -16.952
+          }
+        },
+        {
+          "date": "2026-06-16",
+          "openInterest": 375254,
+          "assetManagers": {
+            "long": 108630,
+            "short": 37497,
+            "spreading": 4495,
+            "net": 71133,
+            "netPctOI": 18.956
+          },
+          "leveragedFunds": {
+            "long": 46150,
+            "short": 97618,
+            "spreading": 52744,
+            "net": -51468,
+            "netPctOI": -13.716
+          }
+        },
+        {
+          "date": "2026-06-23",
+          "openInterest": 276807,
+          "assetManagers": {
+            "long": 99674,
+            "short": 35896,
+            "spreading": 3072,
+            "net": 63778,
+            "netPctOI": 23.041
+          },
+          "leveragedFunds": {
+            "long": 37284,
+            "short": 94687,
+            "spreading": 11740,
+            "net": -57403,
+            "netPctOI": -20.738
+          }
+        },
+        {
+          "date": "2026-06-30",
+          "openInterest": 296634,
+          "assetManagers": {
+            "long": 103697,
+            "short": 35502,
+            "spreading": 3611,
+            "net": 68195,
+            "netPctOI": 22.99
+          },
+          "leveragedFunds": {
+            "long": 31507,
+            "short": 111451,
+            "spreading": 18386,
+            "net": -79944,
+            "netPctOI": -26.95
+          }
+        },
+        {
+          "date": "2026-07-07",
+          "openInterest": 303152,
+          "assetManagers": {
+            "long": 112383,
+            "short": 32521,
+            "spreading": 2969,
+            "net": 79862,
+            "netPctOI": 26.344
+          },
+          "leveragedFunds": {
+            "long": 39088,
+            "short": 107567,
+            "spreading": 17550,
+            "net": -68479,
+            "netPctOI": -22.589
+          }
+        },
+        {
+          "date": "2026-07-14",
+          "openInterest": 307355,
+          "assetManagers": {
+            "long": 107660,
+            "short": 32738,
+            "spreading": 3379,
+            "net": 74922,
+            "netPctOI": 24.376
+          },
+          "leveragedFunds": {
+            "long": 32731,
+            "short": 113054,
+            "spreading": 22035,
+            "net": -80323,
+            "netPctOI": -26.134
+          }
+        },
+        {
+          "date": "2026-07-21",
+          "openInterest": 311523,
+          "assetManagers": {
+            "long": 105690,
+            "short": 32096,
+            "spreading": 3478,
+            "net": 73594,
+            "netPctOI": 23.624
+          },
+          "leveragedFunds": {
+            "long": 32255,
+            "short": 122842,
+            "spreading": 25102,
+            "net": -90587,
+            "netPctOI": -29.079
+          }
+        },
+        {
+          "date": "2026-07-28",
+          "openInterest": 319776,
+          "assetManagers": {
+            "long": 107930,
+            "short": 30190,
+            "spreading": 4107,
+            "net": 77740,
+            "netPctOI": 24.311
+          },
+          "leveragedFunds": {
+            "long": 47364,
+            "short": 124324,
+            "spreading": 25988,
+            "net": -76960,
+            "netPctOI": -24.067
+          }
+        },
+        {
+          "date": "2026-08-04",
+          "openInterest": 334748,
+          "assetManagers": {
+            "long": 100767,
+            "short": 35515,
+            "spreading": 5113,
+            "net": 65252,
+            "netPctOI": 19.493
+          },
+          "leveragedFunds": {
+            "long": 40114,
+            "short": 140754,
+            "spreading": 31829,
+            "net": -100640,
+            "netPctOI": -30.064
+          }
+        },
+        {
+          "date": "2026-08-11",
+          "openInterest": 302340,
+          "assetManagers": {
+            "long": 105223,
+            "short": 42634,
+            "spreading": 4762,
+            "net": 62589,
+            "netPctOI": 20.702
+          },
+          "leveragedFunds": {
+            "long": 30345,
+            "short": 127072,
+            "spreading": 15858,
+            "net": -96727,
+            "netPctOI": -31.993
+          }
+        },
+        {
+          "date": "2026-08-18",
+          "openInterest": 318247,
+          "assetManagers": {
+            "long": 106790,
+            "short": 37764,
+            "spreading": 6538,
+            "net": 69026,
+            "netPctOI": 21.689
+          },
+          "leveragedFunds": {
+            "long": 40706,
+            "short": 108415,
+            "spreading": 14604,
+            "net": -67709,
+            "netPctOI": -21.276
+          }
+        },
+        {
+          "date": "2026-08-25",
+          "openInterest": 322190,
+          "assetManagers": {
+            "long": 110437,
+            "short": 36206,
+            "spreading": 4809,
+            "net": 74231,
+            "netPctOI": 23.04
+          },
+          "leveragedFunds": {
+            "long": 46573,
+            "short": 90889,
+            "spreading": 14398,
+            "net": -44316,
+            "netPctOI": -13.755
+          }
+        },
+        {
+          "date": "2026-09-01",
+          "openInterest": 320401,
+          "assetManagers": {
+            "long": 109428,
+            "short": 36542,
+            "spreading": 5308,
+            "net": 72886,
+            "netPctOI": 22.748
+          },
+          "leveragedFunds": {
+            "long": 49945,
+            "short": 67979,
+            "spreading": 14852,
+            "net": -18034,
+            "netPctOI": -5.629
+          }
+        },
+        {
+          "date": "2026-09-08",
+          "openInterest": 313941,
+          "assetManagers": {
+            "long": 112107,
+            "short": 35548,
+            "spreading": 4078,
+            "net": 76559,
+            "netPctOI": 24.386
+          },
+          "leveragedFunds": {
+            "long": 42041,
+            "short": 78925,
+            "spreading": 17259,
+            "net": -36884,
+            "netPctOI": -11.749
+          }
+        },
+        {
+          "date": "2026-09-15",
+          "openInterest": 345886,
+          "assetManagers": {
+            "long": 106173,
+            "short": 38385,
+            "spreading": 5202,
+            "net": 67788,
+            "netPctOI": 19.598
+          },
+          "leveragedFunds": {
+            "long": 46085,
+            "short": 59137,
+            "spreading": 30161,
+            "net": -13052,
+            "netPctOI": -3.773
+          }
+        },
+        {
+          "date": "2026-09-22",
+          "openInterest": 298319,
+          "assetManagers": {
+            "long": 107285,
+            "short": 33993,
+            "spreading": 5335,
+            "net": 73292,
+            "netPctOI": 24.568
+          },
+          "leveragedFunds": {
+            "long": 52925,
+            "short": 88595,
+            "spreading": 8654,
+            "net": -35670,
+            "netPctOI": -11.957
+          }
+        },
+        {
+          "date": "2026-09-29",
+          "openInterest": 283950,
+          "assetManagers": {
+            "long": 109589,
+            "short": 38788,
+            "spreading": 4707,
+            "net": 70801,
+            "netPctOI": 24.934
+          },
+          "leveragedFunds": {
+            "long": 44814,
+            "short": 78596,
+            "spreading": 10218,
+            "net": -33782,
+            "netPctOI": -11.897
+          }
+        },
+        {
+          "date": "2026-10-06",
+          "openInterest": 297655,
+          "assetManagers": {
+            "long": 112821,
+            "short": 37965,
+            "spreading": 4599,
+            "net": 74856,
+            "netPctOI": 25.149
+          },
+          "leveragedFunds": {
+            "long": 48139,
+            "short": 74877,
+            "spreading": 11732,
+            "net": -26738,
+            "netPctOI": -8.983
+          }
+        },
+        {
+          "date": "2026-10-13",
+          "openInterest": 294776,
+          "assetManagers": {
+            "long": 113679,
+            "short": 37277,
+            "spreading": 5269,
+            "net": 76402,
+            "netPctOI": 25.919
+          },
+          "leveragedFunds": {
+            "long": 43778,
+            "short": 65669,
+            "spreading": 14043,
+            "net": -21891,
+            "netPctOI": -7.426
+          }
+        },
+        {
+          "date": "2026-10-20",
+          "openInterest": 285882,
+          "assetManagers": {
+            "long": 110983,
+            "short": 32216,
+            "spreading": 4977,
+            "net": 78767,
+            "netPctOI": 27.552
+          },
+          "leveragedFunds": {
+            "long": 48053,
+            "short": 55741,
+            "spreading": 13764,
+            "net": -7688,
+            "netPctOI": -2.689
+          }
+        },
+        {
+          "date": "2026-10-27",
+          "openInterest": 281669,
+          "assetManagers": {
+            "long": 107246,
+            "short": 40874,
+            "spreading": 5322,
+            "net": 66372,
+            "netPctOI": 23.564
+          },
+          "leveragedFunds": {
+            "long": 48004,
+            "short": 53623,
+            "spreading": 10191,
+            "net": -5619,
+            "netPctOI": -1.995
+          }
+        },
+        {
+          "date": "2026-11-03",
+          "openInterest": 307936,
+          "assetManagers": {
+            "long": 110680,
+            "short": 36613,
+            "spreading": 4169,
+            "net": 74067,
+            "netPctOI": 24.053
+          },
+          "leveragedFunds": {
+            "long": 59930,
+            "short": 53816,
+            "spreading": 9583,
+            "net": 6114,
+            "netPctOI": 1.985
+          }
+        },
+        {
+          "date": "2026-11-10",
+          "openInterest": 306100,
+          "assetManagers": {
+            "long": 109101,
+            "short": 35206,
+            "spreading": 5090,
+            "net": 73895,
+            "netPctOI": 24.141
+          },
+          "leveragedFunds": {
+            "long": 56390,
+            "short": 43501,
+            "spreading": 14733,
+            "net": 12889,
+            "netPctOI": 4.211
+          }
+        },
+        {
+          "date": "2026-11-17",
+          "openInterest": 314318,
+          "assetManagers": {
+            "long": 113979,
+            "short": 29598,
+            "spreading": 5355,
+            "net": 84381,
+            "netPctOI": 26.846
+          },
+          "leveragedFunds": {
+            "long": 51004,
+            "short": 63472,
+            "spreading": 15370,
+            "net": -12468,
+            "netPctOI": -3.967
+          }
+        }
+      ]
+    },
+    "ES": {
+      "code": "13874+",
+      "name": "S&P 500 Consolidated",
+      "observations": [
+        {
+          "date": "2026-05-26",
+          "openInterest": 2124493,
+          "assetManagers": {
+            "long": 1208046,
+            "short": 201544,
+            "spreading": 100166,
+            "net": 1006502,
+            "netPctOI": 47.376
+          },
+          "leveragedFunds": {
+            "long": 149204,
+            "short": 608619,
+            "spreading": 67939,
+            "net": -459415,
+            "netPctOI": -21.625
+          }
+        },
+        {
+          "date": "2026-06-02",
+          "openInterest": 2183680,
+          "assetManagers": {
+            "long": 1202632,
+            "short": 217711,
+            "spreading": 94209,
+            "net": 984921,
+            "netPctOI": 45.104
+          },
+          "leveragedFunds": {
+            "long": 160224,
+            "short": 663733,
+            "spreading": 79890,
+            "net": -503509,
+            "netPctOI": -23.058
+          }
+        },
+        {
+          "date": "2026-06-09",
+          "openInterest": 2242004,
+          "assetManagers": {
+            "long": 1208185,
+            "short": 221347,
+            "spreading": 95828,
+            "net": 986838,
+            "netPctOI": 44.016
+          },
+          "leveragedFunds": {
+            "long": 168403,
+            "short": 628093,
+            "spreading": 100286,
+            "net": -459690,
+            "netPctOI": -20.504
+          }
+        },
+        {
+          "date": "2026-06-16",
+          "openInterest": 2624882,
+          "assetManagers": {
+            "long": 1202819,
+            "short": 216242,
+            "spreading": 159078,
+            "net": 986577,
+            "netPctOI": 37.586
+          },
+          "leveragedFunds": {
+            "long": 156858,
+            "short": 680740,
+            "spreading": 178664,
+            "net": -523882,
+            "netPctOI": -19.958
+          }
+        },
+        {
+          "date": "2026-06-23",
+          "openInterest": 1997951,
+          "assetManagers": {
+            "long": 1174108,
+            "short": 179116,
+            "spreading": 93541,
+            "net": 994992,
+            "netPctOI": 49.801
+          },
+          "leveragedFunds": {
+            "long": 184095,
+            "short": 558664,
+            "spreading": 28188,
+            "net": -374569,
+            "netPctOI": -18.748
+          }
+        },
+        {
+          "date": "2026-06-30",
+          "openInterest": 1986279,
+          "assetManagers": {
+            "long": 1152122,
+            "short": 172624,
+            "spreading": 89870,
+            "net": 979498,
+            "netPctOI": 49.313
+          },
+          "leveragedFunds": {
+            "long": 147970,
+            "short": 510569,
+            "spreading": 41365,
+            "net": -362599,
+            "netPctOI": -18.255
+          }
+        },
+        {
+          "date": "2026-07-07",
+          "openInterest": 1987662,
+          "assetManagers": {
+            "long": 1161954,
+            "short": 189255,
+            "spreading": 91231,
+            "net": 972699,
+            "netPctOI": 48.937
+          },
+          "leveragedFunds": {
+            "long": 133637,
+            "short": 498596,
+            "spreading": 42173,
+            "net": -364959,
+            "netPctOI": -18.361
+          }
+        },
+        {
+          "date": "2026-07-14",
+          "openInterest": 1959749,
+          "assetManagers": {
+            "long": 1146844,
+            "short": 203822,
+            "spreading": 92865,
+            "net": 943022,
+            "netPctOI": 48.12
+          },
+          "leveragedFunds": {
+            "long": 132631,
+            "short": 503220,
+            "spreading": 43953,
+            "net": -370589,
+            "netPctOI": -18.91
+          }
+        },
+        {
+          "date": "2026-07-21",
+          "openInterest": 1958349,
+          "assetManagers": {
+            "long": 1145470,
+            "short": 214564,
+            "spreading": 93179,
+            "net": 930906,
+            "netPctOI": 47.535
+          },
+          "leveragedFunds": {
+            "long": 141767,
+            "short": 471081,
+            "spreading": 45071,
+            "net": -329314,
+            "netPctOI": -16.816
+          }
+        },
+        {
+          "date": "2026-07-28",
+          "openInterest": 2007178,
+          "assetManagers": {
+            "long": 1160957,
+            "short": 214663,
+            "spreading": 94562,
+            "net": 946294,
+            "netPctOI": 47.145
+          },
+          "leveragedFunds": {
+            "long": 150572,
+            "short": 452944,
+            "spreading": 57901,
+            "net": -302372,
+            "netPctOI": -15.065
+          }
+        },
+        {
+          "date": "2026-08-04",
+          "openInterest": 2140892,
+          "assetManagers": {
+            "long": 1164371,
+            "short": 225287,
+            "spreading": 91724,
+            "net": 939084,
+            "netPctOI": 43.864
+          },
+          "leveragedFunds": {
+            "long": 201532,
+            "short": 534631,
+            "spreading": 55503,
+            "net": -333099,
+            "netPctOI": -15.559
+          }
+        },
+        {
+          "date": "2026-08-11",
+          "openInterest": 2146778,
+          "assetManagers": {
+            "long": 1156714,
+            "short": 206446,
+            "spreading": 95406,
+            "net": 950268,
+            "netPctOI": 44.265
+          },
+          "leveragedFunds": {
+            "long": 197380,
+            "short": 483885,
+            "spreading": 77109,
+            "net": -286505,
+            "netPctOI": -13.346
+          }
+        },
+        {
+          "date": "2026-08-18",
+          "openInterest": 2099170,
+          "assetManagers": {
+            "long": 1167721,
+            "short": 205018,
+            "spreading": 83306,
+            "net": 962703,
+            "netPctOI": 45.861
+          },
+          "leveragedFunds": {
+            "long": 162166,
+            "short": 451601,
+            "spreading": 65694,
+            "net": -289435,
+            "netPctOI": -13.788
+          }
+        },
+        {
+          "date": "2026-08-25",
+          "openInterest": 2074931,
+          "assetManagers": {
+            "long": 1168355,
+            "short": 213379,
+            "spreading": 86000,
+            "net": 954976,
+            "netPctOI": 46.024
+          },
+          "leveragedFunds": {
+            "long": 138765,
+            "short": 467297,
+            "spreading": 56515,
+            "net": -328532,
+            "netPctOI": -15.833
+          }
+        },
+        {
+          "date": "2026-09-01",
+          "openInterest": 2079148,
+          "assetManagers": {
+            "long": 1159145,
+            "short": 222834,
+            "spreading": 86640,
+            "net": 936311,
+            "netPctOI": 45.033
+          },
+          "leveragedFunds": {
+            "long": 150561,
+            "short": 484997,
+            "spreading": 59321,
+            "net": -334436,
+            "netPctOI": -16.085
+          }
+        },
+        {
+          "date": "2026-09-08",
+          "openInterest": 2107535,
+          "assetManagers": {
+            "long": 1155738,
+            "short": 241295,
+            "spreading": 85184,
+            "net": 914443,
+            "netPctOI": 43.389
+          },
+          "leveragedFunds": {
+            "long": 139278,
+            "short": 501365,
+            "spreading": 62323,
+            "net": -362087,
+            "netPctOI": -17.181
+          }
+        },
+        {
+          "date": "2026-09-15",
+          "openInterest": 2483362,
+          "assetManagers": {
+            "long": 1144508,
+            "short": 237854,
+            "spreading": 173357,
+            "net": 906654,
+            "netPctOI": 36.509
+          },
+          "leveragedFunds": {
+            "long": 146263,
+            "short": 458094,
+            "spreading": 183336,
+            "net": -311831,
+            "netPctOI": -12.557
+          }
+        },
+        {
+          "date": "2026-09-22",
+          "openInterest": 1903696,
+          "assetManagers": {
+            "long": 1121081,
+            "short": 184410,
+            "spreading": 93202,
+            "net": 936671,
+            "netPctOI": 49.203
+          },
+          "leveragedFunds": {
+            "long": 119466,
+            "short": 495082,
+            "spreading": 53034,
+            "net": -375616,
+            "netPctOI": -19.731
+          }
+        },
+        {
+          "date": "2026-09-29",
+          "openInterest": 1909989,
+          "assetManagers": {
+            "long": 1106843,
+            "short": 200584,
+            "spreading": 96280,
+            "net": 906259,
+            "netPctOI": 47.448
+          },
+          "leveragedFunds": {
+            "long": 126466,
+            "short": 500473,
+            "spreading": 48341,
+            "net": -374007,
+            "netPctOI": -19.582
+          }
+        },
+        {
+          "date": "2026-10-06",
+          "openInterest": 1949777,
+          "assetManagers": {
+            "long": 1109404,
+            "short": 200102,
+            "spreading": 99381,
+            "net": 909302,
+            "netPctOI": 46.636
+          },
+          "leveragedFunds": {
+            "long": 114660,
+            "short": 530569,
+            "spreading": 53870,
+            "net": -415909,
+            "netPctOI": -21.331
+          }
+        },
+        {
+          "date": "2026-10-13",
+          "openInterest": 1948056,
+          "assetManagers": {
+            "long": 1112656,
+            "short": 194559,
+            "spreading": 96050,
+            "net": 918097,
+            "netPctOI": 47.129
+          },
+          "leveragedFunds": {
+            "long": 121198,
+            "short": 531716,
+            "spreading": 53147,
+            "net": -410518,
+            "netPctOI": -21.073
+          }
+        },
+        {
+          "date": "2026-10-20",
+          "openInterest": 1954969,
+          "assetManagers": {
+            "long": 1104304,
+            "short": 200285,
+            "spreading": 103538,
+            "net": 904019,
+            "netPctOI": 46.242
+          },
+          "leveragedFunds": {
+            "long": 134552,
+            "short": 507421,
+            "spreading": 63247,
+            "net": -372869,
+            "netPctOI": -19.073
+          }
+        },
+        {
+          "date": "2026-10-27",
+          "openInterest": 1978590,
+          "assetManagers": {
+            "long": 1113753,
+            "short": 187606,
+            "spreading": 114971,
+            "net": 926147,
+            "netPctOI": 46.808
+          },
+          "leveragedFunds": {
+            "long": 102967,
+            "short": 502846,
+            "spreading": 54518,
+            "net": -399879,
+            "netPctOI": -20.21
+          }
+        },
+        {
+          "date": "2026-11-03",
+          "openInterest": 2013852,
+          "assetManagers": {
+            "long": 1113850,
+            "short": 183137,
+            "spreading": 118671,
+            "net": 930713,
+            "netPctOI": 46.216
+          },
+          "leveragedFunds": {
+            "long": 122566,
+            "short": 489436,
+            "spreading": 58930,
+            "net": -366870,
+            "netPctOI": -18.217
+          }
+        },
+        {
+          "date": "2026-11-10",
+          "openInterest": 2048000,
+          "assetManagers": {
+            "long": 1118222,
+            "short": 201626,
+            "spreading": 120079,
+            "net": 916596,
+            "netPctOI": 44.756
+          },
+          "leveragedFunds": {
+            "long": 146292,
+            "short": 440983,
+            "spreading": 74454,
+            "net": -294691,
+            "netPctOI": -14.389
+          }
+        },
+        {
+          "date": "2026-11-17",
+          "openInterest": 2129804,
+          "assetManagers": {
+            "long": 1124836,
+            "short": 227288,
+            "spreading": 128198,
+            "net": 897548,
+            "netPctOI": 42.142
+          },
+          "leveragedFunds": {
+            "long": 195401,
+            "short": 420675,
+            "spreading": 81536,
+            "net": -225274,
+            "netPctOI": -10.577
+          }
+        }
+      ]
+    }
+  },
+  "warnings": []
+}
