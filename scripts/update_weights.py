@@ -61,21 +61,51 @@ def parse(data):
    if count<400 or not 97<=total<=103 or any(v<=0 for v in result.values()):continue
    return {k:round(v,4) for k,v in sorted(result.items())},source_date(rows)
  for sheet in workbook.worksheets:
-  print("DIAGNOSTIC worksheet",sheet.title)
-  for i,row in enumerate(sheet.iter_rows(values_only=True)):
-   values=[str(x)[:80] if x is not None else "" for x in row[:14]]
-   if i<20 or any("weight" in v.lower() or "sector" in v.lower() for v in values):
-    print("DIAGNOSTIC row",i,values)
-   if i>=45:break
+  pass
+  pass
  raise ValueError("Complete 11-sector SPY holdings table not found")
+
+def parse_sector_website():
+ from bs4 import BeautifulSoup
+ url="https://www.ssga.com/us/en/intermediary/etfs/state-street-spdr-sp-500-etf-trust-spy"
+ request=Request(url,headers={"User-Agent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 Chrome/126.0.0.0 Safari/537.36","Accept":"text/html"})
+ with urlopen(request,timeout=45) as response:
+  html=response.read(9_000_000).decode("utf-8","replace")
+ soup=BeautifulSoup(html,"html.parser")
+ print("ISSUER-WEB",len(html),"tables",len(soup.find_all("table")),"contains-tech",("Information Technology" in html))
+ for table in soup.find_all("table"):
+  sums={}
+  for tr in table.find_all("tr"):
+   cells=[x.get_text(" ",strip=True) for x in tr.find_all(["th","td"])]
+   if len(cells)<2:continue
+   ticker=TICKERS.get(norm(cells[0]))
+   if ticker:
+    raw=next((x for x in cells[1:] if "%" in x),None)
+    if raw is None:continue
+    value=numeric(raw)
+    if value is not None:sums[ticker]=value
+  if len(sums)==11 and 97<=sum(sums.values())<=103:
+   cleaned={k:round(v,4) for k,v in sorted(sums.items())}
+   whole=soup.get_text(" ",strip=True)
+   m=re.search(r"Fund Sector Breakdown\s+as of\s+([A-Z][a-z]{2}\s+\d{1,2}\s+20\d\d)",whole)
+   asof=datetime.strptime(m.group(1),"%b %d %Y").strftime("%Y-%m-%d") if m else None
+   print("Issuer sector table parsed",asof,cleaned)
+   return cleaned,asof,url
+ raise ValueError("Issuer HTML has no validated 11-sector table")
+
 def main():
  try:
   request=Request(URL,headers={"User-Agent":"Mozilla/5.0 (ATLAS personal financial research)","Accept":"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/octet-stream"})
   with urlopen(request,timeout=45) as response:
    data=response.read(10_000_000)
   if not data.startswith(b"PK"):raise ValueError("Issuer response is not an XLSX file")
-  weights,asof=parse(data)
-  result={"source":"State Street — SPY daily holdings (SPX proxy)","sourceUrl":URL,"asOf":asof,"fetchedAt":datetime.now(timezone.utc).isoformat(timespec="seconds"),"weights":weights,"type":"issuer-holdings-proxy"}
+  try:
+   weights,asof,real_source=parse_sector_website()
+  except Exception as web_error:
+   print("WARNING: fund sector website unavailable:",web_error,file=sys.stderr)
+   weights,asof=parse(data)
+   real_source=URL
+  result={"source":"State Street — SPY daily holdings (SPX proxy)","sourceUrl":real_source,"asOf":asof,"fetchedAt":datetime.now(timezone.utc).isoformat(timespec="seconds"),"weights":weights,"type":"issuer-holdings-proxy"}
   OUT.parent.mkdir(parents=True,exist_ok=True)
   OUT.write_text(json.dumps(result,ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
   print("Updated SPY weights",asof,weights)

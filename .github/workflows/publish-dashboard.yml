@@ -22,7 +22,7 @@ jobs:
         with:
           python-version: '3.12'
       - name: Instaleaza cititorul SPY
-        run: python -m pip install 'openpyxl>=3.1,<4'
+        run: python -m pip install 'openpyxl>=3.1,<4' 'beautifulsoup4>=4.12,<5'
       - name: Actualizeaza sectoarele SPY
         run: python scripts/update_weights.py
       - name: Actualizeaza VIX daily close Cboe
