@@ -49,6 +49,7 @@ header{display:flex;align-items:center;justify-content:space-between;gap:20px;ma
   <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;align-items:center"><div><strong>Conectează o singură dată cheia gratuită Twelve Data</strong><p class="small-note">Cheia rămâne în stocarea acestui browser, <b>nu</b> se publică în GitHub. Poate fi citită de scripturile care rulează pe această pagină.</p></div><a href="https://twelvedata.com/account/api-keys" target="_blank" rel="noopener">Obține o cheie API ↗</a></div>
   <div class="auto-controls"><input id="td-key" type="password" autocomplete="off" placeholder="Introdu cheia API (doar o singură dată)" aria-label="Cheie Twelve Data"><button class="button" id="save-key" type="button">Salvează și activează</button><button class="button" id="clear-key" type="button">Șterge cheia</button><button class="button" id="refresh-feed" type="button">↻ Actualizează acum</button></div>
   <p class="small-note" id="feed-message">TradingView funcționează fără cheie. Pentru calculul automat al randamentelor ai nevoie de cheia gratuită Twelve Data.</p>
+  <p class="small-note" id="feed-budget" role="status">Buget API: maximum 6 credite/lot și plafon conservator în acest browser.</p>
   <p class="small-note">Actualizare controlată la circa 60 minute în sesiunea SUA. Istoric 5D/20D o dată pe zi; max. 6 simboluri/lot, cu pauză. Datele se salvează în browser; reîncărcările excesive consumă credite.</p>
  </div>
  <div class="market-grid" id="market-grid" style="margin-top:12px"></div>
@@ -212,7 +213,7 @@ function updateTiles(){
  }
  renderNative();renderHistory();
 }
-updateTiles();
+// Do not run renderers before const showReturn/colour are initialized.
 function showStatus(message,isError=false){
  document.getElementById('feed-message').textContent=message;
  const tag=document.getElementById('feed-status');tag.textContent=isError?'Verifică API-ul':refreshBusy?'Actualizare în curs':autoMode?'AUTO · min. 60 min':'Fără conexiune API';
@@ -394,7 +395,7 @@ async function loadVix(){
   const status=document.getElementById('vix-status');status.textContent=(age>5?'⚠ VIX istoric poate fi învechit. ':'')+'Cotație oficială de închidere, NU real-time. Date: Cboe / '+last.date+'.';status.style.color=age>5?'#f7c46c':'#9abed1';
  }catch(e){document.getElementById('vix-status').textContent='Istoric VIX indisponibil: '+e.message+' · verifică GitHub Actions.';}
 }
-renderNative();renderHistory();loadVix();
+updateTiles();loadVix();
 
 // Keep a visible warning if the last successful API refresh is old.
 setInterval(()=>{if(lastFetched&&Date.now()-lastFetched.getTime()>60*60*1000){document.getElementById('feed-status').textContent='Date API > 60 min';document.getElementById('feed-status').style.color='#f7c46c';}},5*60*1000);

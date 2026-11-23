@@ -1,0 +1,23 @@
+name: ATLAS - test functional dashboard
+on:
+  push:
+    paths:
+      - 'index.html'
+      - 'tests/**'
+      - 'data/**'
+      - '.github/workflows/test-dashboard.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  browser-script-smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install DOM runtime for test
+        run: npm install --no-save --ignore-scripts jsdom@26.1.0
+      - name: Render dashboard and verify quote/history/VIX with mocked API
+        run: node tests/dashboard-smoke.cjs
