@@ -7,7 +7,7 @@ from pathlib import Path
 from urllib.request import Request, urlopen
 from openpyxl import load_workbook
 
-URL = "https://www.ssga.com/us/en/intermediary/etfs/library-content/products/fund-data/etfs/us/holdings-daily-us-spy.xlsx"
+URL = "https://www.ssga.com/us/en/intermediary/library-content/products/fund-data/etfs/us/holdings-daily-us-en-spy.xlsx"
 OUT = Path("data/sector_weights.json")
 TICKERS = {
  "information technology":"XLK", "technology":"XLK",

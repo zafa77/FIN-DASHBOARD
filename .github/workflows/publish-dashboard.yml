@@ -3,6 +3,7 @@ on:
   push:
     paths:
       - 'scripts/update_vix.py'
+      - 'scripts/update_weights.py'
       - '.github/workflows/publish-dashboard.yml'
   schedule:
     - cron: '17 10 * * 1-5'
