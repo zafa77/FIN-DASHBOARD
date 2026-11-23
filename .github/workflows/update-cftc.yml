@@ -1,0 +1,33 @@
+name: ATLAS - CFTC TFF weekly
+on:
+  push:
+    paths:
+      - 'scripts/update_cot.py'
+      - '.github/workflows/update-cftc.yml'
+  schedule:
+    - cron: '45 22 * * 5'
+    - cron: '15 10 * * 6'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  refresh-cftc-tff:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Preia CFTC TFF Futures Only, NASDAQ-100 + SP500 consolidated
+        run: python scripts/update_cot.py
+      - name: Publica doar schimbari validate
+        run: |
+          git add data/cot_tff.json
+          if git diff --cached --quiet; then
+            echo 'No newer CFTC report'
+            exit 0
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'data: weekly CFTC TFF NQ and ES positioning'
+          git push
