@@ -69,6 +69,7 @@ async function scenario(withKey) {
   if(withKey) {
     await until(()=>doc.querySelector('#market-grid .market-tile b').textContent.includes('1,25'),'Quote value');
     await until(()=>doc.querySelector('#history-tbody tr td:nth-child(3)').textContent!=='—','History 5D');
+    await until(()=>apiCalls.filter(c=>c.type==='history').length===4,'all four ETF history batches');
     assert.equal(apiCalls.filter(c=>c.type==='quote').length,4,'Four requests for 22 ETF quotes');
     assert.equal(apiCalls.filter(c=>c.type==='history').length,4,'Four requests for 22 ETF histories');
     assert.ok(apiCalls.every(c=>c.symbols.length<=6),'Never request more than six symbols at a time');
