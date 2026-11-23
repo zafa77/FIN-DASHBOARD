@@ -6,6 +6,8 @@ const { JSDOM, VirtualConsole } = require('jsdom');
 const html = fs.readFileSync('index.html','utf8');
 const weights = JSON.parse(fs.readFileSync('data/sector_weights.json','utf8'));
 const vix = JSON.parse(fs.readFileSync('data/vix_30d.json','utf8'));
+const cot = JSON.parse(fs.readFileSync('data/cot_tff.json','utf8'));
+
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 
 function response(data) {
@@ -29,6 +31,7 @@ async function scenario(withKey) {
         const url=new URL(String(input),window.location.href);
         if(url.pathname.endsWith('/data/sector_weights.json')) return response(weights);
         if(url.pathname.endsWith('/data/vix_30d.json')) return response(vix);
+        if(url.pathname.endsWith('/data/cot_tff.json')) return response(cot);
         const symbols=(url.searchParams.get('symbol')||'').split(',').filter(Boolean);
         if(url.pathname.endsWith('/quote')) {
           apiCalls.push({type:'quote',symbols});
@@ -66,6 +69,16 @@ async function scenario(withKey) {
   await until(()=>doc.getElementById('vix-current').textContent!=='—','VIX official last close');
   assert.ok(doc.querySelector('#vix-spark polyline'),'VIX historical line');
   assert.ok(doc.getElementById('feed-budget'),'API usage status exists');
+  await until(()=>doc.querySelectorAll('#cot-weeks tr').length===8,'8 weeks CFTC');
+  const nq = cot.markets.NQ.observations.at(-1);
+  const es = cot.markets.ES.observations.at(-1);
+  assert.ok(doc.getElementById('cot-leveraged-net').textContent.includes(Math.abs(nq.leveragedFunds.net).toLocaleString('ro-RO')),'Real CFTC NQ net leveraged position');
+  assert.equal(doc.querySelectorAll('#cot-position-table tr').length,2,'CFTC both investor groups');
+  assert.ok(doc.querySelectorAll('#cot-chart polyline').length===2,'CFTC historical %OI lines');
+  doc.querySelector('[data-cot-market="ES"]').click();
+  await until(()=>doc.getElementById('cot-leveraged-net').textContent.includes(Math.abs(es.leveragedFunds.net).toLocaleString('ro-RO')),'CFTC ES toggle');
+  doc.querySelector('[data-cot-market="NQ"]').click();
+
   if(withKey) {
     await until(()=>doc.querySelector('#market-grid .market-tile b').textContent.includes('1,25'),'Quote value');
     await until(()=>doc.querySelector('#history-tbody tr td:nth-child(3)').textContent!=='—','History 5D');
