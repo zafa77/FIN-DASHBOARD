@@ -60,6 +60,13 @@ def parse(data):
     result={k:100*v for k,v in result.items()};total*=100
    if count<400 or not 97<=total<=103 or any(v<=0 for v in result.values()):continue
    return {k:round(v,4) for k,v in sorted(result.items())},source_date(rows)
+ for sheet in workbook.worksheets:
+  print("DIAGNOSTIC worksheet",sheet.title)
+  for i,row in enumerate(sheet.iter_rows(values_only=True)):
+   values=[str(x)[:80] if x is not None else "" for x in row[:14]]
+   if i<20 or any("weight" in v.lower() or "sector" in v.lower() for v in values):
+    print("DIAGNOSTIC row",i,values)
+   if i>=45:break
  raise ValueError("Complete 11-sector SPY holdings table not found")
 def main():
  try:
