@@ -1,8 +1,20 @@
 {
-  "source": "State Street SPY fund sector breakdown (snapshot fallback)",
+  "source": "State Street — SPY daily holdings (SPX proxy)",
   "sourceUrl": "https://www.ssga.com/us/en/intermediary/etfs/state-street-spdr-sp-500-etf-trust-spy",
   "asOf": "2026-11-20",
-  "fetchedAt": null,
-  "weights": {"XLK":34.3,"XLF":12.88,"XLV":10.76,"XLY":9.71,"XLC":8.86,"XLI":8.33,"XLP":5.55,"XLE":3.69,"XLU":2.24,"XLRE":1.94,"XLB":1.75},
-  "type": "dated-fallback"
+  "fetchedAt": "2026-11-23T16:09:38+00:00",
+  "weights": {
+    "XLB": 1.75,
+    "XLC": 8.86,
+    "XLE": 3.69,
+    "XLF": 12.88,
+    "XLI": 8.33,
+    "XLK": 34.3,
+    "XLP": 5.55,
+    "XLRE": 1.94,
+    "XLU": 2.24,
+    "XLV": 10.76,
+    "XLY": 9.71
+  },
+  "type": "issuer-holdings-proxy"
 }
