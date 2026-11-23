@@ -98,10 +98,10 @@ header{display:flex;align-items:center;justify-content:space-between;gap:20px;ma
  </div>
 </section>
 <section class="section" id="contributie">
- <div class="section-head"><div><h2 class="section-title">04 / Calculatorul contribuției la SPX</h2><p class="section-sub">Ponderi SPY (proxy SPX), cu actualizare automată zilnică dacă este activ GitHub Actions. Variațiile ETF sunt automate cu cheia API sau manuale fără ea.</p></div><a class="source" target="_blank" rel="noopener" href="https://www.ssga.com/us/en/intermediary/etfs/state-street-spdr-sp-500-etf-trust-spy">Sursa ponderilor: State Street ↗</a></div>
+ <div class="section-head"><div><h2 class="section-title">04 / Calculatorul contribuției la SPX</h2><p class="section-sub">Ponderi SPY (proxy SPX), cu actualizare automată zilnică dacă este activ GitHub Actions. Variațiile ETF sunt automate cu cheia API și nu sunt completate manual.</p></div><a class="source" target="_blank" rel="noopener" href="https://www.ssga.com/us/en/intermediary/etfs/state-street-spdr-sp-500-etf-trust-spy">Sursa ponderilor: State Street ↗</a></div>
  <div class="grid23">
   <div class="card"><div class="table-wrap"><table><thead><tr><th>Sector</th><th>ETF</th><th class="num">Pondere SPX (%)</th><th class="num">Variație 1D (%)</th><th class="num">Impact estimat (pp)</th></tr></thead><tbody id="sectors-tbody"></tbody></table></div></div>
-  <div class="card card-pad"><div class="eyebrow" id="contrib-mode">SIMULATOR · INTRODUCERE MANUALĂ</div><p class="small-note" id="weights-status">Ponderi de referință: 20 nov. 2026 · se verifică sursa zilnică...</p><div class="kpi-row"><div class="kpi"><div class="kpi-label">Impact agregat estimat</div><div class="kpi-value" id="sum-result">—</div></div><div class="kpi"><div class="kpi-label">Sectoare pozitive</div><div class="kpi-value" id="positive-sectors">0 / 11</div></div><div class="kpi"><div class="kpi-label">Cea mai mare contribuție</div><div class="kpi-value" id="top-sector" style="font-size:15px">—</div></div></div><div class="chartbar"><div id="upBar" style="background:#42caaa;width:50%"></div><div id="downBar" style="background:#e87982;width:50%"></div></div><p class="muted" style="font-size:12px" id="bar-label">Introdu randamentele pentru calcul.</p><p style="font-size:12px;color:#bed4e8"><b>Formula:</b> pondere sector (%) × variație ETF (%) / 100 = contribuție aproximativă în puncte procentuale.</p><div class="callout" style="margin-bottom:16px">ETF-urile sectoriale urmăresc S&P 500, dar pot exista abateri. Un calcul exact necesită date la nivel de constituent și ponderi actualizate; nu extrapola acest tabel asupra NDX.</div><button class="button" id="resetReturns" type="button">Șterge variațiile zilnice</button><p class="muted" style="font-size:11px;margin-top:12px">Variațiile 1D vin din API; coloana 5D și 20D folosește închideri zilnice, nu flux tick. Prețurile lipsă rămân marcate „—”.</p></div>
+  <div class="card card-pad"><div class="eyebrow" id="contrib-mode">DATE ETF · FĂRĂ SIMULARE</div><p class="small-note" id="weights-status">Ponderi de referință: 20 nov. 2026 · se verifică sursa zilnică...</p><div class="kpi-row"><div class="kpi"><div class="kpi-label">Impact agregat estimat</div><div class="kpi-value" id="sum-result">—</div></div><div class="kpi"><div class="kpi-label">Sectoare pozitive</div><div class="kpi-value" id="positive-sectors">0 / 11</div></div><div class="kpi"><div class="kpi-label">Cea mai mare contribuție</div><div class="kpi-value" id="top-sector" style="font-size:15px">—</div></div></div><div class="chartbar"><div id="upBar" style="background:#42caaa;width:50%"></div><div id="downBar" style="background:#e87982;width:50%"></div></div><p class="muted" style="font-size:12px" id="bar-label">Introdu randamentele pentru calcul.</p><p style="font-size:12px;color:#bed4e8"><b>Formula:</b> pondere sector (%) × variație ETF (%) / 100 = contribuție aproximativă în puncte procentuale.</p><div class="callout" style="margin-bottom:16px">ETF-urile sectoriale urmăresc S&P 500, dar pot exista abateri. Un calcul exact necesită date la nivel de constituent și ponderi actualizate; nu extrapola acest tabel asupra NDX.</div><button class="button" style="display:none" id="resetReturns" type="button" aria-hidden="true">Reset</button><p class="muted" style="font-size:11px;margin-top:12px">Variațiile 1D vin din API; coloana 5D și 20D folosește închideri zilnice, nu flux tick. Prețurile lipsă rămân marcate „—”.</p></div>
  </div>
 </section>
 
@@ -140,7 +140,7 @@ sectors.forEach(([name,ticker,weight],index)=>{
  const input=tr.querySelector('input');
  // Do not carry yesterday's manually typed values into a new day as if they were live.
  const today=new Date().toLocaleDateString('en-CA',{timeZone:'America/New_York'});
- if(safeGet('atlas-sector-date',null)===today && stored[ticker]!==undefined)input.value=stored[ticker];
+ input.value='';input.disabled=true;
  input.addEventListener('input',compute);
 });
 const themeTbody=document.getElementById('themes-tbody');
@@ -212,7 +212,7 @@ function showStatus(message,isError=false){
  const tag=document.getElementById('feed-status');tag.textContent=isError?'Verifică API-ul':refreshBusy?'Actualizare în curs':autoMode?'AUTO · min. 60 min':'Fără conexiune API';
  tag.style.color=isError?'#fb7b84':autoMode?'#46d5ac':'#a9cbed';
 }
-function setMode(mode){autoMode=mode;for(let i=0;i<sectors.length;i++){const inp=document.getElementById('move'+i),q=prices[sectors[i][1]];inp.disabled=mode;if(mode)inp.value=q&&Number.isFinite(Number(q.change))?Number(q.change).toFixed(4):'';}document.getElementById('contrib-mode').textContent=mode?'AUTO · Twelve Data · variații 1D':'SIMULATOR · INTRODUCERE MANUALĂ';compute();}
+function setMode(mode){autoMode=mode;for(let i=0;i<sectors.length;i++){const inp=document.getElementById('move'+i),q=prices[sectors[i][1]];inp.disabled=true;inp.value=q&&Number.isFinite(Number(q.change))?Number(q.change).toFixed(4):'';}document.getElementById('contrib-mode').textContent=mode?'AUTO · Twelve Data · variații 1D':'SIMULATOR · INTRODUCERE MANUALĂ';compute();}
 const API_KEY_STORE='atlas-td-api-key';
 function getKey(){return localStorage.getItem(API_KEY_STORE)||'';}
 function pause(ms){return new Promise(resolve=>setTimeout(resolve,ms));}
@@ -291,7 +291,7 @@ document.getElementById('clear-key').addEventListener('click',()=>{
  localStorage.removeItem(API_KEY_STORE);setMode(false);showStatus('Cheia a fost ștearsă. Calculatorul revine în modul manual.');
 });
 document.getElementById('refresh-feed').addEventListener('click',()=>refreshMarket().then(loadHistory));
-if(getKey()){setMode(true);refreshMarket().then(loadHistory);}else showStatus('Date TradingView automate. Pentru calculatorul numeric, introdu cheia Twelve Data o singură dată.');
+if(getKey()){setMode(true);refreshMarket().then(loadHistory);}else showStatus('Date TradingView automate. Pentru variațiile ETF, introdu cheia Twelve Data o singură dată.');
 // No background polling on a closed page. Fetch when opened and periodically while user is viewing.
 setInterval(()=>{if(getKey()&&isUsMarketOpen()&&!document.hidden&&!refreshBusy)refreshMarket().then(loadHistory);},30*60*1000);
 document.addEventListener('visibilitychange',()=>{if(!document.hidden&&getKey()&&isUsMarketOpen()&&!refreshBusy&&(!lastFetched||Date.now()-lastFetched.getTime()>60*60*1000))refreshMarket();});
