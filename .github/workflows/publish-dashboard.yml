@@ -1,5 +1,9 @@
 name: ATLAS - ponderi SPY si VIX
 on:
+  push:
+    paths:
+      - 'scripts/update_vix.py'
+      - '.github/workflows/publish-dashboard.yml'
   schedule:
     - cron: '17 10 * * 1-5'
     - cron: '35 22 * * 1-5'

@@ -209,10 +209,10 @@ function updateTiles(){
 updateTiles();
 function showStatus(message,isError=false){
  document.getElementById('feed-message').textContent=message;
- const tag=document.getElementById('feed-status');tag.textContent=isError?'Verifică API-ul':refreshBusy?'Actualizare în curs':autoMode?'AUTO · 30 min':'Fără conexiune API';
+ const tag=document.getElementById('feed-status');tag.textContent=isError?'Verifică API-ul':refreshBusy?'Actualizare în curs':autoMode?'AUTO · min. 60 min':'Fără conexiune API';
  tag.style.color=isError?'#fb7b84':autoMode?'#46d5ac':'#a9cbed';
 }
-function setMode(mode){if(mode&&!autoMode){for(let i=0;i<sectors.length;i++)document.getElementById('move'+i).value='';compute();}autoMode=mode;for(let i=0;i<sectors.length;i++)document.getElementById('move'+i).disabled=mode;document.getElementById('contrib-mode').textContent=mode?'AUTO · Twelve Data · variații 1D':'SIMULATOR · INTRODUCERE MANUALĂ';}
+function setMode(mode){autoMode=mode;for(let i=0;i<sectors.length;i++){const inp=document.getElementById('move'+i),q=prices[sectors[i][1]];inp.disabled=mode;if(mode)inp.value=q&&Number.isFinite(Number(q.change))?Number(q.change).toFixed(4):'';}document.getElementById('contrib-mode').textContent=mode?'AUTO · Twelve Data · variații 1D':'SIMULATOR · INTRODUCERE MANUALĂ';compute();}
 const API_KEY_STORE='atlas-td-api-key';
 function getKey(){return localStorage.getItem(API_KEY_STORE)||'';}
 function pause(ms){return new Promise(resolve=>setTimeout(resolve,ms));}
@@ -257,7 +257,7 @@ async function refreshMarket(){
  if(refreshBusy)return;
  if(lastFetched&&Date.now()-lastFetched.getTime()<60*60*1000){showStatus('Cotații în cache, verificare mai nouă de 60 de minute. Nu consumăm credite API.');return;}
  if(!takeLock()){showStatus('Alt tab ATLAS face deja actualizarea. Nu duplicăm apelurile API.');return;}
- refreshBusy=true;setMode(true);showStatus('Se încarcă cotațiile pentru '+tickers.length+' simboluri, în tranșe de maximum 7/minut...');
+ refreshBusy=true;setMode(true);showStatus('Se încarcă cotațiile pentru '+tickers.length+' simboluri, în tranșe de maximum 6 simboluri la minimum 75 secunde...');
  let loaded=0, errors=[];
  try{
   for(let i=0;i<tickers.length;i+=6){
