@@ -76,6 +76,18 @@ async function scenario(withKey) {
   assert.equal(doc.querySelectorAll('#history-tbody tr').length,18,'History table items');
   await until(()=>doc.getElementById('vix-current').textContent!=='—','VIX official last close');
   assert.ok(doc.querySelector('#vix-spark polyline'),'VIX historical line');
+  await until(()=>doc.querySelectorAll('#vix-history-chart path').length===2,'VIX native historical chart');
+  assert.equal(doc.getElementById('vix-chart-current').textContent,doc.getElementById('vix-current').textContent,'VIX charts share the same Cboe closing value');
+  assert.equal(doc.querySelector('[data-vix-period="1M"]').getAttribute('aria-pressed'),'true','1M VIX selected initially');
+  doc.querySelector('[data-vix-period="3M"]').click();
+  assert.equal(doc.querySelector('[data-vix-period="3M"]').getAttribute('aria-pressed'),'true','3M VIX range works');
+  assert.ok(doc.getElementById('vix-chart-range').textContent.includes('3M'),'Historical chart updates range');
+  assert.ok(doc.querySelectorAll('#vix-history-chart .vix-point').length>=10,'Historical VIX daily points');
+  doc.querySelector('[data-vix-period="5D"]').click();
+  assert.equal(doc.querySelectorAll('#vix-history-chart .vix-point').length,6,'5D VIX uses six closing observations for five-day change');
+  doc.querySelector('[data-vix-period="1M"]').click();
+  assert.ok(!html.includes('TVC:VIX|1D'),'Unavailable TradingView VIX embed removed');
+
   assert.ok(doc.getElementById('feed-budget'),'API usage status exists');
   assert.equal(doc.querySelectorAll('#public-weight-grid .public-weight-item').length,11,'Sector weights public without any key');
   assert.equal(doc.querySelectorAll('#sector-pie .sector-pie-slice').length,11,'S&P sector donut has 11 colored slices');

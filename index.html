@@ -105,6 +105,26 @@ body .private-feed,body #contributie,body .nav a[href="#contributie"]{display:no
 @media(max-width:1060px){.sector-pie-layout{grid-template-columns:1fr}.sector-pie-wrap{width:min(100%,340px)}}
 @media(max-width:620px){.sector-pie-layout{padding:12px;gap:15px}.public-weight-grid{grid-template-columns:1fr}.sector-pie-center strong{font-size:28px}}
 
+
+/* VIX: public first-party daily chart from official Cboe data */
+.vix-history-card{min-width:0}
+.vix-history-content{padding:20px 18px 16px;min-height:520px;display:flex;flex-direction:column;gap:16px}
+.vix-history-toolbar{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap}
+.vix-history-details{display:flex;flex-direction:column;gap:4px}
+.vix-history-details strong{font-size:36px;color:#e9f3ff;line-height:1.16;font-weight:850;font-variant-numeric:tabular-nums}
+.vix-history-details>span:last-child{font-size:11px;color:#9bb3cd}
+.vix-periods{display:flex;gap:5px;padding:3px;background:#121e31;border:1px solid #30465e;border-radius:9px}
+.vix-periods button{border:0;border-radius:7px;padding:8px 11px;background:transparent;color:#a9c0d8;cursor:pointer;font:inherit;font-size:11px}
+.vix-periods button.active,.vix-periods button:hover{background:#264663;color:#eef7ff}
+.vix-periods button:focus-visible{outline:2px solid #88beff}
+.vix-chart-frame{display:flex;align-items:center;width:100%;min-height:300px;flex:1}
+#vix-history-chart{display:block;width:100%;height:auto;max-height:340px;overflow:visible}
+.vix-point{cursor:pointer}
+.vix-point:focus-visible{outline:2px solid #c7e9ff}
+.vix-chart-summary{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;border-top:1px solid #293e55;padding-top:13px;color:#97b0ca;font-size:11px}
+#vix-chart-selection{color:#d8e8fa}
+@media(max-width:650px){.vix-history-content{padding:13px;min-height:430px}.vix-chart-frame{min-height:240px}}
+
 </style>
 
 </head>
@@ -219,10 +239,28 @@ body .private-feed,body #contributie,body .nav a[href="#contributie"]{display:no
     <div class="macro-links"><a href="https://www.tradingview.com/symbols/TVC-DXY/" target="_blank" rel="noopener">DXY ↗</a><a href="https://www.tradingview.com/symbols/TVC-US10Y/" target="_blank" rel="noopener">US10Y ↗</a><a href="https://www.tradingview.com/symbols/TVC-US02Y/" target="_blank" rel="noopener">US02Y ↗</a><a href="https://www.tradingview.com/symbols/AMEX-HYG/" target="_blank" rel="noopener">Credit HYG ↗</a></div>
     </div></div>
 
-  <div class="card"><div class="card-h"><strong>VIX · grafic de piață</strong><span>TradingView · evoluție intraday și istoric</span></div><div class="widget medium"><div class="tradingview-widget-container"><div class="tradingview-widget-container__widget"></div>
-   <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-symbol-overview.js" async>
-   {"symbols":[["VIX · Indicele volatilității","TVC:VIX|1D"]],"chartOnly":false,"width":"100%","height":"100%","autosize":true,"locale":"en","colorTheme":"dark","showVolume":false,"showMA":false,"hideDateRanges":false,"hideMarketStatus":false,"hideSymbolLogo":false,"scalePosition":"right","scaleMode":"Percentage","valuesTracking":"1","changeMode":"price-and-percent","chartType":"area","lineWidth":2,"dateRanges":["1d|1","5d|5","1m|1D","3m|1D","12m|1W"]}
-   </script></div></div></div>
+  <div class="card vix-history-card">
+   <div class="card-h"><strong>VIX · grafic istoric Cboe</strong><span>Date oficiale de închidere · fără restricții TradingView</span></div>
+   <div class="vix-history-content">
+    <div class="vix-history-toolbar">
+     <div class="vix-history-details"><span class="eyebrow">EVOLUȚIA VIX</span><strong id="vix-chart-current">—</strong><span id="vix-chart-last-date">Se încarcă istoricul...</span></div>
+     <div class="vix-periods" role="group" aria-label="Interval istoric VIX">
+      <button type="button" data-vix-period="5D" aria-pressed="false">5D</button>
+      <button type="button" class="active" data-vix-period="1M" aria-pressed="true">1M</button>
+      <button type="button" data-vix-period="3M" aria-pressed="false">3M</button>
+     </div>
+    </div>
+    <div class="vix-chart-frame">
+     <svg id="vix-history-chart" role="img" aria-label="Evoluția zilnică a VIX în intervalul selectat" viewBox="0 0 720 315" preserveAspectRatio="xMidYMid meet">
+      <text x="40" y="150" fill="#91a9c4" font-size="14">Se încarcă datele Cboe...</text>
+     </svg>
+    </div>
+    <div class="vix-chart-summary">
+     <span id="vix-chart-selection">Selectează un punct pentru valoare și dată</span>
+     <span id="vix-chart-range">Cboe · închideri zilnice, nu intraday</span>
+    </div>
+   </div>
+  </div>
  </div>
 </section>
 <section class="section" id="contributie">
@@ -650,12 +688,87 @@ async function loadHistory(){
  }catch(e){showStatus('Istoric parțial: '+e.message+' · păstrăm valorile disponibile.',true);}
  finally{historyBusy=false;freeLock();}
 }
+
+let vixHistoryRows=[],vixSelectedPeriod='1M';
+function selectVixPeriod(period){
+ if(!['5D','1M','3M'].includes(period))return;
+ vixSelectedPeriod=period;
+ document.querySelectorAll('[data-vix-period]').forEach(button=>{
+  const selected=button.dataset.vixPeriod===period;
+  button.classList.toggle('active',selected);
+  button.setAttribute('aria-pressed',String(selected));
+ });
+ renderVixHistoryChart();
+}
+function renderVixHistoryChart(){
+ const svg=document.getElementById('vix-history-chart');
+ if(!svg||vixHistoryRows.length<2)return;
+ svg.replaceChildren();
+ const NS='http://www.w3.org/2000/svg',make=(tag,attrs,parent=svg)=>{
+  const node=document.createElementNS(NS,tag);
+  for(const [key,value] of Object.entries(attrs))node.setAttribute(key,String(value));
+  parent.append(node);return node;
+ };
+ const latest=vixHistoryRows.at(-1),cutoff=new Date(latest.date+'T00:00:00Z');
+ cutoff.setUTCDate(cutoff.getUTCDate()-(vixSelectedPeriod==='3M'?90:30));
+ const rows=vixSelectedPeriod==='5D'?vixHistoryRows.slice(-6):vixHistoryRows.filter(r=>new Date(r.date+'T00:00:00Z')>=cutoff);
+ if(rows.length<2)return;
+ const values=rows.map(row=>row.close),small=Math.min(...values),large=Math.max(...values);
+ const margin=Math.max(1.2,(large-small)*.18),low=Math.max(0,small-margin),high=large+margin;
+ const L=42,R=654,T=24,B=260;
+ const x=i=>L+i/(rows.length-1)*(R-L);
+ const y=v=>B-(v-low)/(high-low)*(B-T);
+ const format=n=>Number(n).toLocaleString('ro-RO',{minimumFractionDigits:2,maximumFractionDigits:2});
+ const drawText=(xpos,ypos,t,anchor='start')=>{
+  const label=make('text',{x:xpos,y:ypos,fill:'#9bb5d1','font-size':'12','text-anchor':anchor});
+  label.textContent=t;
+ };
+ for(let i=0;i<=4;i++){
+  const v=low+(high-low)*i/4,position=y(v);
+  make('line',{x1:L,y1:position,x2:R,y2:position,stroke:'#334860','stroke-width':1});
+  drawText(R+11,position+4,format(v));
+ }
+ for(const target of [20,30]){
+  if(target>low&&target<high){
+   const pos=y(target);
+   make('line',{x1:L,y1:pos,x2:R,y2:pos,stroke:'#ecb66e','stroke-width':1,'stroke-dasharray':'5 6',opacity:.65});
+   drawText(L+8,pos-6,'VIX '+target);
+  }
+ }
+ const points=rows.map((row,i)=>[x(i),y(row.close)]);
+ const path=points.map(([a,b],i)=>(i?'L':'M')+a.toFixed(2)+' '+b.toFixed(2)).join(' ');
+ make('path',{d:path+' L '+R+' '+B+' L '+L+' '+B+' Z',fill:'rgba(87,162,248,.12)'});
+ make('path',{d:path,fill:'none',stroke:'#83bfff','stroke-width':3.3,'stroke-linecap':'round','stroke-linejoin':'round'});
+ for(const i of [...new Set([0,Math.floor((rows.length-1)/2),rows.length-1])]){
+  drawText(x(i),B+27,rows[i].date.slice(5),'middle');
+ }
+ const selected=document.getElementById('vix-chart-selection');
+ const show=row=>{selected.textContent=row.date+' · VIX '+format(row.close);};
+ points.forEach(([cx,cy],i)=>{
+  const row=rows[i],dot=make('circle',{cx,cy,r:Math.max(5,Math.min(9,150/rows.length)),fill:'transparent',class:'vix-point',tabindex:0,role:'button','aria-label':row.date+' VIX '+format(row.close)});
+  make('title',{},dot).textContent=row.date+' · '+format(row.close);
+  dot.addEventListener('mouseenter',()=>show(row));dot.addEventListener('focus',()=>show(row));
+  dot.addEventListener('click',()=>show(row));
+  dot.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();show(row);}});
+ });
+ const [endX,endY]=points.at(-1);
+ make('circle',{cx:endX,cy:endY,r:5.5,fill:'#8fc8ff',stroke:'#e9f5ff','stroke-width':2});
+ document.getElementById('vix-chart-current').textContent=format(latest.close);
+ document.getElementById('vix-chart-last-date').textContent='Ultima închidere: '+latest.date;
+ const delta=latest.close-rows[0].close;
+ document.getElementById('vix-chart-range').textContent=vixSelectedPeriod+' · '+rows.length+' ședințe · '+(delta>=0?'+':'')+format(delta)+' puncte';
+ show(latest);
+}
+document.querySelectorAll('[data-vix-period]').forEach(b=>b.addEventListener('click',()=>selectVixPeriod(b.dataset.vixPeriod)));
+
 async function loadVix(){
  try{
   const r=await fetch('./data/vix_30d.json?v='+Date.now(),{cache:'no-store'});if(!r.ok)throw Error('HTTP '+r.status);
   const p=await r.json(),rows=Array.isArray(p.observations)?p.observations:[];
   if(rows.length<15)throw Error('Datele Cboe nu au fost publicate încă.');
   rows.sort((a,b)=>a.date.localeCompare(b.date));
+  vixHistoryRows=rows.filter(r=>Number.isFinite(Number(r.close))&&Number(r.close)>0&&/^\d{4}-\d{2}-\d{2}$/.test(r.date)).map(r=>({date:r.date,close:Number(r.close)}));
+  renderVixHistoryChart();
   const last=rows.at(-1),cutoff=new Date(last.date+'T00:00:00Z');cutoff.setUTCDate(cutoff.getUTCDate()-30);
   const sample=rows.filter(x=>new Date(x.date+'T00:00:00Z')>=cutoff),vals=sample.map(x=>Number(x.close)).filter(x=>x>0);
   if(vals.length<10)throw Error('Prea puține ședințe istorice');
@@ -672,7 +785,7 @@ async function loadVix(){
   const line=document.createElementNS(NS,'polyline');line.setAttribute('points',vals.map(xy).join(' '));line.setAttribute('stroke','#82baff');line.setAttribute('stroke-width','3');line.setAttribute('fill','none');svg.append(line);
   const age=(Date.now()-new Date(last.date+'T23:59:59Z').getTime())/86400000;
   const status=document.getElementById('vix-status');status.textContent=(age>5?'⚠ VIX istoric poate fi învechit. ':'')+'Cotație oficială de închidere, NU real-time. Date: Cboe / '+last.date+'.';status.style.color=age>5?'#f7c46c':'#9abed1';
- }catch(e){document.getElementById('vix-status').textContent='Istoric VIX indisponibil: '+e.message+' · verifică GitHub Actions.';}
+ }catch(e){document.getElementById('vix-status').textContent='Istoric VIX indisponibil: '+e.message+' · verifică GitHub Actions.';document.getElementById('vix-chart-selection').textContent='Date Cboe indisponibile; verifică actualizarea.';}
 }
 updateTiles();loadVix();
 
