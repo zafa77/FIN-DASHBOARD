@@ -7,6 +7,11 @@ const html = fs.readFileSync('index.html','utf8');
 const weights = JSON.parse(fs.readFileSync('data/sector_weights.json','utf8'));
 const vix = JSON.parse(fs.readFileSync('data/vix_30d.json','utf8'));
 const cot = JSON.parse(fs.readFileSync('data/cot_tff.json','utf8'));
+const sectorMomentumMock={
+  asOf:'2026-11-23',
+  source:'State Street ETF NAV test fixture',
+  sectors:Object.fromEntries(['XLK','XLF','XLV','XLY','XLC','XLI','XLP','XLE','XLU','XLRE','XLB'].map((key,i)=>[key,{'1D':i===0?2.73:(i-5)*.22,'2W':i===0?6.31:(i-5)*.55,'1M':i===0?9.32:(i-5)*.75}]))
+};
 
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -32,6 +37,7 @@ async function scenario(withKey) {
         if(url.pathname.endsWith('/data/sector_weights.json')) return response(weights);
         if(url.pathname.endsWith('/data/vix_30d.json')) return response(vix);
         if(url.pathname.endsWith('/data/cot_tff.json')) return response(cot);
+        if(url.pathname.endsWith('/data/sector_performance.json')) return response(sectorMomentumMock);
         const symbols=(url.searchParams.get('symbol')||'').split(',').filter(Boolean);
         if(url.pathname.endsWith('/quote')) {
           apiCalls.push({type:'quote',symbols});
@@ -90,6 +96,18 @@ async function scenario(withKey) {
 
   assert.ok(doc.getElementById('feed-budget'),'API usage status exists');
   assert.equal(doc.querySelectorAll('#public-weight-grid .public-weight-item').length,11,'Sector weights public without any key');
+  await until(()=>doc.querySelectorAll('#sector-momentum-tbody tr').length===11,'11 sector momentum rows');
+  assert.ok(doc.getElementById('sector-momentum-updated').textContent.includes('2026-11-23'),'Sector NAV data date shown');
+  const xlkRow=[...doc.querySelectorAll('#sector-momentum-tbody tr')].find(row=>row.textContent.includes('XLK'));
+  assert.ok(xlkRow,'Sector XLK row available');
+  assert.equal(xlkRow.querySelectorAll('.momentum-cell.extreme').length,3,'Large 1D/2W/1M moves highlighted clearly');
+  assert.ok(xlkRow.textContent.includes('+6,31%'),'NAV 2W return formatted');
+  assert.ok(doc.getElementById('sector-momentum-note').textContent.includes('NAV'),'Return type is disclosed');
+  const vixPriceWidget=doc.querySelector('.vix-single-widget script[src*="embed-widget-single-quote"]');
+  assert.ok(vixPriceWidget,'VIX has numeric intraday broker quote');
+  assert.equal(JSON.parse(vixPriceWidget.textContent).symbol,'CAPITALCOM:VIX','VIX quote broker source');
+  assert.ok(doc.querySelector('#vix-current.vix-official-value'),'Historical official VIX close labeled separately');
+
   assert.equal(doc.querySelectorAll('#sector-pie .sector-pie-slice').length,11,'S&P sector donut has 11 colored slices');
   assert.equal(doc.getElementById('sector-pie-center-value').textContent,'100%','Pie center shows full distribution');
   const techButton=[...doc.querySelectorAll('#public-weight-grid .public-weight-item')].find(x=>x.textContent.includes('XLK'));
