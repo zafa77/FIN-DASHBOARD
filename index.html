@@ -125,6 +125,20 @@ body .private-feed,body #contributie,body .nav a[href="#contributie"]{display:no
 #vix-chart-selection{color:#d8e8fa}
 @media(max-width:650px){.vix-history-content{padding:13px;min-height:430px}.vix-chart-frame{min-height:240px}}
 
+
+/* Public intraday VIX CFD proxy, separate from Cboe spot close/history. */
+.vix-intraday-chart{height:430px;min-width:0;background:#111827}
+.vix-feed-disclosure{padding:12px 16px;color:#a6bfd8;font-size:11px;line-height:1.6;display:flex;gap:8px 14px;flex-wrap:wrap;align-items:baseline;border-top:1px solid #31445c}
+.vix-feed-disclosure b{color:#e3edf7}
+.vix-feed-disclosure a{color:#7dbbfa;white-space:nowrap}
+.vix-cboe-fallback{margin:0 14px 14px;border:1px solid #293b52;border-radius:9px;background:#101b2c}
+.vix-cboe-fallback summary{cursor:pointer;color:#b8d6f1;font-size:12px;padding:14px;list-style:none}
+.vix-cboe-fallback summary::-webkit-details-marker{display:none}
+.vix-cboe-fallback summary::before{content:"▸";margin-right:9px}
+.vix-cboe-fallback[open] summary::before{content:"▾"}
+.vix-cboe-fallback .vix-history-content{min-height:420px;border-top:1px solid #293b52}
+@media(max-width:720px){.vix-intraday-chart{height:390px}}
+
 </style>
 
 </head>
@@ -137,7 +151,7 @@ body .private-feed,body #contributie,body .nav a[href="#contributie"]{display:no
 <div class="ticker-frame" aria-label="Cotații automate TradingView">
  <div class="tradingview-widget-container" style="height:76px"><div class="tradingview-widget-container__widget"></div>
  <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>
- {"symbols":[{"proName":"OANDA:SPX500USD","title":"US500 CFD · OANDA"},{"proName":"OANDA:NAS100USD","title":"NAS100 CFD · OANDA"}],"showSymbolLogo":true,"colorTheme":"dark","isTransparent":false,"displayMode":"adaptive","locale":"en"}
+ {"symbols":[{"proName":"OANDA:SPX500USD","title":"US500 CFD · OANDA"},{"proName":"OANDA:NAS100USD","title":"NAS100 CFD · OANDA"},{"proName":"CAPITALCOM:VIX","title":"VIX CFD · Capital.com"}],"showSymbolLogo":true,"colorTheme":"dark","isTransparent":false,"displayMode":"adaptive","locale":"en"}
  </script></div>
 </div>
 <nav class="nav"><a href="#feed">00 · Feed</a><a href="#heatmap">01 · Sector Rotation</a><a href="#sectoare">02 · Sectoare & istoric</a><a href="#macro">03 · VIX & macro</a><a href="#contributie">04 · Contribuție SPX</a><a href="#cftc">05 · CFTC / COT</a><a href="#instalare">Setări</a></nav>
@@ -240,7 +254,21 @@ body .private-feed,body #contributie,body .nav a[href="#contributie"]{display:no
     </div></div>
 
   <div class="card vix-history-card">
-   <div class="card-h"><strong>VIX · grafic istoric Cboe</strong><span>Date oficiale de închidere · fără restricții TradingView</span></div>
+   <div class="card-h"><strong>VIX CFD · evoluție intraday</strong><span>Capital.com · cotație broker (proxy VIX)</span></div>
+   <div class="vix-intraday-chart" id="vix-live-proxy">
+    <div class="tradingview-widget-container" style="height:100%;width:100%">
+     <div class="tradingview-widget-container__widget" style="height:100%;width:100%"></div>
+     <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js" async>
+{"autosize":true,"symbol":"CAPITALCOM:VIX","interval":"5","timezone":"America/New_York","theme":"dark","style":"1","locale":"en","backgroundColor":"#111827","gridColor":"rgba(85,117,160,0.10)","allow_symbol_change":false,"details":false,"hide_side_toolbar":true,"hide_top_toolbar":false,"hide_legend":false,"hide_volume":true,"withdateranges":true,"watchlist":[],"studies":[],"calendar":false}
+     </script>
+    </div>
+   </div>
+   <div class="vix-feed-disclosure">Feed intraday Capital.com · CFD de volatilitate, <b>nu VIX spot oficial</b>. Cotația poate diferi de Cboe și se actualizează conform programului brokerului.
+     <a href="https://www.cboe.com/data/quotes/vix/charts/" target="_blank" rel="noopener">VIX oficial Cboe ↗</a>
+     <a href="https://www.tradingview.com/symbols/CAPITALCOM-VIX/" target="_blank" rel="noopener">Grafic CFD ↗</a>
+   </div>
+   <details class="vix-cboe-fallback" id="vix-official-history">
+    <summary>Arată și istoricul oficial Cboe (5D / 1M / 3M)</summary>
    <div class="vix-history-content">
     <div class="vix-history-toolbar">
      <div class="vix-history-details"><span class="eyebrow">EVOLUȚIA VIX</span><strong id="vix-chart-current">—</strong><span id="vix-chart-last-date">Se încarcă istoricul...</span></div>
@@ -260,6 +288,7 @@ body .private-feed,body #contributie,body .nav a[href="#contributie"]{display:no
      <span id="vix-chart-range">Cboe · închideri zilnice, nu intraday</span>
     </div>
    </div>
+   </details>
   </div>
  </div>
 </section>

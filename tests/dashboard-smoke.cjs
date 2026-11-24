@@ -103,6 +103,16 @@ async function scenario(withKey) {
   const macro=doc.getElementById('macro');
   assert.ok(macro.querySelector('#vix-history-chart'),'Native Cboe VIX chart is inside Macro');
   assert.ok(![...macro.querySelectorAll('script[src*="embed-widget-symbol-overview"]')].some(s=>s.textContent.includes('TVC:VIX')),'Restricted VIX embed is absent');
+  const cf=macro.querySelector('#vix-live-proxy script[src*="embed-widget-advanced-chart"]');
+  assert.ok(cf,'Broker VIX intraday chart embedded');
+  const options=JSON.parse(cf.textContent);
+  assert.equal(options.symbol,'CAPITALCOM:VIX','Capital.com volatility CFD proxy');
+  assert.equal(options.interval,'5','Five-minute candles on initial load');
+  assert.ok(macro.querySelector('#vix-official-history details')===null || macro.querySelector('#vix-official-history')!==null,'Official historical series retained');
+  assert.equal(macro.querySelector('#vix-official-history').open,false,'Cboe historical details collapsed by default');
+  assert.ok(macro.textContent.includes('nu VIX spot oficial'),'Clear separation of CFD and official index');
+  assert.ok(doc.querySelector('.ticker-frame script').textContent.includes('CAPITALCOM:VIX'),'VIX CFD displayed in ticker tape');
+
 
 
   assert.ok(doc.querySelector('#public-market script[src*="embed-widget-market-overview"]'),'Free market watchlist embedded');
