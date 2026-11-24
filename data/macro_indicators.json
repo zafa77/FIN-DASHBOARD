@@ -1,0 +1,170 @@
+{
+  "updatedAt": "2026-11-24T21:41:15+00:00",
+  "source": "FRED / U.S. Bureau of Labor Statistics / Federal Reserve",
+  "sourceUrls": [
+    "https://fred.stlouisfed.org/graph/fredgraph.csv?id=CPIAUCNS&cosd=2021-01-01",
+    "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DFEDTARL&cosd=2023-10-31",
+    "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DFEDTARU&cosd=2023-10-31"
+  ],
+  "cpi": {
+    "asOf": "2026-09",
+    "yoy": 3.74,
+    "priorYoY": 3.4,
+    "deltaPp": 0.34,
+    "frequency": "monthly",
+    "series": "CPIAUCNS",
+    "method": "12-month percentage change in non-seasonally-adjusted headline CPI",
+    "history": [
+      {
+        "date": "2024-09",
+        "yoy": 2.44
+      },
+      {
+        "date": "2024-10",
+        "yoy": 2.6
+      },
+      {
+        "date": "2024-11",
+        "yoy": 2.75
+      },
+      {
+        "date": "2024-12",
+        "yoy": 2.89
+      },
+      {
+        "date": "2025-01",
+        "yoy": 3.0
+      },
+      {
+        "date": "2025-02",
+        "yoy": 2.82
+      },
+      {
+        "date": "2025-03",
+        "yoy": 2.39
+      },
+      {
+        "date": "2025-04",
+        "yoy": 2.31
+      },
+      {
+        "date": "2025-05",
+        "yoy": 2.35
+      },
+      {
+        "date": "2025-06",
+        "yoy": 2.67
+      },
+      {
+        "date": "2025-07",
+        "yoy": 2.7
+      },
+      {
+        "date": "2025-08",
+        "yoy": 2.92
+      },
+      {
+        "date": "2025-09",
+        "yoy": 3.01
+      },
+      {
+        "date": "2025-11",
+        "yoy": 2.74
+      },
+      {
+        "date": "2025-12",
+        "yoy": 2.68
+      },
+      {
+        "date": "2026-01",
+        "yoy": 2.39
+      },
+      {
+        "date": "2026-02",
+        "yoy": 2.41
+      },
+      {
+        "date": "2026-03",
+        "yoy": 3.26
+      },
+      {
+        "date": "2026-04",
+        "yoy": 3.81
+      },
+      {
+        "date": "2026-05",
+        "yoy": 4.25
+      },
+      {
+        "date": "2026-06",
+        "yoy": 3.53
+      },
+      {
+        "date": "2026-07",
+        "yoy": 3.36
+      },
+      {
+        "date": "2026-08",
+        "yoy": 3.4
+      },
+      {
+        "date": "2026-09",
+        "yoy": 3.74
+      }
+    ]
+  },
+  "fed": {
+    "asOf": "2026-11-24",
+    "lower": 3.75,
+    "upper": 4.0,
+    "deltaUpper12mPp": 0.0,
+    "changes2y": [
+      {
+        "date": "2024-11-08",
+        "lower": 4.5,
+        "upper": 4.75
+      },
+      {
+        "date": "2024-12-19",
+        "lower": 4.25,
+        "upper": 4.5
+      },
+      {
+        "date": "2025-09-18",
+        "lower": 4.0,
+        "upper": 4.25
+      },
+      {
+        "date": "2025-10-30",
+        "lower": 3.75,
+        "upper": 4.0
+      },
+      {
+        "date": "2025-12-11",
+        "lower": 3.5,
+        "upper": 3.75
+      },
+      {
+        "date": "2026-09-17",
+        "lower": 3.75,
+        "upper": 4.0
+      },
+      {
+        "date": "2026-11-24",
+        "lower": 3.75,
+        "upper": 4.0
+      }
+    ],
+    "lastPolicyChange": "2026-09-17",
+    "previousRange": {
+      "date": "2025-12-11",
+      "lower": 3.5,
+      "upper": 3.75
+    },
+    "series": [
+      "DFEDTARL",
+      "DFEDTARU"
+    ],
+    "method": "Federal funds target range, not the effective federal funds rate"
+  }
+}
