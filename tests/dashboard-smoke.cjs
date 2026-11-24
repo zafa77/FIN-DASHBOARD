@@ -65,6 +65,14 @@ async function scenario(withKey) {
   }
   await until(()=>doc.querySelectorAll('#spx-heat .heat-cell').length===11,'SPX map');
   assert.equal(doc.querySelectorAll('#growth-heat .heat-cell').length,10,'Growth map items');
+  const publicQuotes=doc.querySelectorAll('#public-sector-quotes script[src*="embed-widget-market-quotes"]');
+  assert.equal(publicQuotes.length,2,'Two public TradingView quote tables');
+  const cfg=[...publicQuotes].map(el=>JSON.parse(el.textContent));
+  assert.equal(cfg[0].symbolsGroups[0].symbols.length,11,'11 sector symbols');
+  assert.equal(cfg[1].symbolsGroups[0].symbols.length,7,'7 AI symbols');
+  assert.equal(doc.querySelector('#contributie')!==null,true,'Legacy calculator remains in DOM');
+  assert.ok(html.includes('ZAFA MARKET REBORN'),'Public site renamed');
+
   assert.equal(doc.querySelectorAll('#history-tbody tr').length,18,'History table items');
   await until(()=>doc.getElementById('vix-current').textContent!=='—','VIX official last close');
   assert.ok(doc.querySelector('#vix-spark polyline'),'VIX historical line');

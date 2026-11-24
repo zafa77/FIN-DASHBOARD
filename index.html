@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#0a0e19">
-<title>ATLAS • Market Rotation Dashboard</title>
+<title>ZAFA MARKET REBORN</title>
 <style>
 :root{--bg:#080d17;--card:#111827;--card2:#151f30;--line:#28354a;--ink:#eaf1fc;--muted:#93a6bc;--accent:#7eafff;--green:#46d5ac;--red:#fb7b84;--amber:#f7c46c}
 *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(circle at 16% -7%,#16314a 0%,transparent 33%),var(--bg);color:var(--ink);font:15px/1.52 Inter,system-ui,-apple-system,Segoe UI,Arial,sans-serif}
@@ -70,13 +70,21 @@ header{display:flex;align-items:center;justify-content:space-between;gap:20px;ma
 .public-weight-track span{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,#3e84ca,#60c0f1)}
 @media(max-width:700px){.public-weight-grid{grid-template-columns:1fr}.public-widget{height:420px}.public-history-chart{height:360px}}
 
+
+/* Legacy calculations are retained for personal diagnostics, but never render empty panels publicly. */
+body .private-feed,body #contributie,body .nav a[href="#contributie"]{display:none!important}
+.legacy-data-host{display:none!important}
+.quotes-widget{height:600px;background:#111827}
+#public-sector-quotes .card{min-height:680px}
+@media(max-width:850px){#public-sector-quotes{grid-template-columns:1fr}.quotes-widget{height:540px}#public-sector-quotes .card{min-height:610px}}
+
 </style>
 
 </head>
 <body class="no-key">
 <div class="wrap">
 <header>
- <div class="logo"><div class="mark">A·</div><div><div class="title">ATLAS <span style="color:#75b8fc">/ MARKET ROTATION</span></div><div class="sub">US500 CFD · NAS100 CFD · SECTOARE · CFTC</div></div></div>
+ <div class="logo"><div class="mark">Z·</div><div><div class="title">ZAFA <span style="color:#75b8fc">MARKET REBORN</span></div><div class="sub">US500 CFD · NAS100 CFD · SECTOARE · CFTC</div></div></div>
  <div class="actions"><span class="pill"><span class="dot"></span> Date publice · CFD-uri OANDA / CFTC / VIX</span><span class="pill" id="clock">București —</span><button class="button" onclick="window.location.reload()">↻ Reîncarcă datele</button></div>
 </header>
 <div class="ticker-frame" aria-label="Cotații automate TradingView">
@@ -85,7 +93,7 @@ header{display:flex;align-items:center;justify-content:space-between;gap:20px;ma
  {"symbols":[{"proName":"OANDA:SPX500USD","title":"US500 CFD · OANDA"},{"proName":"OANDA:NAS100USD","title":"NAS100 CFD · OANDA"}],"showSymbolLogo":true,"colorTheme":"dark","isTransparent":false,"displayMode":"adaptive","locale":"en"}
  </script></div>
 </div>
-<nav class="nav"><a href="#feed">00 · Feed</a><a href="#heatmap">01 · Harta pieței</a><a href="#sectoare">02 · Sectoare & istoric</a><a href="#macro">03 · VIX & macro</a><a href="#contributie">04 · Contribuție SPX</a><a href="#cftc">05 · CFTC / COT</a><a href="#instalare">Setări</a></nav>
+<nav class="nav"><a href="#feed">00 · Feed</a><a href="#heatmap">01 · Sector Rotation</a><a href="#sectoare">02 · Sectoare & istoric</a><a href="#macro">03 · VIX & macro</a><a href="#contributie">04 · Contribuție SPX</a><a href="#cftc">05 · CFTC / COT</a><a href="#instalare">Setări</a></nav>
 <section class="section" id="feed">
  <div class="section-head"><div><h2 class="section-title">00 / US500 & NAS100 · CFD Market Overview</h2><p class="section-sub">US500 și NAS100 sunt CFD-uri cotate de OANDA, cu feed broker, fără întârzierea standard a futures CME. Prețurile pot diferi de indicii cash și de NQ/ES.</p></div><span class="tag" id="feed-status">Date publice</span></div>
  
@@ -112,15 +120,25 @@ header{display:flex;align-items:center;justify-content:space-between;gap:20px;ma
 </section>
 
 <section class="section" id="heatmap">
- <div class="section-head"><div><h2 class="section-title">01 / Structura sectorială S&P 500</h2><p class="section-sub">Ponderile sectoarelor în indice. Pentru variațiile zilnice folosește watchlistul public de mai sus.</p></div><span class="tag">11 sectoare</span></div>
- <div class="card public-sector-weights" id="public-sector-weights">
-  <div class="card-h"><strong>Ponderi sectoriale S&P 500</strong><span id="public-weights-date">Ponderi la data ultimei actualizări</span></div>
+ <div class="section-head">
+  <div><h2 class="section-title">01 / Sector Rotation & AI</h2><p class="section-sub">Cotații și variații prin widgeturi oficiale TradingView, fără configurare API.</p></div>
+  <span class="tag">11 sectoare · 7 teme</span>
+ </div>
+ <div class="grid2" id="public-sector-quotes">
+  <div class="card"><div class="card-h"><strong>S&P 500 · 11 sectoare</strong><span>ETF-uri sectoriale · variație 1D</span></div><div class="quotes-widget"><div class="tradingview-widget-container" style="height:100%;width:100%"><div class="tradingview-widget-container__widget"></div>
+<script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-market-quotes.js" async>
+{"width":"100%","height":"100%","symbolsGroups":[{"name":"S&P 500 · sectoare","symbols":[{"name":"AMEX:XLK","displayName":"XLK · Technology"},{"name":"AMEX:XLF","displayName":"XLF · Financials"},{"name":"AMEX:XLV","displayName":"XLV · Healthcare"},{"name":"AMEX:XLY","displayName":"XLY · Consumer Discretionary"},{"name":"AMEX:XLC","displayName":"XLC · Communication"},{"name":"AMEX:XLI","displayName":"XLI · Industrials"},{"name":"AMEX:XLP","displayName":"XLP · Consumer Staples"},{"name":"AMEX:XLE","displayName":"XLE · Energy"},{"name":"AMEX:XLU","displayName":"XLU · Utilities"},{"name":"AMEX:XLRE","displayName":"XLRE · Real Estate"},{"name":"AMEX:XLB","displayName":"XLB · Materials"}]}],"showSymbolLogo":false,"isTransparent":false,"colorTheme":"dark","locale":"en"}
+</script></div></div></div>
+  <div class="card"><div class="card-h"><strong>AI, semiconductori & growth</strong><span>ETF-uri tematice · variație 1D</span></div><div class="quotes-widget"><div class="tradingview-widget-container" style="height:100%;width:100%"><div class="tradingview-widget-container__widget"></div>
+<script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-market-quotes.js" async>
+{"width":"100%","height":"100%","symbolsGroups":[{"name":"AI · growth","symbols":[{"name":"NASDAQ:SMH","displayName":"SMH · Semiconductors"},{"name":"NASDAQ:SOXX","displayName":"SOXX · Semiconductors"},{"name":"AMEX:IGV","displayName":"IGV · Software"},{"name":"NASDAQ:BOTZ","displayName":"BOTZ · Robotics / AI"},{"name":"NASDAQ:SKYY","displayName":"SKYY · Cloud"},{"name":"NASDAQ:CIBR","displayName":"CIBR · Cybersecurity"},{"name":"AMEX:URA","displayName":"URA · Uranium"}]}],"showSymbolLogo":false,"isTransparent":false,"colorTheme":"dark","locale":"en"}
+</script></div></div></div>
+ </div>
+ <div class="card public-sector-weights" id="public-sector-weights" style="margin-top:16px">
+  <div class="card-h"><strong>Ponderi sectoriale S&P 500</strong><span id="public-weights-date">Data ultimei actualizări</span></div>
   <div class="public-weight-grid" id="public-weight-grid"></div>
  </div>
- <div class="grid2 private-feed">
-  <div class="card"><div class="card-h"><strong>SPX · 11 sectoare</strong><span>Pondere sectorială SPX · variație ETF</span></div><div class="native-heat" id="spx-heat"></div></div>
-  <div class="card"><div class="card-h"><strong>Growth, AI & broad market</strong><span>Teme de piață, nu ponderi oficiale Nasdaq-100</span></div><div class="native-heat" id="growth-heat"></div></div>
- </div><div class="callout"><b>Notă:</b> harta SPX este o aproximare din ETF-uri, nu o hartă a fiecărei acțiuni. Harta tematică nu este compoziția oficială Nasdaq-100 și temele se suprapun. Simbolurile fără date apar neutru, cu „—”.</div>
+ <div class="legacy-data-host" aria-hidden="true"><div id="spx-heat"></div><div id="growth-heat"></div></div>
 </section>
 <section class="section" id="sectoare">
  <div class="section-head"><div><h2 class="section-title">02 / Sector Rotation & temele AI</h2><p class="section-sub">Grafice interactive disponibile public, cu selecție 1D, 5D și 1M. Calculele numerice 5D/20D sunt opționale.</p></div><a class="source" href="https://www.ssga.com/us/en/individual/resources/sector-tracker" target="_blank" rel="noopener">Sector Tracker oficial ↗</a></div>
@@ -134,7 +152,7 @@ header{display:flex;align-items:center;justify-content:space-between;gap:20px;ma
       </script>
     </div>
   </div>
-  <p class="public-note">Grafice publice: 5D reprezintă aproximativ o săptămână de tranzacționare, 1M aproximativ o lună. Nu sunt returnări numerice 20D calculate de ATLAS.</p>
+  <p class="public-note">Grafice publice: 5D reprezintă aproximativ o săptămână de tranzacționare, 1M aproximativ o lună. Variațiile istorice sunt afișate în grafic, nu în tabel numeric.</p>
  </div>
  <div class="grid23 private-feed" style="margin-top:14px">
   <div class="card"><div class="card-h"><strong>Sectoare & teme — comparații istorice</strong><span>ETF-uri din Twelve Data · fără widgeturi cu simboluri lipsă</span></div>
@@ -247,7 +265,7 @@ header{display:flex;align-items:center;justify-content:space-between;gap:20px;ma
  </div>
   </details>
 </section>
-<footer class="footer"><p><b>ATLAS / Market Rotation.</b> Dashboard de observație, nu instrument de execuție. Widgeturi de piață de la TradingView; întârzierile și disponibilitatea datelor depind de exchange și de politicile furnizorului. Cotații posibil întârziate, inclusiv dacă pagina se reîncarcă.</p><p>Ponderi sectoriale SPX: data sursei este afișată la calculator; referințele principale sunt CFD-urile OANDA US500/NAS100; CFTC urmărește poziții pe futures NQ/ES. ETF-urile tematice pot deține aceleași companii. Nu interpreta culoarea sau volumului ca un semnal garantat. <a href="https://www.tradingview.com/widget-docs/faq/data/" target="_blank" rel="noopener">Politica datelor TradingView</a>.</p></footer>
+<footer class="footer"><p><b>ZAFA MARKET REBORN.</b> Dashboard de observație, nu instrument de execuție. Widgeturi de piață de la TradingView; întârzierile și disponibilitatea datelor depind de exchange și de politicile furnizorului. Cotații posibil întârziate, inclusiv dacă pagina se reîncarcă.</p><p>Ponderi sectoriale SPX: data sursei este afișată la calculator; referințele principale sunt CFD-urile OANDA US500/NAS100; CFTC urmărește poziții pe futures NQ/ES. ETF-urile tematice pot deține aceleași companii. Nu interpreta culoarea sau volumului ca un semnal garantat. <a href="https://www.tradingview.com/widget-docs/faq/data/" target="_blank" rel="noopener">Politica datelor TradingView</a>.</p></footer>
 </div>
 <script>
 const sectors=[['Technology','XLK',34.30],['Financials','XLF',12.88],['Health Care','XLV',10.76],['Consumer Discretionary','XLY',9.71],['Communication Services','XLC',8.86],['Industrials','XLI',8.33],['Consumer Staples','XLP',5.55],['Energy','XLE',3.69],['Utilities','XLU',2.24],['Real Estate','XLRE',1.94],['Materials','XLB',1.75]];
@@ -402,7 +420,7 @@ async function refreshMarket(){
  const key=getKey();if(!key){setMode(false);showStatus('Nu există cheie API. Widgeturile TradingView funcționează în continuare.');return;}
  if(refreshBusy)return;
  if(lastFetched&&Date.now()-lastFetched.getTime()<60*60*1000){showStatus('Cotații în cache, verificare mai nouă de 60 de minute. Nu consumăm credite API.');return;}
- if(!takeLock()){showStatus('Alt tab ATLAS face deja actualizarea. Nu duplicăm apelurile API.');return;}
+ if(!takeLock()){showStatus('Altă filă ZAFA MARKET REBORN actualizează deja datele. Nu duplicăm apelurile API.');return;}
  refreshBusy=true;setMode(true);showStatus('Se încarcă cotațiile pentru '+tickers.length+' simboluri, în tranșe de maximum 6 simboluri la minimum 75 secunde...');
  let loaded=0, errors=[];
  try{
