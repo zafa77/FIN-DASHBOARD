@@ -139,6 +139,40 @@ body .private-feed,body #contributie,body .nav a[href="#contributie"]{display:no
 .vix-cboe-fallback .vix-history-content{min-height:420px;border-top:1px solid #293b52}
 @media(max-width:720px){.vix-intraday-chart{height:390px}}
 
+
+/* Intraday volatility quote with clearly separated official close. */
+.vix-live-quote{border:1px solid #36537a;border-radius:12px;padding:16px;background:#17263e;margin-bottom:17px}
+.vix-single-widget{width:100%;height:115px;min-height:115px;margin:6px auto 3px;overflow:hidden}
+.vix-single-widget .tradingview-widget-container{width:100%;height:100%}
+.vix-live-note{font-size:11px;color:#a6bfd8;line-height:1.5}
+.vix-history-reference{border-top:1px solid #30455d;padding-top:16px;align-items:center}
+.vix-official-value{font-size:24px;font-weight:750;letter-spacing:-.6px;color:#d6e5fa;font-variant-numeric:tabular-nums;margin:5px 0 0}
+.vix-history-reference .vix-position{font-size:22px}
+/* Sector momentum / heatmap */
+.sector-momentum-content{padding:12px 15px 14px}
+.sector-momentum-legend{display:flex;flex-wrap:wrap;gap:9px 18px;align-items:center;margin:1px 0 14px;color:#a8bdd4;font-size:11px}
+.momentum-dot{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:middle;background:#476078}
+.momentum-dot.up{background:#218563}.momentum-dot.down{background:#a54b59}.momentum-dot.big{background:#e8b15a}
+.momentum-description{margin-left:auto;color:#819db9}
+.sector-momentum-table{width:100%;font-variant-numeric:tabular-nums}
+.sector-momentum-table tr:not(:first-child) td{border-top:1px solid #263b51}
+.sector-momentum-table td,.sector-momentum-table th{padding:9px 11px}
+.sector-momentum-table th{color:#a4bfdf;font-size:10px;letter-spacing:.7px}
+.sector-momentum-table .sector-name strong{display:block;color:#e6f0fa;font-size:12px}
+.sector-momentum-table .sector-name small{display:block;font-size:10px;color:#88a9ca}
+.sector-momentum-table .momentum-cell{font-size:12px;font-weight:800;min-width:75px;text-align:center;border-radius:7px;padding:10px 5px}
+.sector-momentum-table .momentum-cell.up{color:#65e7b9;background:rgba(23,140,91,.15)}
+.sector-momentum-table .momentum-cell.down{color:#ff9ca6;background:rgba(177,51,71,.14)}
+.sector-momentum-table .momentum-cell.flat{color:#b6c4d4;background:rgba(120,139,161,.08)}
+.sector-momentum-table .momentum-cell.extreme.up{color:#dbfff1;background:rgba(13,139,85,.52);box-shadow:inset 0 0 0 1px rgba(98,247,177,.5)}
+.sector-momentum-table .momentum-cell.extreme.down{color:#fff0f1;background:rgba(183,47,68,.54);box-shadow:inset 0 0 0 1px rgba(255,132,150,.5)}
+.sector-momentum-table .momentum-cell.extreme::after{content:" ●";font-size:11px;color:#ffe1a6}
+.sector-momentum-table .direction{font-size:11px;color:#b5c9e1;white-space:nowrap}
+.sector-momentum-table .direction.bull{color:#55d5aa}.sector-momentum-table .direction.bear{color:#fa8f9d}
+.sector-momentum-note{font-size:10px;color:#90a9c5;line-height:1.5;margin-top:12px}
+.momentum-loading{color:#9ab2ca;font-size:12px;padding:18px!important}
+@media(max-width:720px){.sector-momentum-content{padding:7px}.sector-momentum-table td,.sector-momentum-table th{padding:8px 4px}.sector-momentum-table .momentum-cell{min-width:59px;font-size:11px}.momentum-description{margin-left:0}}
+
 </style>
 
 </head>
@@ -212,6 +246,24 @@ body .private-feed,body #contributie,body .nav a[href="#contributie"]{display:no
    <div class="public-weight-grid" id="public-weight-grid" aria-label="Legendă sectorială și ponderi"></div>
   </div>
  </div>
+
+ <div class="card sector-momentum-card" id="sector-momentum" style="margin-top:16px">
+   <div class="card-h"><strong>Sector Momentum · 1D / 2W / 1M</strong><span id="sector-momentum-updated">NAV zilnic · State Street</span></div>
+   <div class="sector-momentum-content">
+     <div class="sector-momentum-legend">
+      <span><i class="momentum-dot up"></i> Creștere</span><span><i class="momentum-dot down"></i> Scădere</span>
+      <span><i class="momentum-dot big"></i> Mișcare puternică</span>
+      <span class="momentum-description">2W = 10 ședințe · 1M = 21 ședințe</span>
+     </div>
+     <div class="table-wrap">
+       <table class="sector-momentum-table">
+         <thead><tr><th>Sector</th><th class="num">1D</th><th class="num">2W</th><th class="num">1M</th><th>Direcție</th></tr></thead>
+         <tbody id="sector-momentum-tbody"><tr><td colspan="5" class="momentum-loading">Se verifică istoricul sectorial oficial...</td></tr></tbody>
+       </table>
+     </div>
+     <p class="sector-momentum-note" id="sector-momentum-note">Randamente calculate din NAV zilnic al ETF-urilor sectoriale; nu reprezintă cotații ETF intraday. Cifrele pot fi afectate de distribuții.</p>
+   </div>
+ </div>
  <div class="legacy-data-host" aria-hidden="true"><div id="spx-heat"></div><div id="growth-heat"></div></div>
 </section>
 <section class="section" id="sectoare">
@@ -247,8 +299,21 @@ body .private-feed,body #contributie,body .nav a[href="#contributie"]{display:no
  <div class="section-head"><div><h2 class="section-title">03 / Macro dashboard</h2><p class="section-sub">Dobânzi, dolar, volatilitate, credit și petrol pentru contextul de risc.</p></div><span class="tag">Nu sunt semnale singulare de long / short</span></div>
  <div class="grid2">
 
-  <div class="card"><div class="card-h"><strong>VIX · ultimele 30 zile calendaristice</strong><span>Cboe · închideri zilnice</span></div>
-    <div class="card-pad"><div class="vix-head"><div><div class="eyebrow">VIX · VOLATILITATE IMPLICITĂ</div><div id="vix-current" class="vix-main">—</div><p id="vix-date" class="small-note">Istoric Cboe în curs de verificare</p></div><div><div id="vix-range-position" class="vix-position">—</div><p class="small-note">Poziție în intervalul 30D</p></div></div>
+  <div class="card vix-quote-card"><div class="card-h"><strong>VIX · cotație intraday</strong><span>Capital.com · CFD proxy VIX</span></div>
+    <div class="card-pad">
+      <div class="vix-live-quote">
+        <div class="eyebrow">VIX CFD · CAPITAL.COM · COTAȚIE BROKER</div>
+        <div class="vix-single-widget">
+          <div class="tradingview-widget-container" style="height:100%;width:100%">
+            <div class="tradingview-widget-container__widget"></div>
+            <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-single-quote.js" async>
+            {"symbol":"CAPITALCOM:VIX","width":"100%","colorTheme":"dark","isTransparent":true,"locale":"en"}
+            </script>
+          </div>
+        </div>
+        <div class="vix-live-note">Cotație intraday prin TradingView. Nu este indicele spot oficial Cboe și nu există garanție de latență zero.</div>
+      </div>
+      <div class="vix-head vix-history-reference"><div><div class="eyebrow">VIX OFICIAL CBOE · ULTIMA ÎNCHIDERE</div><div id="vix-current" class="vix-official-value">—</div><p id="vix-date" class="small-note">Istoric Cboe în curs de verificare</p></div><div><div id="vix-range-position" class="vix-position">—</div><p class="small-note">Poziție în intervalul 30D · ultima închidere</p></div></div>
     <svg id="vix-spark" viewBox="0 0 600 170" aria-label="Seria zilnică VIX în ultimele 30 zile" role="img"></svg><div class="vix-metrics" id="vix-metrics"></div><p class="small-note" id="vix-status">Fără date VIX. Le va prelua GitHub Actions din Cboe.</p>
     <div class="macro-links"><a href="https://www.tradingview.com/symbols/TVC-DXY/" target="_blank" rel="noopener">DXY ↗</a><a href="https://www.tradingview.com/symbols/TVC-US10Y/" target="_blank" rel="noopener">US10Y ↗</a><a href="https://www.tradingview.com/symbols/TVC-US02Y/" target="_blank" rel="noopener">US02Y ↗</a><a href="https://www.tradingview.com/symbols/AMEX-HYG/" target="_blank" rel="noopener">Credit HYG ↗</a></div>
     </div></div>
@@ -375,6 +440,69 @@ body .private-feed,body #contributie,body .nav a[href="#contributie"]{display:no
 <footer class="footer"><p><b>ZAFA MARKET REBORN.</b> Dashboard de observație, nu instrument de execuție. Widgeturi de piață de la TradingView; întârzierile și disponibilitatea datelor depind de exchange și de politicile furnizorului. Cotații posibil întârziate, inclusiv dacă pagina se reîncarcă.</p><p>Ponderi sectoriale SPX: data sursei este afișată la calculator; referințele principale sunt CFD-urile OANDA US500/NAS100; CFTC urmărește poziții pe futures NQ/ES. ETF-urile tematice pot deține aceleași companii. Nu interpreta culoarea sau volumului ca un semnal garantat. <a href="https://www.tradingview.com/widget-docs/faq/data/" target="_blank" rel="noopener">Politica datelor TradingView</a>.</p></footer>
 </div>
 <script>
+
+const sectorMomentumState={data:null};
+function renderSectorMomentum(){
+ const body=document.getElementById('sector-momentum-tbody');
+ const source=document.getElementById('sector-momentum-updated');
+ if(!body||!source)return;
+ body.replaceChildren();
+ const payload=sectorMomentumState.data;
+ if(!payload?.sectors){
+  const tr=document.createElement('tr'),td=document.createElement('td');
+  td.colSpan=5;td.className='momentum-loading';td.textContent='Istoricul sectorial se actualizează. Variațiile disponibile sunt afișate în tabelele TradingView de mai sus.';
+  tr.append(td);body.append(tr);source.textContent='Ultima actualizare indisponibilă';return;
+ }
+ source.textContent='State Street · NAV '+payload.asOf;
+ const chartRows=sectors.map(s=>({symbol:s[1],name:s[0],row:payload.sectors[s[1]]})).filter(x=>x.row&&Number.isFinite(x.row["2W"]));
+ chartRows.sort((a,b)=>b.row["2W"]-a.row["2W"]);
+ const fmt=x=>(x>0?'+':'')+Number(x).toLocaleString('ro-RO',{minimumFractionDigits:2,maximumFractionDigits:2})+'%';
+ for(const item of chartRows){
+  const tr=document.createElement('tr');
+  const name=document.createElement('td');name.className='sector-name';
+  const strong=document.createElement('strong');strong.textContent=item.symbol;
+  const small=document.createElement('small');small.textContent=item.name;
+  name.append(strong,small);tr.append(name);
+  for(const [key,threshold] of [["1D",2],["2W",5],["1M",8]]){
+   const td=document.createElement('td');td.className='num';
+   const v=Number(item.row[key]),box=document.createElement('div');
+   box.className='momentum-cell '+(v>.03?'up':v<-.03?'down':'flat')+(Math.abs(v)>=threshold?' extreme':'');
+   box.textContent=fmt(v);
+   box.title=key+' · '+item.symbol+': '+fmt(v)+(Math.abs(v)>=threshold?' · Mișcare puternică':'');
+   td.append(box);tr.append(td);
+  }
+  const dir=document.createElement('td'),two=item.row["2W"],month=item.row["1M"],day=item.row["1D"];
+  let label="↔ Mixt",cls="";
+  if(two>0&&month>0){label=day<-.5?'↘ Retragere':'↗ Ascendent';cls='bull'}
+  else if(two<0&&month<0){label=day>.5?'↗ Revenire':'↘ Descendent';cls='bear'}
+  else if(two>0&&month<=0){label='↗ Revenire';cls='bull'}
+  else if(two<0&&month>=0){label='↘ Slăbire';cls='bear'}
+  dir.className='direction '+cls;dir.textContent=label;tr.append(dir);
+  body.append(tr);
+ }
+ if(chartRows.length!==11){
+  const tr=document.createElement('tr'),td=document.createElement('td');
+  td.colSpan=5;td.className='momentum-loading';td.textContent='Date disponibile pentru '+chartRows.length+'/11 sectoare.';
+  tr.append(td);body.append(tr);
+ }
+ const dates=payload.windowDates;
+ const note=document.getElementById('sector-momentum-note');
+ if(note)note.textContent='Randamente pe NAV zilnic (nu cotații intraday): 1D vs '+(dates?.previous??'ședința precedentă')+', 2W vs '+(dates?.twoWeeks??'10 ședințe')+', 1M vs '+(dates?.oneMonth??'21 ședințe')+'. Mișcare puternică: ±2% / ±5% / ±8%. NAV fără ajustări pentru distribuții.';
+}
+async function loadSectorMomentum(){
+ try{
+  const response=await fetch('./data/sector_performance.json?v='+Date.now(),{cache:'no-store'});
+  if(!response.ok)throw Error('HTTP '+response.status);
+  const payload=await response.json();
+  if(!payload.sectors || !payload.asOf || Object.keys(payload.sectors).length<11)throw Error('Date incomplete');
+  sectorMomentumState.data=payload;
+ }catch(err){
+  console.warn('Sector momentum:',err.message);
+ }
+ renderSectorMomentum();
+}
+loadSectorMomentum();
+
 const sectors=[['Technology','XLK',34.30],['Financials','XLF',12.88],['Health Care','XLV',10.76],['Consumer Discretionary','XLY',9.71],['Communication Services','XLC',8.86],['Industrials','XLI',8.33],['Consumer Staples','XLP',5.55],['Energy','XLE',3.69],['Utilities','XLU',2.24],['Real Estate','XLRE',1.94],['Materials','XLB',1.75]];
 const themes=[['Semiconductori AI','SMH'],['Semiconductori alternativ','SOXX'],['Software','IGV'],['AI & Robotics','BOTZ'],['Cloud','SKYY'],['Cybersecurity','CIBR'],['Uranium','URA']];
 const tickers=[...new Set([...sectors.map(x=>x[1]),...themes.map(x=>x[1])])];

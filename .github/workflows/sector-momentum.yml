@@ -1,0 +1,35 @@
+name: ZAFA - Sector Momentum NAV
+on:
+  push:
+    paths:
+      - 'scripts/update_sector_performance.py'
+      - '.github/workflows/sector-momentum.yml'
+  workflow_dispatch:
+  schedule:
+    - cron: '17 23 * * 1-5'
+    - cron: '35 10 * * 2-6'
+permissions:
+  contents: write
+jobs:
+  sector-nav-momentum:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install spreadsheet reader
+        run: python -m pip install 'openpyxl>=3.1,<4'
+      - name: Calculate returns from official State Street NAV
+        run: python scripts/update_sector_performance.py
+      - name: Publish validated computed sector returns only
+        run: |
+          git add data/sector_performance.json
+          if git diff --cached --quiet; then
+            echo "Sector NAV unchanged"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "data: sector ETF 1D, 2W, 1M NAV momentum"
+          git push
