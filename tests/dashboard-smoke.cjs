@@ -78,6 +78,23 @@ async function scenario(withKey) {
   assert.ok(doc.querySelector('#vix-spark polyline'),'VIX historical line');
   assert.ok(doc.getElementById('feed-budget'),'API usage status exists');
   assert.equal(doc.querySelectorAll('#public-weight-grid .public-weight-item').length,11,'Sector weights public without any key');
+  assert.equal(doc.querySelectorAll('#sector-pie .sector-pie-slice').length,11,'S&P sector donut has 11 colored slices');
+  assert.equal(doc.getElementById('sector-pie-center-value').textContent,'100%','Pie center shows full distribution');
+  const techButton=[...doc.querySelectorAll('#public-weight-grid .public-weight-item')].find(x=>x.textContent.includes('XLK'));
+  assert.ok(techButton,'XLK legend button');
+  techButton.click();
+  assert.ok(doc.getElementById('sector-pie-center-label').textContent.includes('Technology'),'Selected slice shows name');
+  assert.ok(doc.getElementById('sector-pie-center-value').textContent.includes('34,30'),'Selected slice shows current issuer weight');
+  assert.equal(techButton.getAttribute('aria-pressed'),'true','Pie selection accessible');
+  techButton.click();
+  assert.equal(doc.getElementById('sector-pie-center-value').textContent,'100%','Toggle pie selection off');
+  const macro=doc.getElementById('macro');
+  const vixWidget=[...macro.querySelectorAll('script[src*="embed-widget-symbol-overview"]')].find(x=>x.textContent.includes('TVC:VIX'));
+  assert.ok(vixWidget,'Macro embedded VIX chart');
+  const vixWidgetConfig=JSON.parse(vixWidget.textContent);
+  assert.equal(vixWidgetConfig.symbols.length,1,'Macro VIX chart not mixed with CFD indices');
+  assert.ok(!vixWidget.textContent.includes('OANDA:NAS100USD'),'Macro chart replaces Nasdaq CFD');
+
   assert.ok(doc.querySelector('#public-market script[src*="embed-widget-market-overview"]'),'Free market watchlist embedded');
   assert.ok(doc.querySelector('#public-history script[src*="embed-widget-symbol-overview"]'),'Public history chart embedded');
   assert.equal(doc.body.classList.contains('no-key'),!withKey,'Public/personal mode selected');

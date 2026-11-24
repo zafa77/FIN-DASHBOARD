@@ -78,6 +78,33 @@ body .private-feed,body #contributie,body .nav a[href="#contributie"]{display:no
 #public-sector-quotes .card{min-height:680px}
 @media(max-width:850px){#public-sector-quotes{grid-template-columns:1fr}.quotes-widget{height:540px}#public-sector-quotes .card{min-height:610px}}
 
+
+/* ZAFA / interactive S&P 500 sector donut */
+.sector-pie-layout{display:grid;grid-template-columns:minmax(310px,410px) minmax(0,1fr);gap:20px;align-items:center;padding:20px}
+.sector-pie-visual{display:flex;flex-direction:column;align-items:center;gap:4px;min-width:0}
+.sector-pie-wrap{position:relative;width:min(100%,354px);aspect-ratio:1}
+#sector-pie{display:block;width:100%;height:100%;overflow:visible}
+.sector-pie-slice{cursor:pointer;outline:none;stroke:transparent;stroke-width:1px;transition:opacity .18s ease,filter .18s ease}
+.sector-pie-slice:hover,.sector-pie-slice.selected,.sector-pie-slice:focus-visible{filter:brightness(1.2);stroke:#e6f3ff;stroke-width:1.6px}
+.sector-pie-slice.dimmed{opacity:.42}
+.sector-pie-center{position:absolute;inset:28%;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:3px;text-align:center;pointer-events:none}
+.sector-pie-center small{font-size:12px;color:#9fb6d3;max-width:100%;line-height:1.2}
+.sector-pie-center strong{font-size:34px;font-weight:850;line-height:1.12;font-variant-numeric:tabular-nums;color:#eef7ff}
+.sector-pie-center span{font-size:11px;color:#99b1c9}
+.sector-pie-note{margin:0;text-align:center;color:#88a4bd;font-size:11px}
+.public-weight-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;padding:0}
+.public-weight-item{appearance:none;text-align:left;width:100%;color:#eaf1fc;font:inherit;cursor:pointer;border-radius:10px;border:1px solid #294057;background:#132239;padding:12px 11px}
+.public-weight-item:hover,.public-weight-item.selected,.public-weight-item:focus-visible{background:#1e3852;border-color:#639ddb;outline:none}
+.public-weight-head{display:flex;align-items:center;justify-content:space-between;gap:9px;font-size:11px}
+.public-weight-name{display:flex;align-items:center;gap:8px;min-width:0}
+.public-weight-name span{overflow:hidden;text-overflow:ellipsis}
+.public-weight-dot{display:inline-block;flex:0 0 10px;width:10px;height:10px;border-radius:3px}
+.public-weight-head strong{font-size:13px;white-space:nowrap}
+.public-weight-track{display:block;height:5px;border-radius:99px;background:#203047;margin-top:9px;overflow:hidden}
+.public-weight-track>span{display:block;height:100%;border-radius:99px}
+@media(max-width:1060px){.sector-pie-layout{grid-template-columns:1fr}.sector-pie-wrap{width:min(100%,340px)}}
+@media(max-width:620px){.sector-pie-layout{padding:12px;gap:15px}.public-weight-grid{grid-template-columns:1fr}.sector-pie-center strong{font-size:28px}}
+
 </style>
 
 </head>
@@ -136,7 +163,20 @@ body .private-feed,body #contributie,body .nav a[href="#contributie"]{display:no
  </div>
  <div class="card public-sector-weights" id="public-sector-weights" style="margin-top:16px">
   <div class="card-h"><strong>Ponderi sectoriale S&P 500</strong><span id="public-weights-date">Data ultimei actualizări</span></div>
-  <div class="public-weight-grid" id="public-weight-grid"></div>
+  <div class="sector-pie-layout">
+   <div class="sector-pie-visual">
+    <div class="sector-pie-wrap">
+     <svg id="sector-pie" viewBox="0 0 360 360" role="group" aria-label="Grafic circular interactiv al ponderilor celor 11 sectoare S&P 500"></svg>
+     <div class="sector-pie-center" aria-live="polite">
+      <small id="sector-pie-center-label">S&P 500</small>
+      <strong id="sector-pie-center-value">100%</strong>
+      <span id="sector-pie-center-caption">11 sectoare</span>
+     </div>
+    </div>
+    <p class="sector-pie-note">Selectează un sector pentru a vedea ponderea în indice.</p>
+   </div>
+   <div class="public-weight-grid" id="public-weight-grid" aria-label="Legendă sectorială și ponderi"></div>
+  </div>
  </div>
  <div class="legacy-data-host" aria-hidden="true"><div id="spx-heat"></div><div id="growth-heat"></div></div>
 </section>
@@ -148,7 +188,7 @@ body .private-feed,body #contributie,body .nav a[href="#contributie"]{display:no
     <div class="tradingview-widget-container" style="width:100%;height:100%">
       <div class="tradingview-widget-container__widget"></div>
       <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-symbol-overview.js" async>
-      {"symbols":[["XLK • Technology","AMEX:XLK|1D"],["XLF • Financials","AMEX:XLF|1D"],["XLV • Healthcare","AMEX:XLV|1D"],["XLY • Consumer discretionary","AMEX:XLY|1D"],["XLC • Communication","AMEX:XLC|1D"],["XLI • Industrials","AMEX:XLI|1D"],["XLP • Staples","AMEX:XLP|1D"],["XLE • Energy","AMEX:XLE|1D"],["XLU • Utilities","AMEX:XLU|1D"],["XLRE • Real estate","AMEX:XLRE|1D"],["XLB • Materials","AMEX:XLB|1D"],["SMH • Semiconductors","NASDAQ:SMH|1D"],["SOXX • Semiconductors","NASDAQ:SOXX|1D"],["IGV • Software","AMEX:IGV|1D"],["BOTZ • AI robotics","NASDAQ:BOTZ|1D"],["SKYY • Cloud","NASDAQ:SKYY|1D"],["CIBR • Cybersecurity","NASDAQ:CIBR|1D"],["URA • Uranium","AMEX:URA|1D"]],"chartOnly":false,"width":"100%","height":"100%","autosize":true,"locale":"en","colorTheme":"dark","showVolume":false,"hideDateRanges":false,"hideMarketStatus":false,"hideSymbolLogo":false,"scalePosition":"right","scaleMode":"Percentage","valuesTracking":"1","changeMode":"price-and-percent","chartType":"area","lineWidth":2,"dateRanges":["1d|1","5d|5","1m|1D","3m|1D","12m|1W"]}
+      {"symbols":[["XLK • Technology","AMEX:XLK|1D"],["XLF • Financials","AMEX:XLF|1D"],["XLV • Healthcare","AMEX:XLV|1D"],["XLY • Consumer discretionary","AMEX:XLY|1D"],["XLC • Communication","AMEX:XLC|1D"],["XLI • Industrials","AMEX:XLI|1D"],["XLP • Staples","AMEX:XLP|1D"],["XLE • Energy","AMEX:XLE|1D"],["XLU • Utilities","AMEX:XLU|1D"],["XLRE • Real estate","AMEX:XLRE|1D"],["XLB • Materials","AMEX:XLB|1D"],["SMH • Semiconductors","NASDAQ:SMH|1D"],["SOXX • Semiconductors","NASDAQ:SOXX|1D"],["IGV • Software","AMEX:IGV|1D"],["BOTZ • AI robotics","NASDAQ:BOTZ|1D"],["SKYY • Cloud","NASDAQ:SKYY|1D"],["CIBR • Cybersecurity","NASDAQ:CIBR|1D"],["URA • Uranium","AMEX:URA|1D"]],"chartOnly":false,"width":"100%","height":"100%","autosize":true,"locale":"en","colorTheme":"dark","showVolume":false,"hideDateRanges":false,"hideMarketStatus":false,"hideSymbolLogo":false,"scalePosition":"right","scaleMode":"Normal","valuesTracking":"1","changeMode":"price-and-percent","chartType":"area","lineWidth":2,"dateRanges":["1d|1","5d|5","1m|1D","3m|1D","12m|1W"]}
       </script>
     </div>
   </div>
@@ -173,15 +213,15 @@ body .private-feed,body #contributie,body .nav a[href="#contributie"]{display:no
  <div class="section-head"><div><h2 class="section-title">03 / Macro dashboard</h2><p class="section-sub">Dobânzi, dolar, volatilitate, credit și petrol pentru contextul de risc.</p></div><span class="tag">Nu sunt semnale singulare de long / short</span></div>
  <div class="grid2">
 
-  <div class="card"><div class="card-h"><strong>VIX · ultimele 30 zile calendaristice</strong><span>Cboe · ultimul close oficial, NU live</span></div>
+  <div class="card"><div class="card-h"><strong>VIX · ultimele 30 zile calendaristice</strong><span>Cboe · închideri zilnice</span></div>
     <div class="card-pad"><div class="vix-head"><div><div class="eyebrow">VIX · VOLATILITATE IMPLICITĂ</div><div id="vix-current" class="vix-main">—</div><p id="vix-date" class="small-note">Istoric Cboe în curs de verificare</p></div><div><div id="vix-range-position" class="vix-position">—</div><p class="small-note">Poziție în intervalul 30D</p></div></div>
     <svg id="vix-spark" viewBox="0 0 600 170" aria-label="Seria zilnică VIX în ultimele 30 zile" role="img"></svg><div class="vix-metrics" id="vix-metrics"></div><p class="small-note" id="vix-status">Fără date VIX. Le va prelua GitHub Actions din Cboe.</p>
     <div class="macro-links"><a href="https://www.tradingview.com/symbols/TVC-DXY/" target="_blank" rel="noopener">DXY ↗</a><a href="https://www.tradingview.com/symbols/TVC-US10Y/" target="_blank" rel="noopener">US10Y ↗</a><a href="https://www.tradingview.com/symbols/TVC-US02Y/" target="_blank" rel="noopener">US02Y ↗</a><a href="https://www.tradingview.com/symbols/AMEX-HYG/" target="_blank" rel="noopener">Credit HYG ↗</a></div>
     </div></div>
 
-  <div class="card"><div class="card-h"><strong>US500 / NAS100 · CFD-uri OANDA</strong><span>Feed broker · distinct de SPX cash și futures CME</span></div><div class="widget medium"><div class="tradingview-widget-container"><div class="tradingview-widget-container__widget"></div>
+  <div class="card"><div class="card-h"><strong>VIX · grafic de piață</strong><span>TradingView · evoluție intraday și istoric</span></div><div class="widget medium"><div class="tradingview-widget-container"><div class="tradingview-widget-container__widget"></div>
    <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-symbol-overview.js" async>
-   {"symbols":[["US500 · S&P 500 CFD","OANDA:SPX500USD|1D"],["NAS100 · Nasdaq-100 CFD","OANDA:NAS100USD|1D"]],"chartOnly":false,"width":"100%","height":"100%","autosize":true,"locale":"en","colorTheme":"dark","showVolume":false,"showMA":false,"hideDateRanges":false,"hideMarketStatus":false,"hideSymbolLogo":false,"scalePosition":"right","scaleMode":"Percentage","valuesTracking":"1","changeMode":"price-and-percent","chartType":"area","lineWidth":2,"dateRanges":["1d|1","5d|5","1m|1D","3m|1D","12m|1W"]}
+   {"symbols":[["VIX · Indicele volatilității","TVC:VIX|1D"]],"chartOnly":false,"width":"100%","height":"100%","autosize":true,"locale":"en","colorTheme":"dark","showVolume":false,"showMA":false,"hideDateRanges":false,"hideMarketStatus":false,"hideSymbolLogo":false,"scalePosition":"right","scaleMode":"Percentage","valuesTracking":"1","changeMode":"price-and-percent","chartType":"area","lineWidth":2,"dateRanges":["1d|1","5d|5","1m|1D","3m|1D","12m|1W"]}
    </script></div></div></div>
  </div>
 </section>
@@ -350,7 +390,89 @@ async function loadWeights(){
  }catch(e){document.getElementById('weights-status').textContent='Ponderi de rezervă: 20 nov. 2026 · sursa automată indisponibilă';document.getElementById('weights-status').style.color='#f7c46c';}
 }
 loadWeights();
-function renderPublicWeights(){const host=document.getElementById('public-weight-grid');host.replaceChildren();for(const [name,ticker,weight] of [...sectors].sort((a,b)=>b[2]-a[2])){const card=document.createElement('a');card.className='public-weight-item';card.href='https://www.tradingview.com/symbols/'+ticker+'/';card.target='_blank';card.rel='noopener';const head=document.createElement('div');head.className='public-weight-head';const title=document.createElement('span');title.textContent=name+' · '+ticker;const amount=document.createElement('strong');amount.textContent=weight.toLocaleString('ro-RO',{minimumFractionDigits:2,maximumFractionDigits:2})+'%';head.append(title,amount);const track=document.createElement('div');track.className='public-weight-track';const bar=document.createElement('span');bar.style.width=Math.min(100,weight/40*100).toFixed(1)+'%';track.append(bar);card.append(head,track);host.append(card);}}
+function renderPublicWeights(){
+ const legend=document.getElementById('public-weight-grid'),svg=document.getElementById('sector-pie');
+ if(!legend||!svg)return;
+ legend.replaceChildren();svg.replaceChildren();
+ const colors=['#62a9ff','#40d1ac','#a693f7','#f3b665','#e48bb9','#58c6df','#b0cb73','#ff9373','#9fb5e9','#bb9ce5','#79d7b3'];
+ const data=[...sectors].filter(s=>Number.isFinite(s[2])&&s[2]>0).sort((a,b)=>b[2]-a[2]);
+ const total=data.reduce((v,s)=>v+s[2],0);
+ if(data.length!==11||!(total>97&&total<103)){
+  document.getElementById('sector-pie-center-label').textContent='Date';
+  document.getElementById('sector-pie-center-value').textContent='—';
+  document.getElementById('sector-pie-center-caption').textContent='indisponibile';
+  return;
+ }
+ const ns='http://www.w3.org/2000/svg',root=document.getElementById('sector-pie');
+ const label=document.getElementById('sector-pie-center-label'),value=document.getElementById('sector-pie-center-value'),caption=document.getElementById('sector-pie-center-caption');
+ const pct=n=>Number(n).toLocaleString('ro-RO',{minimumFractionDigits:2,maximumFractionDigits:2})+'%';
+ const polar=(a,r)=>[180+r*Math.cos(a),180+r*Math.sin(a)];
+ const sectorPath=(start,end)=>{
+  const gap=Math.min(.014,(end-start)*.14);
+  const s=start+gap,e=end-gap;
+  const p0=polar(s,151),p1=polar(e,151),p2=polar(e,90),p3=polar(s,90);
+  const large=(e-s)>Math.PI?1:0;
+  return 'M '+p0[0]+' '+p0[1]+' A 151 151 0 '+large+' 1 '+p1[0]+' '+p1[1]+
+    ' L '+p2[0]+' '+p2[1]+' A 90 90 0 '+large+' 0 '+p3[0]+' '+p3[1]+' Z';
+ };
+ const slices=new Map(),entries=new Map();let active=null,angle=-Math.PI/2;
+ const setActive=(ticker)=>{
+  const s=data.find(x=>x[1]===ticker);
+  if(s){
+   label.textContent=s[0];value.textContent=pct(s[2]);caption.textContent=s[1]+' · pondere';
+  }else{
+   label.textContent='S&P 500';value.textContent='100%';caption.textContent='11 sectoare';
+  }
+  for(const [key,path] of slices){
+   path.classList.toggle('selected',!!ticker&&key===ticker);
+   path.classList.toggle('dimmed',!!ticker&&key!==ticker);
+  }
+  for(const [key,button] of entries){
+   button.classList.toggle('selected',!!ticker&&key===ticker);
+   button.setAttribute('aria-pressed',String(!!ticker&&key===ticker));
+  }
+ };
+ const peek=ticker=>setActive(ticker),restore=()=>setActive(active);
+ data.forEach(([name,ticker,weight],i)=>{
+  const delta=(weight/total)*Math.PI*2;
+  const path=document.createElementNS(ns,'path');
+  path.setAttribute('d',sectorPath(angle,angle+delta));
+  path.setAttribute('fill',colors[i]);
+  path.setAttribute('class','sector-pie-slice');
+  path.setAttribute('role','button');
+  path.setAttribute('tabindex','0');
+  path.setAttribute('aria-label',name+', '+pct(weight));
+  const title=document.createElementNS(ns,'title');title.textContent=name+' · '+ticker+': '+pct(weight);path.append(title);
+  path.addEventListener('mouseenter',()=>peek(ticker));
+  path.addEventListener('mouseleave',restore);
+  path.addEventListener('focus',()=>peek(ticker));
+  path.addEventListener('blur',restore);
+  path.addEventListener('click',()=>{active=active===ticker?null:ticker;restore();});
+  path.addEventListener('keydown',event=>{
+   if(event.key==='Enter'||event.key===' '){event.preventDefault();active=active===ticker?null:ticker;restore();}
+  });
+  root.append(path);slices.set(ticker,path);
+  angle+=delta;
+  const button=document.createElement('button');button.type='button';button.className='public-weight-item';
+  button.setAttribute('aria-pressed','false');
+  const head=document.createElement('span');head.className='public-weight-head';
+  const sector=document.createElement('span');sector.className='public-weight-name';
+  const dot=document.createElement('i');dot.className='public-weight-dot';dot.style.backgroundColor=colors[i];dot.setAttribute('aria-hidden','true');
+  const text=document.createElement('span');text.textContent=name+' · '+ticker;
+  sector.append(dot,text);
+  const amount=document.createElement('strong');amount.textContent=pct(weight);
+  head.append(sector,amount);button.append(head);
+  const track=document.createElement('span');track.className='public-weight-track';
+  const bar=document.createElement('span');bar.style.width=Math.min(weight/total*300,100).toFixed(1)+'%';bar.style.background=colors[i];track.append(bar);button.append(track);
+  button.addEventListener('mouseenter',()=>peek(ticker));
+  button.addEventListener('mouseleave',restore);
+  button.addEventListener('focus',()=>peek(ticker));
+  button.addEventListener('blur',restore);
+  button.addEventListener('click',()=>{active=active===ticker?null:ticker;restore();});
+  legend.append(button);entries.set(ticker,button);
+ });
+ restore();
+}
 renderPublicWeights();
 function updateTiles(){
  const grid=document.getElementById('market-grid');grid.replaceChildren();
