@@ -56,7 +56,7 @@ header{display:flex;align-items:center;justify-content:space-between;gap:20px;ma
 
 
 /* Visitors receive a public, provider-hosted view; only personal local data is hidden. */
-.no-key .private-feed{display:none!important}
+.no-key .private-feed,.no-key #contributie,.no-key .nav a[href='#contributie']{display:none!important}
 .public-widget{height:485px;background:#0b1320}
 .public-history-chart{height:410px}
 .public-note{color:#9fb7d0;font-size:11px;padding:1px 16px 15px;margin:0}
@@ -108,11 +108,11 @@ header{display:flex;align-items:center;justify-content:space-between;gap:20px;ma
   <div class="market-grid" id="market-grid" style="margin-top:12px"></div>
  <div class="card" style="margin-top:12px"><div class="card-h"><strong>AI, semiconductori și sectoare</strong><span id="auto-updated">Fără date numerice încă</span></div><div class="table-wrap"><table><thead><tr><th>Referință</th><th>ETF</th><th class="num">Variație 1D</th><th class="num">Δ vs media sectoarelor (pp)</th></tr></thead><tbody id="themes-tbody"></tbody></table></div></div>
  </div>
- <div class="callout"><b>Interpretare:</b> „Δ vs media sectoarelor” compară variația ETF cu media simplă a 11 ETF-uri sectoriale, nu cu futures ES sau NQ. Ponderea unui sector în SPX este diferită de variația unui ETF. Contribuția SPX este aproximativă, iar temele AI, semiconductori și cloud se suprapun cu sectoarele oficiale — nu le aduna.</div>
+ <div class="callout"><b>Interpretare:</b> compară liderii sectoriali și temele AI cu ES/NQ în ferestrele 1D, 5D și 1M. ETF-urile tematice se suprapun uneori cu sectoarele; nu însuma performanțele lor.</div>
 </section>
 
 <section class="section" id="heatmap">
- <div class="section-head"><div><h2 class="section-title">01 / Harta pieței — date ETF</h2><p class="section-sub">Hărți native din variațiile ETF-urilor. Dimensiunea pe SPX reflectă aproximativ ponderea sectorului; în zona AI cărțile au dimensiuni egale.</p></div><span class="tag">Fără widgeturi care nu se încarcă</span></div>
+ <div class="section-head"><div><h2 class="section-title">01 / Structura sectorială S&P 500</h2><p class="section-sub">Ponderile sectoarelor în indice. Pentru variațiile zilnice folosește watchlistul public de mai sus.</p></div><span class="tag">11 sectoare</span></div>
  <div class="card public-sector-weights" id="public-sector-weights">
   <div class="card-h"><strong>Ponderi sectoriale S&P 500</strong><span id="public-weights-date">Ponderi la data ultimei actualizări</span></div>
   <div class="public-weight-grid" id="public-weight-grid"></div>
@@ -123,7 +123,7 @@ header{display:flex;align-items:center;justify-content:space-between;gap:20px;ma
  </div><div class="callout"><b>Notă:</b> harta SPX este o aproximare din ETF-uri, nu o hartă a fiecărei acțiuni. Harta tematică nu este compoziția oficială Nasdaq-100 și temele se suprapun. Simbolurile fără date apar neutru, cu „—”.</div>
 </section>
 <section class="section" id="sectoare">
- <div class="section-head"><div><h2 class="section-title">02 / Sector Rotation & temele AI</h2><p class="section-sub">Variație 1D, forță relativă și variații pe 5 și 20 de ședințe (din închideri zilnice).</p></div><a class="source" href="https://www.ssga.com/us/en/individual/resources/sector-tracker" target="_blank" rel="noopener">Sector Tracker oficial ↗</a></div>
+ <div class="section-head"><div><h2 class="section-title">02 / Sector Rotation & temele AI</h2><p class="section-sub">Grafice interactive disponibile public, cu selecție 1D, 5D și 1M. Calculele numerice 5D/20D sunt opționale.</p></div><a class="source" href="https://www.ssga.com/us/en/individual/resources/sector-tracker" target="_blank" rel="noopener">Sector Tracker oficial ↗</a></div>
  <div class="card" id="public-history">
   <div class="card-h"><strong>Grafic ETF-uri · selectează simbolul și intervalul</strong><span>1D / 5D / 1M · TradingView</span></div>
   <div class="public-history-chart">
@@ -241,7 +241,7 @@ header{display:flex;align-items:center;justify-content:space-between;gap:20px;ma
      <div class="auto-panel">
   <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;align-items:center"><div><strong>Conectează o singură dată cheia gratuită Twelve Data</strong><p class="small-note">Cheia rămâne în stocarea acestui browser, <b>nu</b> se publică în GitHub. Poate fi citită de scripturile care rulează pe această pagină.</p></div><a href="https://twelvedata.com/account/api-keys" target="_blank" rel="noopener">Obține o cheie API ↗</a></div>
   <div class="auto-controls"><input id="td-key" type="password" autocomplete="off" placeholder="Introdu cheia API (doar o singură dată)" aria-label="Cheie Twelve Data"><button class="button" id="save-key" type="button">Salvează și activează</button><button class="button" id="clear-key" type="button">Șterge cheia</button><button class="button" id="refresh-feed" type="button">↻ Actualizează acum</button></div>
-  <p class="small-note" id="feed-message">TradingView funcționează fără cheie. Pentru calculul automat al randamentelor ai nevoie de cheia gratuită Twelve Data.</p>
+  <p class="small-note" id="feed-message">Cotațiile publice TradingView sunt disponibile fără cheie. Analizele numerice personale folosesc exclusiv cheia introdusă în browserul tău.</p>
   <p class="small-note" id="feed-budget" role="status">Buget API: maximum 6 credite/lot și plafon conservator în acest browser.</p>
   <p class="small-note">Actualizare controlată la circa 60 minute în sesiunea SUA. Istoric 5D/20D o dată pe zi; max. 6 simboluri/lot, cu pauză. Datele se salvează în browser; reîncărcările excesive consumă credite.</p>
  </div>
@@ -353,8 +353,8 @@ function updateTiles(){
 // Do not run renderers before const showReturn/colour are initialized.
 function showStatus(message,isError=false){
  document.getElementById('feed-message').textContent=message;
- const tag=document.getElementById('feed-status');tag.textContent=isError?'Verifică API-ul':refreshBusy?'Actualizare în curs':autoMode?'AUTO · min. 60 min':'Fără conexiune API';
- tag.style.color=isError?'#fb7b84':autoMode?'#46d5ac':'#a9cbed';
+ const tag=document.getElementById('feed-status');tag.textContent=!getKey()?'Date publice':isError?'Verifică API-ul':refreshBusy?'Actualizare în curs':'Public + analiză personală';
+ tag.style.color=isError&&getKey()?'#fb7b84':'#46d5ac';
 }
 function setMode(mode){autoMode=mode;for(let i=0;i<sectors.length;i++){const inp=document.getElementById('move'+i),q=prices[sectors[i][1]];inp.disabled=true;inp.value=q&&Number.isFinite(Number(q.change))?Number(q.change).toFixed(4):'';}document.getElementById('contrib-mode').textContent=mode?'AUTO · Twelve Data · variații 1D':'SIMULATOR · INTRODUCERE MANUALĂ';compute();}
 const API_KEY_STORE='atlas-td-api-key';
