@@ -69,6 +69,11 @@ async function scenario(withKey) {
   await until(()=>doc.getElementById('vix-current').textContent!=='—','VIX official last close');
   assert.ok(doc.querySelector('#vix-spark polyline'),'VIX historical line');
   assert.ok(doc.getElementById('feed-budget'),'API usage status exists');
+  assert.equal(doc.querySelectorAll('#public-weight-grid .public-weight-item').length,11,'Sector weights public without any key');
+  assert.ok(doc.querySelector('#public-market script[src*="embed-widget-market-overview"]'),'Free market watchlist embedded');
+  assert.ok(doc.querySelector('#public-history script[src*="embed-widget-symbol-overview"]'),'Public history chart embedded');
+  assert.equal(doc.body.classList.contains('no-key'),!withKey,'Public/personal mode selected');
+
   assert.ok(html.includes('CME_MINI:ES1!') && html.includes('CME_MINI:NQ1!'),'ES/NQ futures embedded');
   assert.ok(!html.includes('SPY') && !html.includes('QQQ'),'No SPY/QQQ stock ETF benchmarks');
   assert.ok(doc.getElementById('instalare').querySelector('details.settings-details'),'Data settings collapsible');

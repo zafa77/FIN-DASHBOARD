@@ -54,14 +54,30 @@ header{display:flex;align-items:center;justify-content:space-between;gap:20px;ma
 .settings-hint{font-weight:400;font-size:12px;color:#91a8c3;margin-left:13px}
 .settings-details .auto-panel{margin-top:15px}
 
+
+/* Visitors receive a public, provider-hosted view; only personal local data is hidden. */
+.no-key .private-feed{display:none!important}
+.public-widget{height:485px;background:#0b1320}
+.public-history-chart{height:410px}
+.public-note{color:#9fb7d0;font-size:11px;padding:1px 16px 15px;margin:0}
+.public-sector-weights{margin-bottom:15px}
+.public-weight-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;padding:13px}
+.public-weight-item{border:1px solid #2d415a;background:#162337;border-radius:10px;padding:11px;text-decoration:none!important}
+.public-weight-item:hover{background:#1d3350}
+.public-weight-head{display:flex;justify-content:space-between;gap:10px;color:#cedff0;font-size:12px}
+.public-weight-head strong{color:#f0f7ff;font-variant-numeric:tabular-nums}
+.public-weight-track{height:7px;border-radius:99px;background:#27374c;margin-top:10px;overflow:hidden}
+.public-weight-track span{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,#3e84ca,#60c0f1)}
+@media(max-width:700px){.public-weight-grid{grid-template-columns:1fr}.public-widget{height:420px}.public-history-chart{height:360px}}
+
 </style>
 
 </head>
-<body>
+<body class="no-key">
 <div class="wrap">
 <header>
  <div class="logo"><div class="mark">A·</div><div><div class="title">ATLAS <span style="color:#75b8fc">/ MARKET ROTATION</span></div><div class="sub">ES FUTURES · NQ FUTURES · SECTOARE · CFTC</div></div></div>
- <div class="actions"><span class="pill"><span class="dot"></span> Widgeturi automate · API personal opțional</span><span class="pill" id="clock">București —</span><button class="button" onclick="window.location.reload()">↻ Reîncarcă datele</button></div>
+ <div class="actions"><span class="pill"><span class="dot"></span> Date publice · ES / NQ / CFTC / VIX</span><span class="pill" id="clock">București —</span><button class="button" onclick="window.location.reload()">↻ Reîncarcă datele</button></div>
 </header>
 <div class="ticker-frame" aria-label="Cotații automate TradingView">
  <div class="tradingview-widget-container" style="height:76px"><div class="tradingview-widget-container__widget"></div>
@@ -71,23 +87,56 @@ header{display:flex;align-items:center;justify-content:space-between;gap:20px;ma
 </div>
 <nav class="nav"><a href="#feed">00 · Feed</a><a href="#heatmap">01 · Harta pieței</a><a href="#sectoare">02 · Sectoare & istoric</a><a href="#macro">03 · VIX & macro</a><a href="#contributie">04 · Contribuție SPX</a><a href="#cftc">05 · CFTC / COT</a><a href="#instalare">Setări</a></nav>
 <section class="section" id="feed">
- <div class="section-head"><div><h2 class="section-title">00 / ES și NQ · Market Overview</h2><p class="section-sub">ES și NQ sunt reperele futures principale. ETF-urile măsoară separat performanța sectoarelor și a temelor AI.</p></div><span class="tag" id="feed-status">Fără conexiune API</span></div>
- <div class="market-grid" id="market-grid" style="margin-top:12px"></div>
+ <div class="section-head"><div><h2 class="section-title">00 / ES și NQ · Market Overview</h2><p class="section-sub">ES și NQ sunt reperele futures principale. ETF-urile măsoară separat performanța sectoarelor și a temelor AI.</p></div><span class="tag" id="feed-status">Date publice</span></div>
+ 
+<div class="card public-market" id="public-market">
+  <div class="card-h"><strong>Market watchlist · Futures / Sectoare / AI</strong><span>TradingView · cotații publice, posibil întârziate</span></div>
+  <div class="public-widget">
+    <div class="tradingview-widget-container" style="height:100%;width:100%">
+      <div class="tradingview-widget-container__widget"></div>
+      <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-market-overview.js" async>
+      {"colorTheme":"dark","dateRange":"1M","showChart":true,"locale":"en","largeChartUrl":"","isTransparent":true,"showSymbolLogo":false,"showFloatingTooltip":true,"width":"100%","height":"100%","tabs":[
+        {"title":"Futures ES / NQ","symbols":[{"s":"CME_MINI:ES1!","d":"ES · S&P 500 Futures"},{"s":"CME_MINI:NQ1!","d":"NQ · Nasdaq-100 Futures"}]},
+        {"title":"Sectoare S&P 500","symbols":[{"s":"AMEX:XLK","d":"Technology"},{"s":"AMEX:XLF","d":"Financials"},{"s":"AMEX:XLV","d":"Health Care"},{"s":"AMEX:XLY","d":"Consumer Discretionary"},{"s":"AMEX:XLC","d":"Communication Services"},{"s":"AMEX:XLI","d":"Industrials"},{"s":"AMEX:XLP","d":"Consumer Staples"},{"s":"AMEX:XLE","d":"Energy"},{"s":"AMEX:XLU","d":"Utilities"},{"s":"AMEX:XLRE","d":"Real Estate"},{"s":"AMEX:XLB","d":"Materials"}]},
+        {"title":"AI & growth","symbols":[{"s":"NASDAQ:SMH","d":"Semiconductors"},{"s":"NASDAQ:SOXX","d":"Semiconductors SOXX"},{"s":"AMEX:IGV","d":"Software"},{"s":"NASDAQ:BOTZ","d":"Robotics AI"},{"s":"NASDAQ:SKYY","d":"Cloud"},{"s":"NASDAQ:CIBR","d":"Cybersecurity"},{"s":"AMEX:URA","d":"Uranium"}]}
+      ]}
+      </script>
+    </div>
+  </div>
+</div>
+<div class="private-feed">
+  <div class="market-grid" id="market-grid" style="margin-top:12px"></div>
  <div class="card" style="margin-top:12px"><div class="card-h"><strong>AI, semiconductori și sectoare</strong><span id="auto-updated">Fără date numerice încă</span></div><div class="table-wrap"><table><thead><tr><th>Referință</th><th>ETF</th><th class="num">Variație 1D</th><th class="num">Δ vs media sectoarelor (pp)</th></tr></thead><tbody id="themes-tbody"></tbody></table></div></div>
+ </div>
  <div class="callout"><b>Interpretare:</b> „Δ vs media sectoarelor” compară variația ETF cu media simplă a 11 ETF-uri sectoriale, nu cu futures ES sau NQ. Ponderea unui sector în SPX este diferită de variația unui ETF. Contribuția SPX este aproximativă, iar temele AI, semiconductori și cloud se suprapun cu sectoarele oficiale — nu le aduna.</div>
 </section>
 
 <section class="section" id="heatmap">
  <div class="section-head"><div><h2 class="section-title">01 / Harta pieței — date ETF</h2><p class="section-sub">Hărți native din variațiile ETF-urilor. Dimensiunea pe SPX reflectă aproximativ ponderea sectorului; în zona AI cărțile au dimensiuni egale.</p></div><span class="tag">Fără widgeturi care nu se încarcă</span></div>
- <div class="grid2">
+ <div class="card public-sector-weights" id="public-sector-weights">
+  <div class="card-h"><strong>Ponderi sectoriale S&P 500</strong><span id="public-weights-date">Ponderi la data ultimei actualizări</span></div>
+  <div class="public-weight-grid" id="public-weight-grid"></div>
+ </div>
+ <div class="grid2 private-feed">
   <div class="card"><div class="card-h"><strong>SPX · 11 sectoare</strong><span>Pondere sectorială SPX · variație ETF</span></div><div class="native-heat" id="spx-heat"></div></div>
   <div class="card"><div class="card-h"><strong>Growth, AI & broad market</strong><span>Teme de piață, nu ponderi NQ futures</span></div><div class="native-heat" id="growth-heat"></div></div>
  </div><div class="callout"><b>Notă:</b> harta SPX este o aproximare din ETF-uri, nu o hartă a fiecărei acțiuni. Harta tematică nu este compoziția oficială Nasdaq-100 și temele se suprapun. Simbolurile fără date apar neutru, cu „—”.</div>
 </section>
 <section class="section" id="sectoare">
  <div class="section-head"><div><h2 class="section-title">02 / Sector Rotation & temele AI</h2><p class="section-sub">Variație 1D, forță relativă și variații pe 5 și 20 de ședințe (din închideri zilnice).</p></div><a class="source" href="https://www.ssga.com/us/en/individual/resources/sector-tracker" target="_blank" rel="noopener">Sector Tracker oficial ↗</a></div>
- <div class="grid23">
-
+ <div class="card" id="public-history">
+  <div class="card-h"><strong>Grafic ETF-uri · selectează simbolul și intervalul</strong><span>1D / 5D / 1M · TradingView</span></div>
+  <div class="public-history-chart">
+    <div class="tradingview-widget-container" style="width:100%;height:100%">
+      <div class="tradingview-widget-container__widget"></div>
+      <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-symbol-overview.js" async>
+      {"symbols":[["XLK • Technology","AMEX:XLK|1D"],["XLF • Financials","AMEX:XLF|1D"],["XLV • Healthcare","AMEX:XLV|1D"],["XLY • Consumer discretionary","AMEX:XLY|1D"],["XLC • Communication","AMEX:XLC|1D"],["XLI • Industrials","AMEX:XLI|1D"],["XLP • Staples","AMEX:XLP|1D"],["XLE • Energy","AMEX:XLE|1D"],["XLU • Utilities","AMEX:XLU|1D"],["XLRE • Real estate","AMEX:XLRE|1D"],["XLB • Materials","AMEX:XLB|1D"],["SMH • Semiconductors","NASDAQ:SMH|1D"],["SOXX • Semiconductors","NASDAQ:SOXX|1D"],["IGV • Software","AMEX:IGV|1D"],["BOTZ • AI robotics","NASDAQ:BOTZ|1D"],["SKYY • Cloud","NASDAQ:SKYY|1D"],["CIBR • Cybersecurity","NASDAQ:CIBR|1D"],["URA • Uranium","AMEX:URA|1D"]],"chartOnly":false,"width":"100%","height":"100%","autosize":true,"locale":"en","colorTheme":"dark","showVolume":false,"hideDateRanges":false,"hideMarketStatus":false,"hideSymbolLogo":false,"scalePosition":"right","scaleMode":"Percentage","valuesTracking":"1","changeMode":"price-and-percent","chartType":"area","lineWidth":2,"dateRanges":["1d|1","5d|5","1m|1D","3m|1D","12m|1W"]}
+      </script>
+    </div>
+  </div>
+  <p class="public-note">Grafice publice: 5D reprezintă aproximativ o săptămână de tranzacționare, 1M aproximativ o lună. Nu sunt returnări numerice 20D calculate de ATLAS.</p>
+ </div>
+ <div class="grid23 private-feed" style="margin-top:14px">
   <div class="card"><div class="card-h"><strong>Sectoare & teme — comparații istorice</strong><span>ETF-uri din Twelve Data · fără widgeturi cu simboluri lipsă</span></div>
     <div class="table-wrap"><table><thead><tr><th>ETF</th><th class="num">1D</th><th class="num">5D</th><th class="num">20D</th><th class="num">Δ vs media sectoarelor (pp)</th></tr></thead><tbody id="history-tbody"></tbody></table></div>
   </div>
@@ -120,7 +169,7 @@ header{display:flex;align-items:center;justify-content:space-between;gap:20px;ma
 </section>
 <section class="section" id="contributie">
  <div class="section-head"><div><h2 class="section-title">04 / Contribuție sectorială SPX</h2><p class="section-sub">Ponderi sectoriale S&P 500 și randamente ETF. Contribuția este estimată pentru indicele SPX, nu pentru variația ES futures.</p></div><a class="source" target="_blank" rel="noopener" href="https://www.spglobal.com/spdji/en/indices/equity/sp-500/">Structura SPX · S&P DJI ↗</a></div>
- <div class="grid23">
+ <div class="grid23 private-feed">
   <div class="card"><div class="table-wrap"><table><thead><tr><th>Sector</th><th>ETF</th><th class="num">Pondere SPX (%)</th><th class="num">Variație 1D (%)</th><th class="num">Impact estimat (pp)</th></tr></thead><tbody id="sectors-tbody"></tbody></table></div></div>
   <div class="card card-pad"><div class="eyebrow" id="contrib-mode">DATE ETF · FĂRĂ SIMULARE</div><p class="small-note" id="weights-status">Ponderi de referință: 20 nov. 2026 · se verifică sursa zilnică...</p><div class="kpi-row"><div class="kpi"><div class="kpi-label">Impact agregat estimat</div><div class="kpi-value" id="sum-result">—</div></div><div class="kpi"><div class="kpi-label">Sectoare pozitive</div><div class="kpi-value" id="positive-sectors">0 / 11</div></div><div class="kpi"><div class="kpi-label">Cea mai mare contribuție</div><div class="kpi-value" id="top-sector" style="font-size:15px">—</div></div></div><div class="chartbar"><div id="upBar" style="background:#42caaa;width:50%"></div><div id="downBar" style="background:#e87982;width:50%"></div></div><p class="muted" style="font-size:12px" id="bar-label">Date sectoriale indisponibile.</p><p style="font-size:12px;color:#bed4e8"><b>Formula:</b> pondere sector (%) × variație ETF (%) / 100 = contribuție aproximativă în puncte procentuale.</p><div class="callout" style="margin-bottom:16px">ETF-urile sectoriale urmăresc S&P 500, dar pot exista abateri. Un calcul exact necesită date la nivel de constituent și ponderi actualizate; nu extrapola acest tabel asupra NDX.</div><button class="button" style="display:none" id="resetReturns" type="button" aria-hidden="true">Reset</button><p class="muted" style="font-size:11px;margin-top:12px">Variațiile 1D vin din API, iar istoricul 5D și 20D este disponibil în secțiunea 02. Valorile lipsă rămân marcate „—”.</p></div>
  </div>
@@ -274,6 +323,8 @@ async function loadWeights(){
   if(!(total>97&&total<103))throw new Error('invalid weight total');
   sectors.forEach((s,i)=>{s[2]=Number(w[s[1]]);document.getElementById('w'+i).textContent=s[2].toFixed(2)});
   currentWeightsDate=obj.asOf||'necunoscută';
+  document.getElementById('public-weights-date').textContent='Data ponderilor: '+currentWeightsDate;
+  renderPublicWeights();
   const fallback=obj.type==='dated-fallback';
   document.getElementById('weights-status').textContent=(fallback?'Snapshot datat':'Ponderi sectoriale SPX')+' · Data sursei: '+currentWeightsDate+' · '+(fallback?'workflow încă neconfirmat':'actualizare publicată automat');
   document.getElementById('weights-status').style.color=fallback?'#f7c46c':'#b8decf';
@@ -281,6 +332,8 @@ async function loadWeights(){
  }catch(e){document.getElementById('weights-status').textContent='Ponderi de rezervă: 20 nov. 2026 · sursa automată indisponibilă';document.getElementById('weights-status').style.color='#f7c46c';}
 }
 loadWeights();
+function renderPublicWeights(){const host=document.getElementById('public-weight-grid');host.replaceChildren();for(const [name,ticker,weight] of [...sectors].sort((a,b)=>b[2]-a[2])){const card=document.createElement('a');card.className='public-weight-item';card.href='https://www.tradingview.com/symbols/'+ticker+'/';card.target='_blank';card.rel='noopener';const head=document.createElement('div');head.className='public-weight-head';const title=document.createElement('span');title.textContent=name+' · '+ticker;const amount=document.createElement('strong');amount.textContent=weight.toLocaleString('ro-RO',{minimumFractionDigits:2,maximumFractionDigits:2})+'%';head.append(title,amount);const track=document.createElement('div');track.className='public-weight-track';const bar=document.createElement('span');bar.style.width=Math.min(100,weight/40*100).toFixed(1)+'%';track.append(bar);card.append(head,track);host.append(card);}}
+renderPublicWeights();
 function updateTiles(){
  const grid=document.getElementById('market-grid');grid.replaceChildren();
  for(const ticker of ['XLK','SMH','XLF','XLE']){
@@ -306,6 +359,8 @@ function showStatus(message,isError=false){
 function setMode(mode){autoMode=mode;for(let i=0;i<sectors.length;i++){const inp=document.getElementById('move'+i),q=prices[sectors[i][1]];inp.disabled=true;inp.value=q&&Number.isFinite(Number(q.change))?Number(q.change).toFixed(4):'';}document.getElementById('contrib-mode').textContent=mode?'AUTO · Twelve Data · variații 1D':'SIMULATOR · INTRODUCERE MANUALĂ';compute();}
 const API_KEY_STORE='atlas-td-api-key';
 function getKey(){return localStorage.getItem(API_KEY_STORE)||'';}
+function syncViewMode(){const has=!!getKey();document.body.classList.toggle('no-key',!has);document.body.classList.toggle('with-key',has);document.getElementById('feed-status').textContent=has?'Public + analiză personală':'Date publice';}
+syncViewMode();
 function pause(ms){return new Promise(resolve=>setTimeout(resolve,ms));}
 function isUsMarketOpen(){
  const v=new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',weekday:'short',hour:'2-digit',minute:'2-digit',hour12:false}).formatToParts(new Date());
@@ -376,10 +431,10 @@ async function refreshMarket(){
 document.getElementById('save-key').addEventListener('click',()=>{
  const key=document.getElementById('td-key').value.trim();
  if(!key){showStatus('Introdu o cheie API validă înainte de salvare.',true);return;}
- localStorage.setItem(API_KEY_STORE,key);document.getElementById('td-key').value='';refreshMarket();
+ localStorage.setItem(API_KEY_STORE,key);document.getElementById('td-key').value='';syncViewMode();refreshMarket();
 });
 document.getElementById('clear-key').addEventListener('click',()=>{
- localStorage.removeItem(API_KEY_STORE);setMode(false);showStatus('Cheia a fost ștearsă. Calculatorul revine în modul manual.');
+ localStorage.removeItem(API_KEY_STORE);syncViewMode();setMode(false);showStatus('Cheia a fost ștearsă. Calculatorul revine în modul manual.');
 });
 document.getElementById('refresh-feed').addEventListener('click',()=>refreshMarket().then(loadHistory));
 if(getKey()){setMode(true);refreshMarket().then(loadHistory);}else showStatus('Date TradingView automate. Pentru variațiile ETF, introdu cheia Twelve Data o singură dată.');
