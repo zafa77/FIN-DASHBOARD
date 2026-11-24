@@ -101,11 +101,9 @@ async function scenario(withKey) {
   techButton.click();
   assert.equal(doc.getElementById('sector-pie-center-value').textContent,'100%','Toggle pie selection off');
   const macro=doc.getElementById('macro');
-  const vixWidget=[...macro.querySelectorAll('script[src*="embed-widget-symbol-overview"]')].find(x=>x.textContent.includes('TVC:VIX'));
-  assert.ok(vixWidget,'Macro embedded VIX chart');
-  const vixWidgetConfig=JSON.parse(vixWidget.textContent);
-  assert.equal(vixWidgetConfig.symbols.length,1,'Macro VIX chart not mixed with CFD indices');
-  assert.ok(!vixWidget.textContent.includes('OANDA:NAS100USD'),'Macro chart replaces Nasdaq CFD');
+  assert.ok(macro.querySelector('#vix-history-chart'),'Native Cboe VIX chart is inside Macro');
+  assert.ok(![...macro.querySelectorAll('script[src*="embed-widget-symbol-overview"]')].some(s=>s.textContent.includes('TVC:VIX')),'Restricted VIX embed is absent');
+
 
   assert.ok(doc.querySelector('#public-market script[src*="embed-widget-market-overview"]'),'Free market watchlist embedded');
   assert.ok(doc.querySelector('#public-history script[src*="embed-widget-symbol-overview"]'),'Public history chart embedded');
