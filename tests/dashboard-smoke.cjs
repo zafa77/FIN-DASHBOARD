@@ -65,10 +65,15 @@ async function scenario(withKey) {
   }
   await until(()=>doc.querySelectorAll('#spx-heat .heat-cell').length===11,'SPX map');
   assert.equal(doc.querySelectorAll('#growth-heat .heat-cell').length,10,'Growth map items');
-  assert.equal(doc.querySelectorAll('#history-tbody tr').length,22,'History table items');
+  assert.equal(doc.querySelectorAll('#history-tbody tr').length,18,'History table items');
   await until(()=>doc.getElementById('vix-current').textContent!=='—','VIX official last close');
   assert.ok(doc.querySelector('#vix-spark polyline'),'VIX historical line');
   assert.ok(doc.getElementById('feed-budget'),'API usage status exists');
+  assert.ok(html.includes('CME_MINI:ES1!') && html.includes('CME_MINI:NQ1!'),'ES/NQ futures embedded');
+  assert.ok(!html.includes('SPY') && !html.includes('QQQ'),'No SPY/QQQ stock ETF benchmarks');
+  assert.ok(doc.getElementById('instalare').querySelector('details.settings-details'),'Data settings collapsible');
+  assert.ok(doc.getElementById('instalare').querySelector('#td-key'),'API key UI preserved');
+
   await until(()=>doc.querySelectorAll('#cot-weeks tr').length===8,'8 weeks CFTC');
   const nq = cot.markets.NQ.observations.at(-1);
   const es = cot.markets.ES.observations.at(-1);
@@ -82,9 +87,9 @@ async function scenario(withKey) {
   if(withKey) {
     await until(()=>doc.querySelector('#market-grid .market-tile b').textContent.includes('1,25'),'Quote value');
     await until(()=>doc.querySelector('#history-tbody tr td:nth-child(3)').textContent!=='—','History 5D');
-    await until(()=>apiCalls.filter(c=>c.type==='history').length===4,'all four ETF history batches');
-    assert.equal(apiCalls.filter(c=>c.type==='quote').length,4,'Four requests for 22 ETF quotes');
-    assert.equal(apiCalls.filter(c=>c.type==='history').length,4,'Four requests for 22 ETF histories');
+    await until(()=>apiCalls.filter(c=>c.type==='history').length===3,'all three ETF history batches');
+    assert.equal(apiCalls.filter(c=>c.type==='quote').length,3,'Three requests for 18 ETF quotes');
+    assert.equal(apiCalls.filter(c=>c.type==='history').length,3,'Three requests for 18 ETF histories');
     assert.ok(apiCalls.every(c=>c.symbols.length<=6),'Never request more than six symbols at a time');
     assert.ok(doc.getElementById('feed-budget').textContent.includes('API:'),'API usage rendered');
   } else {
