@@ -1,0 +1,33 @@
+name: ZAFA - Public macro CPI and Fed
+on:
+  push:
+    paths:
+      - 'scripts/update_macro.py'
+      - '.github/workflows/update-macro.yml'
+  workflow_dispatch:
+  schedule:
+    - cron: '45 15 * * 1-5'
+    - cron: '35 19 * * 1-5'
+permissions:
+  contents: write
+jobs:
+  update-macro:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Calculate CPI YoY and Fed target range from official FRED CSV
+        run: python scripts/update_macro.py
+      - name: Publish only validated changes
+        run: |
+          git add data/macro_indicators.json
+          if git diff --cached --quiet; then
+            echo "No new CPI or Fed rate data"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "data: update public CPI and Fed target rate history"
+          git push
