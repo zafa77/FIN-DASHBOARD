@@ -119,7 +119,7 @@ async function scenario(withKey) {
   assert.ok(techButton,'XLK legend button');
   techButton.click();
   assert.ok(doc.getElementById('sector-pie-center-label').textContent.includes('Technology'),'Selected slice shows name');
-  assert.ok(doc.getElementById('sector-pie-center-value').textContent.includes('34,30'),'Selected slice shows current issuer weight');
+  assert.equal(doc.getElementById('sector-pie-center-value').textContent,weights.weights.XLK.toLocaleString('ro-RO',{minimumFractionDigits:2,maximumFractionDigits:2})+'%','Selected slice matches current issuer weight');
   assert.equal(techButton.getAttribute('aria-pressed'),'true','Pie selection accessible');
   techButton.click();
   assert.equal(doc.getElementById('sector-pie-center-value').textContent,'100%','Toggle pie selection off');
