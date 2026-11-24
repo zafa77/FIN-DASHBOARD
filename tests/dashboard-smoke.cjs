@@ -71,16 +71,17 @@ async function scenario(withKey) {
   }
   await until(()=>doc.querySelectorAll('#spx-heat .heat-cell').length===11,'SPX map');
   assert.equal(doc.querySelectorAll('#growth-heat .heat-cell').length,10,'Growth map items');
-  const sectorQuote=doc.querySelector('#sector-momentum-live script[src*="embed-widget-market-quotes"]');
+  const sectorQuotes=[...doc.querySelectorAll('#sector-momentum-tbody .sector-tv-quote script[src*="embed-widget-single-quote"]')];
   const themeQuote=doc.querySelector('#public-sector-quotes script[src*="embed-widget-market-quotes"]');
-  assert.ok(sectorQuote,'Compact sector intraday quotes inside the momentum panel');
-  assert.ok(themeQuote,'AI quote table remains in the sector section');
-  const sectorCfg=JSON.parse(sectorQuote.textContent),themeCfg=JSON.parse(themeQuote.textContent);
-  assert.equal(sectorCfg.symbolsGroups[0].symbols.length,11,'11 sector live quote symbols');
-  assert.equal(themeCfg.symbolsGroups[0].symbols.length,7,'7 AI quote symbols');
-  assert.ok(doc.getElementById('sector-momentum-live').textContent.includes('nu'), 'Live price feed disclosure visible');
-  assert.equal(doc.querySelectorAll('#sector-momentum-live script[src*="embed-widget-symbol-overview"]').length,0,'No sector price charts');
-  assert.equal(doc.querySelectorAll('#sector-momentum-tbody tr').length<=11,true,'Historical NAV table separate from intraday prices');
+  assert.equal(sectorQuotes.length,11,'11 intraday single-quote widgets embedded inside the momentum rows');
+  assert.ok(themeQuote,'AI quote list remains available');
+  const symbols=sectorQuotes.map(script=>JSON.parse(script.textContent).symbol);
+  assert.equal(new Set(symbols).size,11,'Every sector has a distinct live quote');
+  assert.ok(symbols.includes('AMEX:XLK') && symbols.includes('AMEX:XLB'),'Sector quotes use SPDR sector ETF symbols');
+  assert.equal(JSON.parse(themeQuote.textContent).symbolsGroups[0].symbols.length,7,'Seven AI symbols remain');
+  assert.equal(doc.querySelector('#sector-momentum-live'),null,'Duplicate live quote side table removed');
+  assert.ok(!doc.querySelector('#sector-momentum').textContent.includes('1D close'),'Historical 1D close column removed');
+  assert.equal(doc.querySelectorAll('#sector-momentum-tbody tr[data-sector-symbol]').length,11,'11 static sector rows');
   assert.equal(doc.querySelector('#contributie')!==null,true,'Legacy calculator remains in DOM');
   assert.ok(html.includes('ZAFA MARKET REBORN'),'Public site renamed');
 
@@ -105,8 +106,11 @@ async function scenario(withKey) {
   assert.ok(doc.getElementById('sector-momentum-updated').textContent.includes('2026-11-23'),'Sector NAV data date shown');
   const xlkRow=[...doc.querySelectorAll('#sector-momentum-tbody tr')].find(row=>row.textContent.includes('XLK'));
   assert.ok(xlkRow,'Sector XLK row available');
-  assert.equal(xlkRow.querySelectorAll('.momentum-cell.extreme').length,3,'Large 1D/2W/1M moves highlighted clearly');
+  assert.equal(xlkRow.querySelectorAll('.momentum-cell.extreme').length,2,'Large 2W and 1M moves highlighted clearly');
   assert.ok(xlkRow.textContent.includes('+6,31%'),'NAV 2W return formatted');
+  assert.ok(xlkRow.querySelector('[data-return="1M"]').textContent.includes('+9,32%'),'NAV 1M preserved');
+  assert.equal(xlkRow.querySelectorAll('.sector-tv-quote').length,1,'Intraday quote and historical returns share one sector row');
+
   assert.ok(doc.getElementById('sector-momentum-note').textContent.includes('NAV'),'Return type is disclosed');
   const vixPriceWidget=doc.querySelector('.vix-single-widget script[src*="embed-widget-single-quote"]');
   assert.ok(vixPriceWidget,'VIX has numeric intraday broker quote');

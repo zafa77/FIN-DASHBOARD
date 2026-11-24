@@ -185,6 +185,24 @@ body .private-feed,body #contributie,body .nav a[href="#contributie"]{display:no
 .public-ai-quote-card .quotes-widget{height:415px;min-height:415px}
 @media(max-width:1160px){.sector-momentum-layout{grid-template-columns:1fr}#sector-momentum-live .quotes-widget{height:560px}}
 @media(max-width:650px){.sector-momentum-layout{padding:8px;gap:10px}.sector-momentum-table .sector-name small{display:none}.sector-momentum-table th{font-size:9px}}
+
+/* ZAFA sector momentum: one live market quote per sector inside the same heatmap row. */
+.sector-momentum-layout{display:block;padding:12px 16px}
+.sector-momentum-content{padding:0!important;width:100%}
+.sector-momentum-table{table-layout:fixed;width:100%}
+.sector-momentum-table th:first-child{width:19%}
+.sector-momentum-table th.sector-quote-header{width:38%}
+.sector-momentum-table th:nth-child(3),.sector-momentum-table th:nth-child(4){width:14%}
+.sector-momentum-table th:nth-child(5){width:15%}
+.sector-momentum-table td{vertical-align:middle}
+.sector-current-cell{padding:3px 6px!important;min-width:0}
+.sector-tv-quote{height:102px;max-width:100%;overflow:hidden;background:#101c2c;border-radius:9px}
+.sector-tv-quote .tradingview-widget-container{width:100%;height:100%}
+.sector-tv-quote iframe{max-width:100%}
+#sector-momentum-live{display:none!important}
+@media(max-width:850px){.sector-momentum-layout{padding:6px}.sector-momentum-table th:first-child{width:18%}.sector-momentum-table th.sector-quote-header{width:42%}.sector-momentum-table th:nth-child(3),.sector-momentum-table th:nth-child(4){width:14%}.sector-momentum-table th:nth-child(5){width:12%}.sector-momentum-table .direction{font-size:10px}.sector-tv-quote{height:104px}}
+@media(max-width:550px){.sector-momentum-table{min-width:680px}.sector-tv-quote{height:99px}}
+
 </style>
 
 </head>
@@ -227,7 +245,7 @@ body .private-feed,body #contributie,body .nav a[href="#contributie"]{display:no
  </div>
 
  <div class="card sector-momentum-card" id="sector-momentum" style="margin-top:16px">
-   <div class="card-h"><strong>Sector Momentum · intraday + 1D / 2W / 1M</strong><span id="sector-momentum-updated">Închideri zilnice · State Street</span></div>
+   <div class="card-h"><strong>Sector Momentum · intraday / 2W / 1M</strong><span id="sector-momentum-updated">Închideri zilnice · State Street</span></div>
    <div class="sector-momentum-layout">
    <div class="sector-momentum-content">
      <div class="sector-momentum-legend">
@@ -237,19 +255,168 @@ body .private-feed,body #contributie,body .nav a[href="#contributie"]{display:no
      </div>
      <div class="table-wrap">
        <table class="sector-momentum-table">
-         <thead><tr><th>Sector</th><th class="num" title="Ultima zi încheiată, nu intraday">1D close</th><th class="num">2W</th><th class="num">1M</th><th>Direcție</th></tr></thead>
-         <tbody id="sector-momentum-tbody"><tr><td colspan="5" class="momentum-loading">Se verifică istoricul sectorial oficial...</td></tr></tbody>
+         <thead><tr><th>Sector</th><th class="num sector-quote-header" title="Preț ETF și variație în sesiune din feedul TradingView">Cotație acum · 1D</th><th class="num">2W</th><th class="num">1M</th><th>Direcție</th></tr></thead>
+         <tbody id="sector-momentum-tbody">
+<tr data-sector-symbol="XLK">
+  <td class="sector-name"><strong>XLK</strong><small>Technology</small></td>
+  <td class="sector-current-cell">
+    <div class="sector-tv-quote" aria-label="Cotație TradingView XLK în sesiunea curentă">
+      <div class="tradingview-widget-container" style="height:100%;width:100%">
+        <div class="tradingview-widget-container__widget"></div>
+        <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-single-quote.js" async>{"symbol":"AMEX:XLK","width":"100%","colorTheme":"dark","isTransparent":true,"locale":"en"}</script>
+      </div>
+    </div>
+  </td>
+  <td data-return="2W" class="num"><div class="momentum-cell flat">—</div></td>
+  <td data-return="1M" class="num"><div class="momentum-cell flat">—</div></td>
+  <td data-direction class="direction">—</td>
+ </tr>
+<tr data-sector-symbol="XLF">
+  <td class="sector-name"><strong>XLF</strong><small>Financials</small></td>
+  <td class="sector-current-cell">
+    <div class="sector-tv-quote" aria-label="Cotație TradingView XLF în sesiunea curentă">
+      <div class="tradingview-widget-container" style="height:100%;width:100%">
+        <div class="tradingview-widget-container__widget"></div>
+        <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-single-quote.js" async>{"symbol":"AMEX:XLF","width":"100%","colorTheme":"dark","isTransparent":true,"locale":"en"}</script>
+      </div>
+    </div>
+  </td>
+  <td data-return="2W" class="num"><div class="momentum-cell flat">—</div></td>
+  <td data-return="1M" class="num"><div class="momentum-cell flat">—</div></td>
+  <td data-direction class="direction">—</td>
+ </tr>
+<tr data-sector-symbol="XLV">
+  <td class="sector-name"><strong>XLV</strong><small>Health Care</small></td>
+  <td class="sector-current-cell">
+    <div class="sector-tv-quote" aria-label="Cotație TradingView XLV în sesiunea curentă">
+      <div class="tradingview-widget-container" style="height:100%;width:100%">
+        <div class="tradingview-widget-container__widget"></div>
+        <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-single-quote.js" async>{"symbol":"AMEX:XLV","width":"100%","colorTheme":"dark","isTransparent":true,"locale":"en"}</script>
+      </div>
+    </div>
+  </td>
+  <td data-return="2W" class="num"><div class="momentum-cell flat">—</div></td>
+  <td data-return="1M" class="num"><div class="momentum-cell flat">—</div></td>
+  <td data-direction class="direction">—</td>
+ </tr>
+<tr data-sector-symbol="XLY">
+  <td class="sector-name"><strong>XLY</strong><small>Consumer Discretionary</small></td>
+  <td class="sector-current-cell">
+    <div class="sector-tv-quote" aria-label="Cotație TradingView XLY în sesiunea curentă">
+      <div class="tradingview-widget-container" style="height:100%;width:100%">
+        <div class="tradingview-widget-container__widget"></div>
+        <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-single-quote.js" async>{"symbol":"AMEX:XLY","width":"100%","colorTheme":"dark","isTransparent":true,"locale":"en"}</script>
+      </div>
+    </div>
+  </td>
+  <td data-return="2W" class="num"><div class="momentum-cell flat">—</div></td>
+  <td data-return="1M" class="num"><div class="momentum-cell flat">—</div></td>
+  <td data-direction class="direction">—</td>
+ </tr>
+<tr data-sector-symbol="XLC">
+  <td class="sector-name"><strong>XLC</strong><small>Communication Services</small></td>
+  <td class="sector-current-cell">
+    <div class="sector-tv-quote" aria-label="Cotație TradingView XLC în sesiunea curentă">
+      <div class="tradingview-widget-container" style="height:100%;width:100%">
+        <div class="tradingview-widget-container__widget"></div>
+        <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-single-quote.js" async>{"symbol":"AMEX:XLC","width":"100%","colorTheme":"dark","isTransparent":true,"locale":"en"}</script>
+      </div>
+    </div>
+  </td>
+  <td data-return="2W" class="num"><div class="momentum-cell flat">—</div></td>
+  <td data-return="1M" class="num"><div class="momentum-cell flat">—</div></td>
+  <td data-direction class="direction">—</td>
+ </tr>
+<tr data-sector-symbol="XLI">
+  <td class="sector-name"><strong>XLI</strong><small>Industrials</small></td>
+  <td class="sector-current-cell">
+    <div class="sector-tv-quote" aria-label="Cotație TradingView XLI în sesiunea curentă">
+      <div class="tradingview-widget-container" style="height:100%;width:100%">
+        <div class="tradingview-widget-container__widget"></div>
+        <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-single-quote.js" async>{"symbol":"AMEX:XLI","width":"100%","colorTheme":"dark","isTransparent":true,"locale":"en"}</script>
+      </div>
+    </div>
+  </td>
+  <td data-return="2W" class="num"><div class="momentum-cell flat">—</div></td>
+  <td data-return="1M" class="num"><div class="momentum-cell flat">—</div></td>
+  <td data-direction class="direction">—</td>
+ </tr>
+<tr data-sector-symbol="XLP">
+  <td class="sector-name"><strong>XLP</strong><small>Consumer Staples</small></td>
+  <td class="sector-current-cell">
+    <div class="sector-tv-quote" aria-label="Cotație TradingView XLP în sesiunea curentă">
+      <div class="tradingview-widget-container" style="height:100%;width:100%">
+        <div class="tradingview-widget-container__widget"></div>
+        <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-single-quote.js" async>{"symbol":"AMEX:XLP","width":"100%","colorTheme":"dark","isTransparent":true,"locale":"en"}</script>
+      </div>
+    </div>
+  </td>
+  <td data-return="2W" class="num"><div class="momentum-cell flat">—</div></td>
+  <td data-return="1M" class="num"><div class="momentum-cell flat">—</div></td>
+  <td data-direction class="direction">—</td>
+ </tr>
+<tr data-sector-symbol="XLE">
+  <td class="sector-name"><strong>XLE</strong><small>Energy</small></td>
+  <td class="sector-current-cell">
+    <div class="sector-tv-quote" aria-label="Cotație TradingView XLE în sesiunea curentă">
+      <div class="tradingview-widget-container" style="height:100%;width:100%">
+        <div class="tradingview-widget-container__widget"></div>
+        <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-single-quote.js" async>{"symbol":"AMEX:XLE","width":"100%","colorTheme":"dark","isTransparent":true,"locale":"en"}</script>
+      </div>
+    </div>
+  </td>
+  <td data-return="2W" class="num"><div class="momentum-cell flat">—</div></td>
+  <td data-return="1M" class="num"><div class="momentum-cell flat">—</div></td>
+  <td data-direction class="direction">—</td>
+ </tr>
+<tr data-sector-symbol="XLU">
+  <td class="sector-name"><strong>XLU</strong><small>Utilities</small></td>
+  <td class="sector-current-cell">
+    <div class="sector-tv-quote" aria-label="Cotație TradingView XLU în sesiunea curentă">
+      <div class="tradingview-widget-container" style="height:100%;width:100%">
+        <div class="tradingview-widget-container__widget"></div>
+        <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-single-quote.js" async>{"symbol":"AMEX:XLU","width":"100%","colorTheme":"dark","isTransparent":true,"locale":"en"}</script>
+      </div>
+    </div>
+  </td>
+  <td data-return="2W" class="num"><div class="momentum-cell flat">—</div></td>
+  <td data-return="1M" class="num"><div class="momentum-cell flat">—</div></td>
+  <td data-direction class="direction">—</td>
+ </tr>
+<tr data-sector-symbol="XLRE">
+  <td class="sector-name"><strong>XLRE</strong><small>Real Estate</small></td>
+  <td class="sector-current-cell">
+    <div class="sector-tv-quote" aria-label="Cotație TradingView XLRE în sesiunea curentă">
+      <div class="tradingview-widget-container" style="height:100%;width:100%">
+        <div class="tradingview-widget-container__widget"></div>
+        <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-single-quote.js" async>{"symbol":"AMEX:XLRE","width":"100%","colorTheme":"dark","isTransparent":true,"locale":"en"}</script>
+      </div>
+    </div>
+  </td>
+  <td data-return="2W" class="num"><div class="momentum-cell flat">—</div></td>
+  <td data-return="1M" class="num"><div class="momentum-cell flat">—</div></td>
+  <td data-direction class="direction">—</td>
+ </tr>
+<tr data-sector-symbol="XLB">
+  <td class="sector-name"><strong>XLB</strong><small>Materials</small></td>
+  <td class="sector-current-cell">
+    <div class="sector-tv-quote" aria-label="Cotație TradingView XLB în sesiunea curentă">
+      <div class="tradingview-widget-container" style="height:100%;width:100%">
+        <div class="tradingview-widget-container__widget"></div>
+        <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-single-quote.js" async>{"symbol":"AMEX:XLB","width":"100%","colorTheme":"dark","isTransparent":true,"locale":"en"}</script>
+      </div>
+    </div>
+  </td>
+  <td data-return="2W" class="num"><div class="momentum-cell flat">—</div></td>
+  <td data-return="1M" class="num"><div class="momentum-cell flat">—</div></td>
+  <td data-direction class="direction">—</td>
+ </tr>
+</tbody>
        </table>
      </div>
-     <p class="sector-momentum-note" id="sector-momentum-note">Randamente calculate din NAV zilnic al ETF-urilor sectoriale; nu reprezintă cotații ETF intraday. Cifrele pot fi afectate de distribuții.</p>
+     <p class="sector-momentum-note" id="sector-momentum-note">Cotația și variația din sesiune sunt preluate prin TradingView; pot exista întârzieri în funcție de feed. 2W și 1M sunt calculate din NAV zilnic State Street, nu intraday.</p>
    </div>
-   <aside id="sector-momentum-live" aria-label="Cotații ETF din sesiunea curentă">
-    <div class="sector-live-quote-panel"><div class="card-h"><strong>Cotații în sesiune · ETF-uri sectoriale</strong><span>TradingView · preț și Δ 1D</span></div><div class="quotes-widget"><div class="tradingview-widget-container" style="height:100%;width:100%"><div class="tradingview-widget-container__widget"></div>
-<script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-market-quotes.js" async>
-{"width":"100%","height":"100%","symbolsGroups":[{"name":"S&P 500 · sectoare","symbols":[{"name":"AMEX:XLK","displayName":"XLK · Technology"},{"name":"AMEX:XLF","displayName":"XLF · Financials"},{"name":"AMEX:XLV","displayName":"XLV · Healthcare"},{"name":"AMEX:XLY","displayName":"XLY · Consumer Discretionary"},{"name":"AMEX:XLC","displayName":"XLC · Communication"},{"name":"AMEX:XLI","displayName":"XLI · Industrials"},{"name":"AMEX:XLP","displayName":"XLP · Consumer Staples"},{"name":"AMEX:XLE","displayName":"XLE · Energy"},{"name":"AMEX:XLU","displayName":"XLU · Utilities"},{"name":"AMEX:XLRE","displayName":"XLRE · Real Estate"},{"name":"AMEX:XLB","displayName":"XLB · Materials"}]}],"showSymbolLogo":false,"isTransparent":false,"colorTheme":"dark","locale":"en"}
-</script></div></div></div>
-    <p class="sector-live-disclaimer">Cotații din feedul public TradingView (Cboe sau feed disponibil). Actualizarea în timp real nu este garantată; pot exista întârzieri și diferențe față de prețul consolidat. <strong>2W / 1M</strong> din stânga rămân randamente la închidere.</p>
-   </aside>
+
   </div>
  </div>
  <div class="card public-ai-quote-card" id="public-sector-quotes" style="margin-top:16px">
@@ -422,49 +589,47 @@ const sectorMomentumState={data:null};
 function renderSectorMomentum(){
  const body=document.getElementById('sector-momentum-tbody');
  const source=document.getElementById('sector-momentum-updated');
+ const note=document.getElementById('sector-momentum-note');
  if(!body||!source)return;
- body.replaceChildren();
  const payload=sectorMomentumState.data;
+ // Live single-quote widgets are authored in HTML, independently of NAV availability.
  if(!payload?.sectors){
-  const tr=document.createElement('tr'),td=document.createElement('td');
-  td.colSpan=5;td.className='momentum-loading';td.textContent='Istoricul sectorial se actualizează. Variațiile disponibile sunt afișate în tabelele TradingView de mai sus.';
-  tr.append(td);body.append(tr);source.textContent='Ultima actualizare indisponibilă';return;
+  source.textContent='Istoric 2W / 1M indisponibil';
+  if(note)note.textContent='Cotațiile din sesiune sunt furnizate de TradingView (posibil întârziate). Istoricul NAV se actualizează separat.';
+  return;
  }
- source.textContent='State Street · NAV '+payload.asOf;
- const chartRows=sectors.map(s=>({symbol:s[1],name:s[0],row:payload.sectors[s[1]]})).filter(x=>x.row&&Number.isFinite(x.row["2W"]));
- chartRows.sort((a,b)=>b.row["2W"]-a.row["2W"]);
+ source.textContent='TradingView · sesiune / NAV '+payload.asOf;
  const fmt=x=>(x>0?'+':'')+Number(x).toLocaleString('ro-RO',{minimumFractionDigits:2,maximumFractionDigits:2})+'%';
- for(const item of chartRows){
-  const tr=document.createElement('tr');
-  const name=document.createElement('td');name.className='sector-name';
-  const strong=document.createElement('strong');strong.textContent=item.symbol;
-  const small=document.createElement('small');small.textContent=item.name;
-  name.append(strong,small);tr.append(name);
-  for(const [key,threshold] of [["1D",2],["2W",5],["1M",8]]){
-   const td=document.createElement('td');td.className='num';
-   const v=Number(item.row[key]),box=document.createElement('div');
+ const rows=[...body.querySelectorAll('tr[data-sector-symbol]')];
+ for(const tr of rows){
+  const ticker=tr.dataset.sectorSymbol;
+  const sector=payload.sectors[ticker];
+  if(!sector||!Number.isFinite(Number(sector['2W']))||!Number.isFinite(Number(sector['1M'])))continue;
+  for(const [key,threshold] of [['2W',5],['1M',8]]){
+   const td=tr.querySelector('[data-return="'+key+'"]');
+   if(!td)continue;
+   const v=Number(sector[key]),box=td.querySelector('.momentum-cell');
    box.className='momentum-cell '+(v>.03?'up':v<-.03?'down':'flat')+(Math.abs(v)>=threshold?' extreme':'');
    box.textContent=fmt(v);
-   box.title=key+' · '+item.symbol+': '+fmt(v)+(Math.abs(v)>=threshold?' · Mișcare puternică':'');
-   td.append(box);tr.append(td);
+   box.title=key+' · '+ticker+': '+fmt(v)+(Math.abs(v)>=threshold?' · Mișcare puternică':'');
   }
-  const dir=document.createElement('td'),two=item.row["2W"],month=item.row["1M"],day=item.row["1D"];
-  let label="↔ Mixt",cls="";
-  if(two>0&&month>0){label=day<-.5?'↘ Retragere':'↗ Ascendent';cls='bull'}
-  else if(two<0&&month<0){label=day>.5?'↗ Revenire':'↘ Descendent';cls='bear'}
-  else if(two>0&&month<=0){label='↗ Revenire';cls='bull'}
-  else if(two<0&&month>=0){label='↘ Slăbire';cls='bear'}
-  dir.className='direction '+cls;dir.textContent=label;tr.append(dir);
-  body.append(tr);
+  const two=Number(sector['2W']),month=Number(sector['1M']),dir=tr.querySelector('[data-direction]');
+  if(dir){
+   let label='↔ Mixt',cls='';
+   if(two>0&&month>0){label='↗ Ascendent';cls='bull'}
+   else if(two<0&&month<0){label='↘ Descendent';cls='bear'}
+   else if(two>0&&month<=0){label='↗ Revenire';cls='bull'}
+   else if(two<0&&month>=0){label='↘ Slăbire';cls='bear'}
+   dir.className='direction '+cls;dir.textContent=label;
+  }
  }
- if(chartRows.length!==11){
-  const tr=document.createElement('tr'),td=document.createElement('td');
-  td.colSpan=5;td.className='momentum-loading';td.textContent='Date disponibile pentru '+chartRows.length+'/11 sectoare.';
-  tr.append(td);body.append(tr);
- }
- const dates=payload.windowDates;
- const note=document.getElementById('sector-momentum-note');
- if(note)note.textContent='Randamente pe NAV zilnic (nu cotații intraday): 1D vs '+(dates?.previous??'ședința precedentă')+', 2W vs '+(dates?.twoWeeks??'10 ședințe')+', 1M vs '+(dates?.oneMonth??'21 ședințe')+'. Mișcare puternică: ±2% / ±5% / ±8%. NAV fără ajustări pentru distribuții.';
+ // Sort by historical 2-week performance; quote widgets remain the same DOM elements.
+ rows.sort((a,b)=>{
+  const av=Number(payload.sectors[a.dataset.sectorSymbol]?.['2W']);
+  const bv=Number(payload.sectors[b.dataset.sectorSymbol]?.['2W']);
+  return (Number.isFinite(bv)?bv:-Infinity)-(Number.isFinite(av)?av:-Infinity);
+ }).forEach(row=>body.append(row));
+ if(note)note.textContent='Cotație acum: TradingView (latența depinde de feed). 2W = 10 ședințe, 1M = 21 ședințe, din NAV State Street la '+payload.asOf+'. Mișcare mare: ±5% (2W) / ±8% (1M). Datele NAV nu sunt ajustate pentru distribuții.';
 }
 async function loadSectorMomentum(){
  try{
