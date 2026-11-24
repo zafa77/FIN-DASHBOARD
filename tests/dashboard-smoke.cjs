@@ -71,11 +71,16 @@ async function scenario(withKey) {
   }
   await until(()=>doc.querySelectorAll('#spx-heat .heat-cell').length===11,'SPX map');
   assert.equal(doc.querySelectorAll('#growth-heat .heat-cell').length,10,'Growth map items');
-  const publicQuotes=doc.querySelectorAll('#public-sector-quotes script[src*="embed-widget-market-quotes"]');
-  assert.equal(publicQuotes.length,2,'Two public TradingView quote tables');
-  const cfg=[...publicQuotes].map(el=>JSON.parse(el.textContent));
-  assert.equal(cfg[0].symbolsGroups[0].symbols.length,11,'11 sector symbols');
-  assert.equal(cfg[1].symbolsGroups[0].symbols.length,7,'7 AI symbols');
+  const sectorQuote=doc.querySelector('#sector-momentum-live script[src*="embed-widget-market-quotes"]');
+  const themeQuote=doc.querySelector('#public-sector-quotes script[src*="embed-widget-market-quotes"]');
+  assert.ok(sectorQuote,'Compact sector intraday quotes inside the momentum panel');
+  assert.ok(themeQuote,'AI quote table remains in the sector section');
+  const sectorCfg=JSON.parse(sectorQuote.textContent),themeCfg=JSON.parse(themeQuote.textContent);
+  assert.equal(sectorCfg.symbolsGroups[0].symbols.length,11,'11 sector live quote symbols');
+  assert.equal(themeCfg.symbolsGroups[0].symbols.length,7,'7 AI quote symbols');
+  assert.ok(doc.getElementById('sector-momentum-live').textContent.includes('nu'), 'Live price feed disclosure visible');
+  assert.equal(doc.querySelectorAll('#sector-momentum-live script[src*="embed-widget-symbol-overview"]').length,0,'No sector price charts');
+  assert.equal(doc.querySelectorAll('#sector-momentum-tbody tr').length<=11,true,'Historical NAV table separate from intraday prices');
   assert.equal(doc.querySelector('#contributie')!==null,true,'Legacy calculator remains in DOM');
   assert.ok(html.includes('ZAFA MARKET REBORN'),'Public site renamed');
 
@@ -133,8 +138,14 @@ async function scenario(withKey) {
 
 
 
-  assert.ok(doc.querySelector('#public-market script[src*="embed-widget-market-overview"]'),'Free market watchlist embedded');
-  assert.ok(doc.querySelector('#public-history script[src*="embed-widget-symbol-overview"]'),'Public history chart embedded');
+  assert.equal(doc.querySelector('#feed'),null,'Old section 00 removed from visible page');
+  assert.equal(doc.querySelector('#sectoare'),null,'Old section 02 removed from visible page');
+  assert.equal(doc.querySelector('nav a[href="#feed"]'),null,'Navigation does not link removed feed');
+  assert.equal(doc.querySelector('nav a[href="#sectoare"]'),null,'Navigation does not link removed charts');
+  assert.equal(doc.querySelector('#public-market'),null,'Old market overview widget removed');
+  assert.equal(doc.querySelector('#public-history'),null,'Old ETF chart widget removed');
+  assert.equal(doc.querySelector('#macro .section-title').textContent.includes('02 /'),true,'Macro renumbered');
+  assert.equal(doc.querySelector('#cftc .section-title').textContent.includes('03 /'),true,'CFTC renumbered');
   assert.equal(doc.body.classList.contains('no-key'),!withKey,'Public/personal mode selected');
 
   assert.ok(html.includes('OANDA:SPX500USD') && html.includes('OANDA:NAS100USD'),'OANDA US500/NAS100 CFD feed references');

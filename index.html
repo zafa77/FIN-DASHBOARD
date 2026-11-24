@@ -173,6 +173,18 @@ body .private-feed,body #contributie,body .nav a[href="#contributie"]{display:no
 .momentum-loading{color:#9ab2ca;font-size:12px;padding:18px!important}
 @media(max-width:720px){.sector-momentum-content{padding:7px}.sector-momentum-table td,.sector-momentum-table th{padding:8px 4px}.sector-momentum-table .momentum-cell{min-width:59px;font-size:11px}.momentum-description{margin-left:0}}
 
+
+/* Sector Momentum: live quotes are a table, not extra charts. */
+.sector-momentum-layout{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(330px,.9fr);gap:14px;padding:14px;align-items:start}
+.sector-momentum-layout .sector-momentum-content{padding:0;min-width:0}
+#sector-momentum-live{min-width:0;background:#121e31;border:1px solid #30435b;border-radius:12px;overflow:hidden}
+#sector-momentum-live .card-h{flex-wrap:wrap;gap:5px 12px}
+#sector-momentum-live .quotes-widget{height:560px;min-height:560px}
+.sector-live-disclaimer{font-size:10px;color:#90a8c2;line-height:1.6;margin:0;padding:10px 12px 13px;border-top:1px solid #293d53}
+.public-ai-quote-card .public-ai-quote-body{max-width:900px}
+.public-ai-quote-card .quotes-widget{height:415px;min-height:415px}
+@media(max-width:1160px){.sector-momentum-layout{grid-template-columns:1fr}#sector-momentum-live .quotes-widget{height:560px}}
+@media(max-width:650px){.sector-momentum-layout{padding:8px;gap:10px}.sector-momentum-table .sector-name small{display:none}.sector-momentum-table th{font-size:9px}}
 </style>
 
 </head>
@@ -188,46 +200,13 @@ body .private-feed,body #contributie,body .nav a[href="#contributie"]{display:no
  {"symbols":[{"proName":"OANDA:SPX500USD","title":"US500 CFD · OANDA"},{"proName":"OANDA:NAS100USD","title":"NAS100 CFD · OANDA"},{"proName":"CAPITALCOM:VIX","title":"VIX CFD · Capital.com"}],"showSymbolLogo":true,"colorTheme":"dark","isTransparent":false,"displayMode":"adaptive","locale":"en"}
  </script></div>
 </div>
-<nav class="nav"><a href="#feed">00 · Feed</a><a href="#heatmap">01 · Sector Rotation</a><a href="#sectoare">02 · Sectoare & istoric</a><a href="#macro">03 · VIX & macro</a><a href="#contributie">04 · Contribuție SPX</a><a href="#cftc">05 · CFTC / COT</a><a href="#instalare">Setări</a></nav>
-<section class="section" id="feed">
- <div class="section-head"><div><h2 class="section-title">00 / US500 & NAS100 · CFD Market Overview</h2><p class="section-sub">US500 și NAS100 sunt CFD-uri cotate de OANDA, cu feed broker, fără întârzierea standard a futures CME. Prețurile pot diferi de indicii cash și de NQ/ES.</p></div><span class="tag" id="feed-status">Date publice</span></div>
- 
-<div class="card public-market" id="public-market">
-  <div class="card-h"><strong>Market watchlist · CFD-uri / Sectoare / AI</strong><span>TradingView · CFD-uri OANDA, date broker</span></div>
-  <div class="public-widget">
-    <div class="tradingview-widget-container" style="height:100%;width:100%">
-      <div class="tradingview-widget-container__widget"></div>
-      <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-market-overview.js" async>
-      {"colorTheme":"dark","dateRange":"1M","showChart":true,"locale":"en","largeChartUrl":"","isTransparent":true,"showSymbolLogo":false,"showFloatingTooltip":true,"width":"100%","height":"100%","tabs":[
-        {"title":"CFD US500 / NAS100","symbols":[{"s":"OANDA:SPX500USD","d":"US500 · S&P 500 CFD / OANDA"},{"s":"OANDA:NAS100USD","d":"NAS100 · Nasdaq CFD / OANDA"}]},
-        {"title":"Sectoare S&P 500","symbols":[{"s":"AMEX:XLK","d":"Technology"},{"s":"AMEX:XLF","d":"Financials"},{"s":"AMEX:XLV","d":"Health Care"},{"s":"AMEX:XLY","d":"Consumer Discretionary"},{"s":"AMEX:XLC","d":"Communication Services"},{"s":"AMEX:XLI","d":"Industrials"},{"s":"AMEX:XLP","d":"Consumer Staples"},{"s":"AMEX:XLE","d":"Energy"},{"s":"AMEX:XLU","d":"Utilities"},{"s":"AMEX:XLRE","d":"Real Estate"},{"s":"AMEX:XLB","d":"Materials"}]},
-        {"title":"AI & growth","symbols":[{"s":"NASDAQ:SMH","d":"Semiconductors"},{"s":"NASDAQ:SOXX","d":"Semiconductors SOXX"},{"s":"AMEX:IGV","d":"Software"},{"s":"NASDAQ:BOTZ","d":"Robotics AI"},{"s":"NASDAQ:SKYY","d":"Cloud"},{"s":"NASDAQ:CIBR","d":"Cybersecurity"},{"s":"AMEX:URA","d":"Uranium"}]}
-      ]}
-      </script>
-    </div>
-  </div>
-</div>
-<div class="private-feed">
-  <div class="market-grid" id="market-grid" style="margin-top:12px"></div>
- <div class="card" style="margin-top:12px"><div class="card-h"><strong>AI, semiconductori și sectoare</strong><span id="auto-updated">Fără date numerice încă</span></div><div class="table-wrap"><table><thead><tr><th>Referință</th><th>ETF</th><th class="num">Variație 1D</th><th class="num">Δ vs media sectoarelor (pp)</th></tr></thead><tbody id="themes-tbody"></tbody></table></div></div>
- </div>
- <div class="callout"><b>Interpretare:</b> compară liderii sectoriali și temele AI cu US500/NAS100 CFD în ferestrele 1D, 5D și 1M. ETF-urile tematice se suprapun uneori cu sectoarele; nu însuma performanțele lor.</div>
-</section>
+<nav class="nav"><a href="#heatmap">01 · Sectoare</a><a href="#macro">02 · VIX & macro</a><a href="#cftc">03 · CFTC / COT</a><a href="#instalare">Setări</a></nav>
+
 
 <section class="section" id="heatmap">
  <div class="section-head">
-  <div><h2 class="section-title">01 / Sector Rotation & AI</h2><p class="section-sub">Cotații și variații prin widgeturi oficiale TradingView, fără configurare API.</p></div>
+  <div><h2 class="section-title">01 / Sector Rotation & AI</h2><p class="section-sub">Ponderi sectoriale, tendință 1D / 2W / 1M și cotații ETF din sesiune — fără grafice suplimentare.</p></div>
   <span class="tag">11 sectoare · 7 teme</span>
- </div>
- <div class="grid2" id="public-sector-quotes">
-  <div class="card"><div class="card-h"><strong>S&P 500 · 11 sectoare</strong><span>ETF-uri sectoriale · variație 1D</span></div><div class="quotes-widget"><div class="tradingview-widget-container" style="height:100%;width:100%"><div class="tradingview-widget-container__widget"></div>
-<script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-market-quotes.js" async>
-{"width":"100%","height":"100%","symbolsGroups":[{"name":"S&P 500 · sectoare","symbols":[{"name":"AMEX:XLK","displayName":"XLK · Technology"},{"name":"AMEX:XLF","displayName":"XLF · Financials"},{"name":"AMEX:XLV","displayName":"XLV · Healthcare"},{"name":"AMEX:XLY","displayName":"XLY · Consumer Discretionary"},{"name":"AMEX:XLC","displayName":"XLC · Communication"},{"name":"AMEX:XLI","displayName":"XLI · Industrials"},{"name":"AMEX:XLP","displayName":"XLP · Consumer Staples"},{"name":"AMEX:XLE","displayName":"XLE · Energy"},{"name":"AMEX:XLU","displayName":"XLU · Utilities"},{"name":"AMEX:XLRE","displayName":"XLRE · Real Estate"},{"name":"AMEX:XLB","displayName":"XLB · Materials"}]}],"showSymbolLogo":false,"isTransparent":false,"colorTheme":"dark","locale":"en"}
-</script></div></div></div>
-  <div class="card"><div class="card-h"><strong>AI, semiconductori & growth</strong><span>ETF-uri tematice · variație 1D</span></div><div class="quotes-widget"><div class="tradingview-widget-container" style="height:100%;width:100%"><div class="tradingview-widget-container__widget"></div>
-<script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-market-quotes.js" async>
-{"width":"100%","height":"100%","symbolsGroups":[{"name":"AI · growth","symbols":[{"name":"NASDAQ:SMH","displayName":"SMH · Semiconductors"},{"name":"NASDAQ:SOXX","displayName":"SOXX · Semiconductors"},{"name":"AMEX:IGV","displayName":"IGV · Software"},{"name":"NASDAQ:BOTZ","displayName":"BOTZ · Robotics / AI"},{"name":"NASDAQ:SKYY","displayName":"SKYY · Cloud"},{"name":"NASDAQ:CIBR","displayName":"CIBR · Cybersecurity"},{"name":"AMEX:URA","displayName":"URA · Uranium"}]}],"showSymbolLogo":false,"isTransparent":false,"colorTheme":"dark","locale":"en"}
-</script></div></div></div>
  </div>
  <div class="card public-sector-weights" id="public-sector-weights" style="margin-top:16px">
   <div class="card-h"><strong>Ponderi sectoriale S&P 500</strong><span id="public-weights-date">Data ultimei actualizări</span></div>
@@ -248,7 +227,8 @@ body .private-feed,body #contributie,body .nav a[href="#contributie"]{display:no
  </div>
 
  <div class="card sector-momentum-card" id="sector-momentum" style="margin-top:16px">
-   <div class="card-h"><strong>Sector Momentum · 1D / 2W / 1M</strong><span id="sector-momentum-updated">NAV zilnic · State Street</span></div>
+   <div class="card-h"><strong>Sector Momentum · intraday + 1D / 2W / 1M</strong><span id="sector-momentum-updated">Închideri zilnice · State Street</span></div>
+   <div class="sector-momentum-layout">
    <div class="sector-momentum-content">
      <div class="sector-momentum-legend">
       <span><i class="momentum-dot up"></i> Creștere</span><span><i class="momentum-dot down"></i> Scădere</span>
@@ -257,46 +237,43 @@ body .private-feed,body #contributie,body .nav a[href="#contributie"]{display:no
      </div>
      <div class="table-wrap">
        <table class="sector-momentum-table">
-         <thead><tr><th>Sector</th><th class="num">1D</th><th class="num">2W</th><th class="num">1M</th><th>Direcție</th></tr></thead>
+         <thead><tr><th>Sector</th><th class="num" title="Ultima zi încheiată, nu intraday">1D close</th><th class="num">2W</th><th class="num">1M</th><th>Direcție</th></tr></thead>
          <tbody id="sector-momentum-tbody"><tr><td colspan="5" class="momentum-loading">Se verifică istoricul sectorial oficial...</td></tr></tbody>
        </table>
      </div>
      <p class="sector-momentum-note" id="sector-momentum-note">Randamente calculate din NAV zilnic al ETF-urilor sectoriale; nu reprezintă cotații ETF intraday. Cifrele pot fi afectate de distribuții.</p>
    </div>
+   <aside id="sector-momentum-live" aria-label="Cotații ETF din sesiunea curentă">
+    <div class="sector-live-quote-panel"><div class="card-h"><strong>Cotații în sesiune · ETF-uri sectoriale</strong><span>TradingView · preț și Δ 1D</span></div><div class="quotes-widget"><div class="tradingview-widget-container" style="height:100%;width:100%"><div class="tradingview-widget-container__widget"></div>
+<script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-market-quotes.js" async>
+{"width":"100%","height":"100%","symbolsGroups":[{"name":"S&P 500 · sectoare","symbols":[{"name":"AMEX:XLK","displayName":"XLK · Technology"},{"name":"AMEX:XLF","displayName":"XLF · Financials"},{"name":"AMEX:XLV","displayName":"XLV · Healthcare"},{"name":"AMEX:XLY","displayName":"XLY · Consumer Discretionary"},{"name":"AMEX:XLC","displayName":"XLC · Communication"},{"name":"AMEX:XLI","displayName":"XLI · Industrials"},{"name":"AMEX:XLP","displayName":"XLP · Consumer Staples"},{"name":"AMEX:XLE","displayName":"XLE · Energy"},{"name":"AMEX:XLU","displayName":"XLU · Utilities"},{"name":"AMEX:XLRE","displayName":"XLRE · Real Estate"},{"name":"AMEX:XLB","displayName":"XLB · Materials"}]}],"showSymbolLogo":false,"isTransparent":false,"colorTheme":"dark","locale":"en"}
+</script></div></div></div>
+    <p class="sector-live-disclaimer">Cotații din feedul public TradingView (Cboe sau feed disponibil). Pot exista întârzieri și diferențe față de prețul consolidat. <strong>2W / 1M</strong> din stânga rămân randamente la închidere.</p>
+   </aside>
+  </div>
+ </div>
+ <div class="card public-ai-quote-card" id="public-sector-quotes" style="margin-top:16px">
+  <div class="card-h"><strong>AI & Growth · cotații tematice</strong><span>7 ETF-uri · TradingView, fără grafice</span></div>
+  <div class="public-ai-quote-body"><div class="quotes-widget"><div class="tradingview-widget-container" style="height:100%;width:100%"><div class="tradingview-widget-container__widget"></div>
+<script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-market-quotes.js" async>
+{"width":"100%","height":"100%","symbolsGroups":[{"name":"AI · growth","symbols":[{"name":"NASDAQ:SMH","displayName":"SMH · Semiconductors"},{"name":"NASDAQ:SOXX","displayName":"SOXX · Semiconductors"},{"name":"AMEX:IGV","displayName":"IGV · Software"},{"name":"NASDAQ:BOTZ","displayName":"BOTZ · Robotics / AI"},{"name":"NASDAQ:SKYY","displayName":"SKYY · Cloud"},{"name":"NASDAQ:CIBR","displayName":"CIBR · Cybersecurity"},{"name":"AMEX:URA","displayName":"URA · Uranium"}]}],"showSymbolLogo":false,"isTransparent":false,"colorTheme":"dark","locale":"en"}
+</script></div></div></div>
  </div>
  <div class="legacy-data-host" aria-hidden="true"><div id="spx-heat"></div><div id="growth-heat"></div></div>
 </section>
-<section class="section" id="sectoare">
- <div class="section-head"><div><h2 class="section-title">02 / Sector Rotation & temele AI</h2><p class="section-sub">Grafice interactive disponibile public, cu selecție 1D, 5D și 1M. Calculele numerice 5D/20D sunt opționale.</p></div><a class="source" href="https://www.ssga.com/us/en/individual/resources/sector-tracker" target="_blank" rel="noopener">Sector Tracker oficial ↗</a></div>
- <div class="card" id="public-history">
-  <div class="card-h"><strong>Grafic ETF-uri · selectează simbolul și intervalul</strong><span>1D / 5D / 1M · TradingView</span></div>
-  <div class="public-history-chart">
-    <div class="tradingview-widget-container" style="width:100%;height:100%">
-      <div class="tradingview-widget-container__widget"></div>
-      <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-symbol-overview.js" async>
-      {"symbols":[["XLK • Technology","AMEX:XLK|1D"],["XLF • Financials","AMEX:XLF|1D"],["XLV • Healthcare","AMEX:XLV|1D"],["XLY • Consumer discretionary","AMEX:XLY|1D"],["XLC • Communication","AMEX:XLC|1D"],["XLI • Industrials","AMEX:XLI|1D"],["XLP • Staples","AMEX:XLP|1D"],["XLE • Energy","AMEX:XLE|1D"],["XLU • Utilities","AMEX:XLU|1D"],["XLRE • Real estate","AMEX:XLRE|1D"],["XLB • Materials","AMEX:XLB|1D"],["SMH • Semiconductors","NASDAQ:SMH|1D"],["SOXX • Semiconductors","NASDAQ:SOXX|1D"],["IGV • Software","AMEX:IGV|1D"],["BOTZ • AI robotics","NASDAQ:BOTZ|1D"],["SKYY • Cloud","NASDAQ:SKYY|1D"],["CIBR • Cybersecurity","NASDAQ:CIBR|1D"],["URA • Uranium","AMEX:URA|1D"]],"chartOnly":false,"width":"100%","height":"100%","autosize":true,"locale":"en","colorTheme":"dark","showVolume":false,"hideDateRanges":false,"hideMarketStatus":false,"hideSymbolLogo":false,"scalePosition":"right","scaleMode":"Normal","valuesTracking":"1","changeMode":"price-and-percent","chartType":"area","lineWidth":2,"dateRanges":["1d|1","5d|5","1m|1D","3m|1D","12m|1W"]}
-      </script>
-    </div>
-  </div>
-  <p class="public-note">Grafice publice: 5D reprezintă aproximativ o săptămână de tranzacționare, 1M aproximativ o lună. Variațiile istorice sunt afișate în grafic, nu în tabel numeric.</p>
- </div>
- <div class="grid23 private-feed" style="margin-top:14px">
-  <div class="card"><div class="card-h"><strong>Sectoare & teme — comparații istorice</strong><span>ETF-uri din Twelve Data · fără widgeturi cu simboluri lipsă</span></div>
-    <div class="table-wrap"><table><thead><tr><th>ETF</th><th class="num">1D</th><th class="num">5D</th><th class="num">20D</th><th class="num">Δ vs media sectoarelor (pp)</th></tr></thead><tbody id="history-tbody"></tbody></table></div>
-  </div>
 
-  <div class="card card-pad"><div class="eyebrow" style="margin:4px 0 13px">CUM CITIM ROTAȚIA</div>
-   <div class="tools" style="grid-template-columns:1fr;gap:10px">
-    <div class="tool"><h3>↑ XLK + SMH + IGV</h3><p>Growth/tech conduce. Compară mișcarea cu NAS100 CFD și cu participarea celorlalte sectoare.</p></div>
-    <div class="tool"><h3>↑ XLF + XLI + IWM</h3><p>Posibilă lărgire a participării către financiar, industrial și small caps.</p></div>
-    <div class="tool"><h3>↑ XLP + XLV + XLU</h3><p>Posibilă rotație defensivă; interpretarea depinde și de randamentele obligațiunilor.</p></div>
-    <div class="tool"><h3>↑ XLE + energie</h3><p>Poate reflecta petrolul, oferta geopolitică sau cererea. Nu este automat risk-on.</p></div>
-   </div><p class="muted" style="font-size:12px;margin-top:17px">ETF-urile tematice pot avea dețineri suprapuse; nu reprezintă ponderi adiționale în SPX sau NQ.</p>
-  </div>
- </div>
-</section>
+
+<!-- Internal compatibility targets for the optional personal API tools.
+     Public section 00 and section 02 have been removed from the page. -->
+<div id="data-compat" hidden aria-hidden="true" style="display:none!important">
+ <span id="feed-status"></span>
+ <div id="market-grid"></div>
+ <span id="auto-updated"></span>
+ <table><tbody id="themes-tbody"></tbody></table>
+ <table><tbody id="history-tbody"></tbody></table>
+</div>
 <section class="section" id="macro">
- <div class="section-head"><div><h2 class="section-title">03 / Macro dashboard</h2><p class="section-sub">Dobânzi, dolar, volatilitate, credit și petrol pentru contextul de risc.</p></div><span class="tag">Nu sunt semnale singulare de long / short</span></div>
+ <div class="section-head"><div><h2 class="section-title">02 / Macro dashboard</h2><p class="section-sub">Dobânzi, dolar, volatilitate, credit și petrol pentru contextul de risc.</p></div><span class="tag">Nu sunt semnale singulare de long / short</span></div>
  <div class="grid2">
 
   <div class="card vix-quote-card"><div class="card-h"><strong>VIX · cotație intraday</strong><span>Capital.com · CFD proxy VIX</span></div>
@@ -368,7 +345,7 @@ body .private-feed,body #contributie,body .nav a[href="#contributie"]{display:no
 
 <section class="section" id="cftc">
   <div class="section-head">
-    <div><h2 class="section-title">05 / CFTC · poziționarea fondurilor pe futures</h2>
+    <div><h2 class="section-title">03 / CFTC · poziționarea fondurilor pe futures</h2>
       <p class="section-sub">Traders in Financial Futures (TFF) · Futures Only · comparație săptămânală Asset Managers vs Leveraged Funds</p>
     </div>
     <a class="source" href="https://www.cftc.gov/MarketReports/CommitmentsofTraders/HistoricalCompressed/index.htm" target="_blank" rel="noopener">Raport oficial CFTC ↗</a>
