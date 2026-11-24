@@ -203,6 +203,33 @@ body .private-feed,body #contributie,body .nav a[href="#contributie"]{display:no
 @media(max-width:850px){.sector-momentum-layout{padding:6px}.sector-momentum-table th:first-child{width:18%}.sector-momentum-table th.sector-quote-header{width:42%}.sector-momentum-table th:nth-child(3),.sector-momentum-table th:nth-child(4){width:14%}.sector-momentum-table th:nth-child(5){width:12%}.sector-momentum-table .direction{font-size:10px}.sector-tv-quote{height:104px}}
 @media(max-width:550px){.sector-momentum-table{min-width:680px}.sector-tv-quote{height:99px}}
 
+
+/* Three compact macro indicators; historical data and market feed stay separate. */
+.macro-indicators-head{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap;margin:26px 0 13px}
+.macro-indicators-head h3{font-size:19px;letter-spacing:-.2px;margin:0}
+.macro-indicators-head p{margin:5px 0 0;font-size:11px;color:#90aaca}
+.macro-indicators-source{font-size:11px;color:#9cb5d0}
+.macro-indicators-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px}
+.macro-indicator-card{min-width:0;overflow:hidden}
+.macro-indicator-top{display:flex;justify-content:space-between;align-items:center;gap:10px;min-height:49px;padding:13px 15px;border-bottom:1px solid #2b4158}
+.macro-indicator-top strong{font-size:12px;color:#e3f1ff}
+.macro-indicator-top span{font-size:10px;color:#9bb5d0}
+.macro-indicator-body{padding:14px;display:flex;flex-direction:column;gap:8px;min-height:258px}
+.macro-indicator-main{font-size:32px;font-weight:850;color:#eff6ff;line-height:1.1;font-variant-numeric:tabular-nums;letter-spacing:-.4px}
+.macro-fed-main{font-size:26px}
+.macro-indicator-change{font-size:11px;min-height:32px;color:#b7ccdf}
+.macro-indicator-change.up{color:#e9ae75}.macro-indicator-change.down{color:#64d9ab}
+.macro-indicator-chart{width:100%;height:120px;flex:1}
+.macro-indicator-chart svg{display:block;width:100%;height:100%;min-height:115px}
+.macro-indicator-footer{font-size:10px;color:#99b2ce;line-height:1.5;margin-top:auto}
+.macro-indicator-footer a{color:#85bdf6}
+.macro-data-footnote{font-size:10px;line-height:1.6;color:#8ca6c0;padding:9px 2px 0}
+.macro-dxy-quote{height:86px;min-width:0;background:#111d2d;border-radius:9px;overflow:hidden}
+.macro-dxy-mini{height:120px;min-width:0;border-radius:9px;overflow:hidden}
+.macro-dxy-mini .tradingview-widget-container{width:100%;height:100%}
+@media(max-width:1120px){.macro-indicators-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.macro-indicators-grid .macro-indicator-card:last-child{grid-column:span 2}}
+@media(max-width:650px){.macro-indicators-grid{grid-template-columns:1fr}.macro-indicators-grid .macro-indicator-card:last-child{grid-column:auto}.macro-indicator-body{min-height:234px}}
+
 </style>
 
 </head>
@@ -500,6 +527,58 @@ body .private-feed,body #contributie,body .nav a[href="#contributie"]{display:no
    </details>
   </div>
  </div>
+
+ <div class="macro-indicators-head">
+   <div><h3>CPI · Fed Funds · DXY</h3><p>Tendințe macro SUA · două serii oficiale și un indicator de piață</p></div>
+   <span class="macro-indicators-source">FRED / BLS / Fed · TradingView</span>
+ </div>
+ <div class="macro-indicators-grid" id="macro-indicators">
+   <article class="card macro-indicator-card">
+     <div class="macro-indicator-top"><strong>CPI · inflație SUA</strong><span>YoY · headline</span></div>
+     <div class="macro-indicator-body">
+       <div id="macro-cpi-value" class="macro-indicator-main">—</div>
+       <div id="macro-cpi-delta" class="macro-indicator-change">Se verifică valoarea CPI...</div>
+       <div class="macro-indicator-chart">
+         <svg id="macro-cpi-chart" viewBox="0 0 360 130" role="img" aria-label="Evoluția lunară a ratei inflației CPI anuale" preserveAspectRatio="xMidYMid meet"></svg>
+       </div>
+       <div id="macro-cpi-date" class="macro-indicator-footer">Publicare lunară · ultima lună raportată</div>
+     </div>
+   </article>
+   <article class="card macro-indicator-card">
+     <div class="macro-indicator-top"><strong>Fed Funds · rata-țintă</strong><span>Interval FOMC</span></div>
+     <div class="macro-indicator-body">
+       <div id="macro-fed-value" class="macro-indicator-main macro-fed-main">—</div>
+       <div id="macro-fed-delta" class="macro-indicator-change">Se verifică intervalul Fed...</div>
+       <div class="macro-indicator-chart">
+         <svg id="macro-fed-chart" viewBox="0 0 360 130" role="img" aria-label="Evoluția istorică a intervalului ratei-țintă Fed" preserveAspectRatio="xMidYMid meet"></svg>
+       </div>
+       <div id="macro-fed-date" class="macro-indicator-footer">Modificări după deciziile Fed</div>
+     </div>
+   </article>
+   <article class="card macro-indicator-card">
+     <div class="macro-indicator-top"><strong>DXY · US Dollar Index</strong><span>CFD TradingView</span></div>
+     <div class="macro-indicator-body">
+       <div class="macro-dxy-quote">
+        <div class="tradingview-widget-container" style="width:100%;height:100%">
+         <div class="tradingview-widget-container__widget"></div>
+         <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-single-quote.js" async>
+         {"symbol":"TVC:DXY","width":"100%","colorTheme":"dark","isTransparent":true,"locale":"en"}
+         </script>
+        </div>
+       </div>
+       <div class="macro-dxy-mini">
+         <div class="tradingview-widget-container" style="width:100%;height:100%">
+          <div class="tradingview-widget-container__widget"></div>
+          <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js" async>
+          {"symbol":"TVC:DXY","width":"100%","height":"100%","locale":"en","dateRange":"1M","colorTheme":"dark","isTransparent":true,"autosize":true,"chartOnly":true,"noTimeScale":true}
+          </script>
+         </div>
+       </div>
+       <div class="macro-indicator-footer">Cotație intraday CFD · <a href="https://www.tradingview.com/symbols/TVC-DXY/" target="_blank" rel="noopener">Detalii DXY ↗</a></div>
+     </div>
+   </article>
+ </div>
+ <div class="macro-data-footnote">CPI este variația anuală a indicelui headline neajustat sezonier; Fed Funds reprezintă intervalul-țintă, nu rata efectivă. DXY este o referință CFD, care poate diferi de indicele ICE și poate avea latență. Datele oficiale se publică periodic, nu în timp real.</div>
 </section>
 <section class="section" id="contributie">
  <div class="section-head"><div><h2 class="section-title">04 / Contribuție sectorială SPX</h2><p class="section-sub">Ponderi sectoriale S&P 500 și randamente ETF. Contribuția este estimată pentru indicele SPX și nu reprezintă exact variația cotației publicate.</p></div><a class="source" target="_blank" rel="noopener" href="https://www.spglobal.com/spdji/en/indices/equity/sp-500/">Structura SPX · S&P DJI ↗</a></div>
@@ -1213,6 +1292,93 @@ setInterval(()=>{if(lastFetched&&Date.now()-lastFetched.getTime()>60*60*1000){do
    }
  }
  loadCFTC();
+})();
+
+</script>
+<script>
+
+(function(){
+ "use strict";
+ const $=id=>document.getElementById(id);
+ const NS="http://www.w3.org/2000/svg";
+ const fmt=(n,dec=2)=>Number(n).toLocaleString("ro-RO",{minimumFractionDigits:dec,maximumFractionDigits:dec});
+ const month=s=>new Date(s+"-01T00:00:00Z").toLocaleDateString("ro-RO",{month:"long",year:"numeric",timeZone:"UTC"});
+ const shortDate=s=>new Date(s+"T00:00:00Z").toLocaleDateString("ro-RO",{day:"numeric",month:"short",year:"numeric",timeZone:"UTC"});
+ function el(parent,tag,attrs,textContent){
+   const node=document.createElementNS(NS,tag);
+   for(const [key,value] of Object.entries(attrs))node.setAttribute(key,String(value));
+   if(textContent!==undefined)node.textContent=textContent;
+   parent.append(node);return node;
+ }
+ function drawChart(id,records,options={}){
+   const svg=$(id);
+   if(!svg||records.length<2)return;
+   svg.replaceChildren();
+   const values=records.flatMap(r=>options.range?[r.lower,r.upper]:[r.yoy]);
+   const minValue=Math.min(...values),maxValue=Math.max(...values);
+   const spread=Math.max(maxValue-minValue,.4),padding=spread*.22;
+   const min=Math.max(0,minValue-padding),max=maxValue+padding;
+   const W=360,H=130,L=9,R=350,T=13,B=109;
+   const t0=Date.parse(records[0].date.length===7?records[0].date+"-01T00:00:00Z":records[0].date+"T00:00:00Z");
+   const t1=Date.parse((records.at(-1).date.length===7?records.at(-1).date+"-01":records.at(-1).date)+"T00:00:00Z");
+   const px=s=>L+((Date.parse((s.length===7?s+"-01":s)+"T00:00:00Z")-t0)/Math.max(1,t1-t0))*(R-L);
+   const py=v=>B-(v-min)/Math.max(.2,max-min)*(B-T);
+   for(let i=0;i<=2;i++){
+     const y=T+(B-T)*i/2;
+     el(svg,"line",{x1:L,y1:y,x2:R,y2:y,stroke:"#344861","stroke-width":1,opacity:.7});
+   }
+   const dateLabel=s=>s.length===7?s:s.slice(0,7);
+   el(svg,"text",{x:L,y:126,fill:"#849eb9","font-size":10},dateLabel(records[0].date));
+   el(svg,"text",{x:R,y:126,fill:"#849eb9","font-size":10,"text-anchor":"end"},dateLabel(records.at(-1).date));
+   if(options.range){
+     const stepPath=key=>{
+       let path="M "+px(records[0].date).toFixed(1)+" "+py(records[0][key]).toFixed(1);
+       for(let i=1;i<records.length;i++){
+         path+=" H "+px(records[i].date).toFixed(1)+" V "+py(records[i][key]).toFixed(1);
+       }
+       return path;
+     };
+     const upper=stepPath("upper"),lower=stepPath("lower");
+     el(svg,"path",{d:upper,stroke:"#7fb8ff","stroke-width":2.5,fill:"none","stroke-linecap":"round"});
+     el(svg,"path",{d:lower,stroke:"#62d4b0","stroke-width":2.5,fill:"none","stroke-linecap":"round"});
+     const final=records.at(-1);
+     el(svg,"circle",{cx:px(final.date),cy:py(final.upper),r:3.5,fill:"#a3caff"});
+     el(svg,"circle",{cx:px(final.date),cy:py(final.lower),r:3.5,fill:"#68e3bd"});
+   }else{
+     const d=records.map((r,i)=>(i?"L ":"M ")+px(r.date).toFixed(1)+" "+py(r.yoy).toFixed(1)).join(" ");
+     const area=d+" L "+px(records.at(-1).date).toFixed(1)+" "+B+" L "+L+" "+B+" Z";
+     el(svg,"path",{d:area,fill:"rgba(105,174,255,.12)"});
+     el(svg,"path",{d,stroke:"#81bafe","stroke-width":2.8,fill:"none","stroke-linecap":"round","stroke-linejoin":"round"});
+     const last=records.at(-1);
+     el(svg,"circle",{cx:px(last.date),cy:py(last.yoy),r:4,fill:"#a6d5ff"});
+   }
+ }
+ async function load(){
+   try{
+     const response=await fetch("./data/macro_indicators.json?v="+Date.now(),{cache:"no-store"});
+     if(!response.ok)throw Error("HTTP "+response.status);
+     const data=await response.json();
+     if(!data.cpi||!data.fed||!Array.isArray(data.cpi.history)||!Array.isArray(data.fed.changes2y)||data.cpi.history.length<12||data.fed.changes2y.length<2){
+       throw Error("Seriile macro sunt incomplete");
+     }
+     const c=data.cpi,f=data.fed;
+     $("macro-cpi-value").textContent=fmt(c.yoy)+"%";
+     const cdelta=$("macro-cpi-delta");cdelta.textContent=(c.deltaPp>0?"+":"")+fmt(c.deltaPp)+" pp față de luna precedentă";
+     cdelta.classList.toggle("up",c.deltaPp>0);
+     cdelta.classList.toggle("down",c.deltaPp<0);
+     $("macro-cpi-date").textContent="CPI headline YoY · "+month(c.asOf)+" · BLS / FRED";
+     drawChart("macro-cpi-chart",c.history);
+     $("macro-fed-value").textContent=fmt(f.lower)+"–"+fmt(f.upper)+"%";
+     const fedDiff=f.deltaUpper12mPp;
+     $("macro-fed-delta").textContent=(Number.isFinite(fedDiff)?((fedDiff>0?"+":"")+fmt(fedDiff)+" pp vs acum 12 luni · "):"")+"Ultima modificare: "+shortDate(f.lastPolicyChange);
+     $("macro-fed-date").textContent="Interval-țintă Fed · la "+shortDate(f.asOf)+" · FRED";
+     drawChart("macro-fed-chart",f.changes2y,{range:true});
+   }catch(err){
+     $("macro-cpi-delta").textContent="Date CPI indisponibile; verifică actualizarea FRED";
+     $("macro-fed-delta").textContent="Date Fed indisponibile; verifică actualizarea FRED";
+   }
+ }
+ load();
 })();
 
 </script>

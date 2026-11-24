@@ -7,6 +7,7 @@ const html = fs.readFileSync('index.html','utf8');
 const weights = JSON.parse(fs.readFileSync('data/sector_weights.json','utf8'));
 const vix = JSON.parse(fs.readFileSync('data/vix_30d.json','utf8'));
 const cot = JSON.parse(fs.readFileSync('data/cot_tff.json','utf8'));
+const macro=JSON.parse(fs.readFileSync('data/macro_indicators.json','utf8'));
 const sectorMomentumMock={
   asOf:'2026-11-23',
   source:'State Street ETF NAV test fixture',
@@ -38,6 +39,7 @@ async function scenario(withKey) {
         if(url.pathname.endsWith('/data/vix_30d.json')) return response(vix);
         if(url.pathname.endsWith('/data/cot_tff.json')) return response(cot);
         if(url.pathname.endsWith('/data/sector_performance.json')) return response(sectorMomentumMock);
+        if(url.pathname.endsWith('/data/macro_indicators.json')) return response(macro);
         const symbols=(url.searchParams.get('symbol')||'').split(',').filter(Boolean);
         if(url.pathname.endsWith('/quote')) {
           apiCalls.push({type:'quote',symbols});
@@ -116,6 +118,21 @@ async function scenario(withKey) {
   assert.ok(vixPriceWidget,'VIX has numeric intraday broker quote');
   assert.equal(JSON.parse(vixPriceWidget.textContent).symbol,'CAPITALCOM:VIX','VIX quote broker source');
   assert.ok(doc.querySelector('#vix-current.vix-official-value'),'Historical official VIX close labeled separately');
+  await until(()=>doc.querySelectorAll('#macro-cpi-chart path').length===2,'CPI historical line');
+  assert.equal(doc.getElementById('macro-cpi-value').textContent,
+    macro.cpi.yoy.toLocaleString('ro-RO',{minimumFractionDigits:2,maximumFractionDigits:2})+'%',
+    'Actual CPI YoY displayed from the official saved series');
+  assert.ok(doc.getElementById('macro-cpi-date').textContent.includes(macro.cpi.asOf.slice(0,4)),'CPI report year displayed');
+  assert.ok(doc.getElementById('macro-fed-value').textContent.includes(
+    macro.fed.upper.toLocaleString('ro-RO',{minimumFractionDigits:2,maximumFractionDigits:2})),
+    'Fed target range upper bound displayed');
+  assert.ok(doc.querySelectorAll('#macro-fed-chart path').length>=2,'Fed history step chart displayed');
+  const dxyWidgets=[...doc.querySelectorAll('#macro-indicators script[src*="external-embedding/embed-widget-"]')].filter(s=>{
+    try{return JSON.parse(s.textContent).symbol==='TVC:DXY'}catch(e){return false}
+  });
+  assert.equal(dxyWidgets.length,2,'DXY quote plus miniature history widget');
+  assert.equal(doc.querySelectorAll('#macro-indicators .macro-indicator-card').length,3,'Exactly three compact macro cards');
+
 
   assert.equal(doc.querySelectorAll('#sector-pie .sector-pie-slice').length,11,'S&P sector donut has 11 colored slices');
   assert.equal(doc.getElementById('sector-pie-center-value').textContent,'100%','Pie center shows full distribution');
