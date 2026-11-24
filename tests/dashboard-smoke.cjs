@@ -7,7 +7,7 @@ const html = fs.readFileSync('index.html','utf8');
 const weights = JSON.parse(fs.readFileSync('data/sector_weights.json','utf8'));
 const vix = JSON.parse(fs.readFileSync('data/vix_30d.json','utf8'));
 const cot = JSON.parse(fs.readFileSync('data/cot_tff.json','utf8'));
-const macro=JSON.parse(fs.readFileSync('data/macro_indicators.json','utf8'));
+const macroFixture=JSON.parse(fs.readFileSync('data/macro_indicators.json','utf8'));
 const sectorMomentumMock={
   asOf:'2026-11-23',
   source:'State Street ETF NAV test fixture',
@@ -39,7 +39,7 @@ async function scenario(withKey) {
         if(url.pathname.endsWith('/data/vix_30d.json')) return response(vix);
         if(url.pathname.endsWith('/data/cot_tff.json')) return response(cot);
         if(url.pathname.endsWith('/data/sector_performance.json')) return response(sectorMomentumMock);
-        if(url.pathname.endsWith('/data/macro_indicators.json')) return response(macro);
+        if(url.pathname.endsWith('/data/macro_indicators.json')) return response(macroFixture);
         const symbols=(url.searchParams.get('symbol')||'').split(',').filter(Boolean);
         if(url.pathname.endsWith('/quote')) {
           apiCalls.push({type:'quote',symbols});
@@ -120,11 +120,11 @@ async function scenario(withKey) {
   assert.ok(doc.querySelector('#vix-current.vix-official-value'),'Historical official VIX close labeled separately');
   await until(()=>doc.querySelectorAll('#macro-cpi-chart path').length===2,'CPI historical line');
   assert.equal(doc.getElementById('macro-cpi-value').textContent,
-    macro.cpi.yoy.toLocaleString('ro-RO',{minimumFractionDigits:2,maximumFractionDigits:2})+'%',
+    macroFixture.cpi.yoy.toLocaleString('ro-RO',{minimumFractionDigits:2,maximumFractionDigits:2})+'%',
     'Actual CPI YoY displayed from the official saved series');
-  assert.ok(doc.getElementById('macro-cpi-date').textContent.includes(macro.cpi.asOf.slice(0,4)),'CPI report year displayed');
+  assert.ok(doc.getElementById('macro-cpi-date').textContent.includes(macroFixture.cpi.asOf.slice(0,4)),'CPI report year displayed');
   assert.ok(doc.getElementById('macro-fed-value').textContent.includes(
-    macro.fed.upper.toLocaleString('ro-RO',{minimumFractionDigits:2,maximumFractionDigits:2})),
+    macroFixture.fed.upper.toLocaleString('ro-RO',{minimumFractionDigits:2,maximumFractionDigits:2})),
     'Fed target range upper bound displayed');
   assert.ok(doc.querySelectorAll('#macro-fed-chart path').length>=2,'Fed history step chart displayed');
   const dxyWidgets=[...doc.querySelectorAll('#macro-indicators script[src*="external-embedding/embed-widget-"]')].filter(s=>{
