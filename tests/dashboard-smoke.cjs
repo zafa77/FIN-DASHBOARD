@@ -74,8 +74,8 @@ async function scenario(withKey) {
   assert.ok(doc.querySelector('#public-history script[src*="embed-widget-symbol-overview"]'),'Public history chart embedded');
   assert.equal(doc.body.classList.contains('no-key'),!withKey,'Public/personal mode selected');
 
-  assert.ok(html.includes('CME_MINI:ES1!') && html.includes('CME_MINI:NQ1!'),'ES/NQ futures embedded');
-  assert.ok(!html.includes('SPY') && !html.includes('QQQ'),'No SPY/QQQ stock ETF benchmarks');
+  assert.ok(html.includes('TVC:SPX') && html.includes('NASDAQ:QQQ'),'SPX/QQQ references embedded');
+  assert.ok(!html.includes('CME_MINI:ES1!') && !html.includes('CME_MINI:NQ1!'),'No delayed CME widgets in primary dashboard');
   assert.ok(doc.getElementById('instalare').querySelector('details.settings-details'),'Data settings collapsible');
   assert.ok(doc.getElementById('instalare').querySelector('#td-key'),'API key UI preserved');
 

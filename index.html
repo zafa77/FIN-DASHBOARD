@@ -76,27 +76,27 @@ header{display:flex;align-items:center;justify-content:space-between;gap:20px;ma
 <body class="no-key">
 <div class="wrap">
 <header>
- <div class="logo"><div class="mark">A·</div><div><div class="title">ATLAS <span style="color:#75b8fc">/ MARKET ROTATION</span></div><div class="sub">ES FUTURES · NQ FUTURES · SECTOARE · CFTC</div></div></div>
- <div class="actions"><span class="pill"><span class="dot"></span> Date publice · ES / NQ / CFTC / VIX</span><span class="pill" id="clock">București —</span><button class="button" onclick="window.location.reload()">↻ Reîncarcă datele</button></div>
+ <div class="logo"><div class="mark">A·</div><div><div class="title">ATLAS <span style="color:#75b8fc">/ MARKET ROTATION</span></div><div class="sub">SPX · QQQ · SECTOARE · VIX · CFTC</div></div></div>
+ <div class="actions"><span class="pill"><span class="dot"></span> Date publice · SPX / QQQ / CFTC / VIX</span><span class="pill" id="clock">București —</span><button class="button" onclick="window.location.reload()">↻ Reîncarcă datele</button></div>
 </header>
 <div class="ticker-frame" aria-label="Cotații automate TradingView">
  <div class="tradingview-widget-container" style="height:76px"><div class="tradingview-widget-container__widget"></div>
  <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>
- {"symbols":[{"proName":"CME_MINI:ES1!","title":"ES Futures"},{"proName":"CME_MINI:NQ1!","title":"NQ Futures"}],"showSymbolLogo":true,"colorTheme":"dark","isTransparent":false,"displayMode":"adaptive","locale":"en"}
+ {"symbols":[{"proName":"TVC:SPX","title":"SPX · S&P 500"},{"proName":"NASDAQ:QQQ","title":"QQQ · Nasdaq-100 ETF"}],"showSymbolLogo":true,"colorTheme":"dark","isTransparent":false,"displayMode":"adaptive","locale":"en"}
  </script></div>
 </div>
 <nav class="nav"><a href="#feed">00 · Feed</a><a href="#heatmap">01 · Harta pieței</a><a href="#sectoare">02 · Sectoare & istoric</a><a href="#macro">03 · VIX & macro</a><a href="#contributie">04 · Contribuție SPX</a><a href="#cftc">05 · CFTC / COT</a><a href="#instalare">Setări</a></nav>
 <section class="section" id="feed">
- <div class="section-head"><div><h2 class="section-title">00 / ES și NQ · Market Overview</h2><p class="section-sub">ES și NQ sunt reperele futures principale. ETF-urile măsoară separat performanța sectoarelor și a temelor AI.</p></div><span class="tag" id="feed-status">Date publice</span></div>
+ <div class="section-head"><div><h2 class="section-title">00 / SPX & QQQ · Market Overview</h2><p class="section-sub">SPX (indice calculat de TradingView) și QQQ (ETF Nasdaq-100) sunt reperele principale. Vizualizarea urmează sursele publice TradingView; actualizarea și întârzierile pot varia.</p></div><span class="tag" id="feed-status">Date publice</span></div>
  
 <div class="card public-market" id="public-market">
-  <div class="card-h"><strong>Market watchlist · Futures / Sectoare / AI</strong><span>TradingView · cotații publice, posibil întârziate</span></div>
+  <div class="card-h"><strong>Market watchlist · Indici / Sectoare / AI</strong><span>TradingView · cotații publice, posibil întârziate</span></div>
   <div class="public-widget">
     <div class="tradingview-widget-container" style="height:100%;width:100%">
       <div class="tradingview-widget-container__widget"></div>
       <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-market-overview.js" async>
       {"colorTheme":"dark","dateRange":"1M","showChart":true,"locale":"en","largeChartUrl":"","isTransparent":true,"showSymbolLogo":false,"showFloatingTooltip":true,"width":"100%","height":"100%","tabs":[
-        {"title":"Futures ES / NQ","symbols":[{"s":"CME_MINI:ES1!","d":"ES · S&P 500 Futures"},{"s":"CME_MINI:NQ1!","d":"NQ · Nasdaq-100 Futures"}]},
+        {"title":"SPX / QQQ","symbols":[{"s":"TVC:SPX","d":"SPX · S&P 500 (TradingView)"},{"s":"NASDAQ:QQQ","d":"QQQ · Nasdaq-100 ETF"}]},
         {"title":"Sectoare S&P 500","symbols":[{"s":"AMEX:XLK","d":"Technology"},{"s":"AMEX:XLF","d":"Financials"},{"s":"AMEX:XLV","d":"Health Care"},{"s":"AMEX:XLY","d":"Consumer Discretionary"},{"s":"AMEX:XLC","d":"Communication Services"},{"s":"AMEX:XLI","d":"Industrials"},{"s":"AMEX:XLP","d":"Consumer Staples"},{"s":"AMEX:XLE","d":"Energy"},{"s":"AMEX:XLU","d":"Utilities"},{"s":"AMEX:XLRE","d":"Real Estate"},{"s":"AMEX:XLB","d":"Materials"}]},
         {"title":"AI & growth","symbols":[{"s":"NASDAQ:SMH","d":"Semiconductors"},{"s":"NASDAQ:SOXX","d":"Semiconductors SOXX"},{"s":"AMEX:IGV","d":"Software"},{"s":"NASDAQ:BOTZ","d":"Robotics AI"},{"s":"NASDAQ:SKYY","d":"Cloud"},{"s":"NASDAQ:CIBR","d":"Cybersecurity"},{"s":"AMEX:URA","d":"Uranium"}]}
       ]}
@@ -108,7 +108,7 @@ header{display:flex;align-items:center;justify-content:space-between;gap:20px;ma
   <div class="market-grid" id="market-grid" style="margin-top:12px"></div>
  <div class="card" style="margin-top:12px"><div class="card-h"><strong>AI, semiconductori și sectoare</strong><span id="auto-updated">Fără date numerice încă</span></div><div class="table-wrap"><table><thead><tr><th>Referință</th><th>ETF</th><th class="num">Variație 1D</th><th class="num">Δ vs media sectoarelor (pp)</th></tr></thead><tbody id="themes-tbody"></tbody></table></div></div>
  </div>
- <div class="callout"><b>Interpretare:</b> compară liderii sectoriali și temele AI cu ES/NQ în ferestrele 1D, 5D și 1M. ETF-urile tematice se suprapun uneori cu sectoarele; nu însuma performanțele lor.</div>
+ <div class="callout"><b>Interpretare:</b> compară liderii sectoriali și temele AI cu SPX / QQQ în ferestrele 1D, 5D și 1M. ETF-urile tematice se suprapun uneori cu sectoarele; nu însuma performanțele lor.</div>
 </section>
 
 <section class="section" id="heatmap">
@@ -119,7 +119,7 @@ header{display:flex;align-items:center;justify-content:space-between;gap:20px;ma
  </div>
  <div class="grid2 private-feed">
   <div class="card"><div class="card-h"><strong>SPX · 11 sectoare</strong><span>Pondere sectorială SPX · variație ETF</span></div><div class="native-heat" id="spx-heat"></div></div>
-  <div class="card"><div class="card-h"><strong>Growth, AI & broad market</strong><span>Teme de piață, nu ponderi NQ futures</span></div><div class="native-heat" id="growth-heat"></div></div>
+  <div class="card"><div class="card-h"><strong>Growth, AI & broad market</strong><span>Teme de piață, nu ponderi oficiale Nasdaq-100</span></div><div class="native-heat" id="growth-heat"></div></div>
  </div><div class="callout"><b>Notă:</b> harta SPX este o aproximare din ETF-uri, nu o hartă a fiecărei acțiuni. Harta tematică nu este compoziția oficială Nasdaq-100 și temele se suprapun. Simbolurile fără date apar neutru, cu „—”.</div>
 </section>
 <section class="section" id="sectoare">
@@ -143,7 +143,7 @@ header{display:flex;align-items:center;justify-content:space-between;gap:20px;ma
 
   <div class="card card-pad"><div class="eyebrow" style="margin:4px 0 13px">CUM CITIM ROTAȚIA</div>
    <div class="tools" style="grid-template-columns:1fr;gap:10px">
-    <div class="tool"><h3>↑ XLK + SMH + IGV</h3><p>Growth/tech conduce. Compară mișcarea cu NQ futures și cu participarea celorlalte sectoare.</p></div>
+    <div class="tool"><h3>↑ XLK + SMH + IGV</h3><p>Growth/tech conduce. Compară mișcarea cu QQQ și cu participarea celorlalte sectoare.</p></div>
     <div class="tool"><h3>↑ XLF + XLI + IWM</h3><p>Posibilă lărgire a participării către financiar, industrial și small caps.</p></div>
     <div class="tool"><h3>↑ XLP + XLV + XLU</h3><p>Posibilă rotație defensivă; interpretarea depinde și de randamentele obligațiunilor.</p></div>
     <div class="tool"><h3>↑ XLE + energie</h3><p>Poate reflecta petrolul, oferta geopolitică sau cererea. Nu este automat risk-on.</p></div>
@@ -161,14 +161,14 @@ header{display:flex;align-items:center;justify-content:space-between;gap:20px;ma
     <div class="macro-links"><a href="https://www.tradingview.com/symbols/TVC-DXY/" target="_blank" rel="noopener">DXY ↗</a><a href="https://www.tradingview.com/symbols/TVC-US10Y/" target="_blank" rel="noopener">US10Y ↗</a><a href="https://www.tradingview.com/symbols/TVC-US02Y/" target="_blank" rel="noopener">US02Y ↗</a><a href="https://www.tradingview.com/symbols/AMEX-HYG/" target="_blank" rel="noopener">Credit HYG ↗</a></div>
     </div></div>
 
-  <div class="card"><div class="card-h"><strong>ES / NQ · Futures CME</strong><span>Contracte continue · cotații posibil întârziate</span></div><div class="widget medium"><div class="tradingview-widget-container"><div class="tradingview-widget-container__widget"></div>
+  <div class="card"><div class="card-h"><strong>SPX / QQQ · Indice și ETF</strong><span>Grafice TradingView · SPX calculat, QQQ feed public</span></div><div class="widget medium"><div class="tradingview-widget-container"><div class="tradingview-widget-container__widget"></div>
    <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-symbol-overview.js" async>
-   {"symbols":[["ES · S&P 500 Futures","CME_MINI:ES1!|1D"],["NQ · Nasdaq-100 Futures","CME_MINI:NQ1!|1D"]],"chartOnly":false,"width":"100%","height":"100%","autosize":true,"locale":"en","colorTheme":"dark","showVolume":false,"showMA":false,"hideDateRanges":false,"hideMarketStatus":false,"hideSymbolLogo":false,"scalePosition":"right","scaleMode":"Percentage","valuesTracking":"1","changeMode":"price-and-percent","chartType":"area","lineWidth":2,"dateRanges":["1d|1","5d|5","1m|1D","3m|1D","12m|1W"]}
+   {"symbols":[["SPX · S&P 500","TVC:SPX|1D"],["QQQ · Nasdaq-100 ETF","NASDAQ:QQQ|1D"]],"chartOnly":false,"width":"100%","height":"100%","autosize":true,"locale":"en","colorTheme":"dark","showVolume":false,"showMA":false,"hideDateRanges":false,"hideMarketStatus":false,"hideSymbolLogo":false,"scalePosition":"right","scaleMode":"Percentage","valuesTracking":"1","changeMode":"price-and-percent","chartType":"area","lineWidth":2,"dateRanges":["1d|1","5d|5","1m|1D","3m|1D","12m|1W"]}
    </script></div></div></div>
  </div>
 </section>
 <section class="section" id="contributie">
- <div class="section-head"><div><h2 class="section-title">04 / Contribuție sectorială SPX</h2><p class="section-sub">Ponderi sectoriale S&P 500 și randamente ETF. Contribuția este estimată pentru indicele SPX, nu pentru variația ES futures.</p></div><a class="source" target="_blank" rel="noopener" href="https://www.spglobal.com/spdji/en/indices/equity/sp-500/">Structura SPX · S&P DJI ↗</a></div>
+ <div class="section-head"><div><h2 class="section-title">04 / Contribuție sectorială SPX</h2><p class="section-sub">Ponderi sectoriale S&P 500 și randamente ETF. Contribuția este estimată pentru indicele SPX și nu reprezintă exact variația cotației publicate.</p></div><a class="source" target="_blank" rel="noopener" href="https://www.spglobal.com/spdji/en/indices/equity/sp-500/">Structura SPX · S&P DJI ↗</a></div>
  <div class="grid23 private-feed">
   <div class="card"><div class="table-wrap"><table><thead><tr><th>Sector</th><th>ETF</th><th class="num">Pondere SPX (%)</th><th class="num">Variație 1D (%)</th><th class="num">Impact estimat (pp)</th></tr></thead><tbody id="sectors-tbody"></tbody></table></div></div>
   <div class="card card-pad"><div class="eyebrow" id="contrib-mode">DATE ETF · FĂRĂ SIMULARE</div><p class="small-note" id="weights-status">Ponderi de referință: 20 nov. 2026 · se verifică sursa zilnică...</p><div class="kpi-row"><div class="kpi"><div class="kpi-label">Impact agregat estimat</div><div class="kpi-value" id="sum-result">—</div></div><div class="kpi"><div class="kpi-label">Sectoare pozitive</div><div class="kpi-value" id="positive-sectors">0 / 11</div></div><div class="kpi"><div class="kpi-label">Cea mai mare contribuție</div><div class="kpi-value" id="top-sector" style="font-size:15px">—</div></div></div><div class="chartbar"><div id="upBar" style="background:#42caaa;width:50%"></div><div id="downBar" style="background:#e87982;width:50%"></div></div><p class="muted" style="font-size:12px" id="bar-label">Date sectoriale indisponibile.</p><p style="font-size:12px;color:#bed4e8"><b>Formula:</b> pondere sector (%) × variație ETF (%) / 100 = contribuție aproximativă în puncte procentuale.</p><div class="callout" style="margin-bottom:16px">ETF-urile sectoriale urmăresc S&P 500, dar pot exista abateri. Un calcul exact necesită date la nivel de constituent și ponderi actualizate; nu extrapola acest tabel asupra NDX.</div><button class="button" style="display:none" id="resetReturns" type="button" aria-hidden="true">Reset</button><p class="muted" style="font-size:11px;margin-top:12px">Variațiile 1D vin din API, iar istoricul 5D și 20D este disponibil în secțiunea 02. Valorile lipsă rămân marcate „—”.</p></div>
@@ -247,7 +247,7 @@ header{display:flex;align-items:center;justify-content:space-between;gap:20px;ma
  </div>
   </details>
 </section>
-<footer class="footer"><p><b>ATLAS / Market Rotation.</b> Dashboard de observație, nu instrument de execuție. Widgeturi de piață de la TradingView; întârzierile și disponibilitatea datelor depind de exchange și de politicile furnizorului. Cotații posibil întârziate, inclusiv dacă pagina se reîncarcă.</p><p>Ponderi sectoriale SPX: data sursei este afișată la calculator; referințele futures sunt ES și NQ. ETF-urile tematice pot deține aceleași companii. Nu interpreta culoarea sau volumului ca un semnal garantat. <a href="https://www.tradingview.com/widget-docs/faq/data/" target="_blank" rel="noopener">Politica datelor TradingView</a>.</p></footer>
+<footer class="footer"><p><b>ATLAS / Market Rotation.</b> Dashboard de observație, nu instrument de execuție. Widgeturi de piață de la TradingView; întârzierile și disponibilitatea datelor depind de exchange și de politicile furnizorului. Cotații posibil întârziate, inclusiv dacă pagina se reîncarcă.</p><p>Ponderi sectoriale SPX: data sursei este afișată la calculator; referințele principale sunt SPX (TVC:SPX) și QQQ; CFTC rămâne bazat pe futures NQ/ES. ETF-urile tematice pot deține aceleași companii. Nu interpreta culoarea sau volumului ca un semnal garantat. <a href="https://www.tradingview.com/widget-docs/faq/data/" target="_blank" rel="noopener">Politica datelor TradingView</a>.</p></footer>
 </div>
 <script>
 const sectors=[['Technology','XLK',34.30],['Financials','XLF',12.88],['Health Care','XLV',10.76],['Consumer Discretionary','XLY',9.71],['Communication Services','XLC',8.86],['Industrials','XLI',8.33],['Consumer Staples','XLP',5.55],['Energy','XLE',3.69],['Utilities','XLU',2.24],['Real Estate','XLRE',1.94],['Materials','XLB',1.75]];
