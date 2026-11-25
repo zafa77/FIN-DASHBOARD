@@ -230,6 +230,31 @@ body .private-feed,body #contributie,body .nav a[href="#contributie"]{display:no
 @media(max-width:1120px){.macro-indicators-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.macro-indicators-grid .macro-indicator-card:last-child{grid-column:span 2}}
 @media(max-width:650px){.macro-indicators-grid{grid-template-columns:1fr}.macro-indicators-grid .macro-indicator-card:last-child{grid-column:auto}.macro-indicator-body{min-height:234px}}
 
+
+/* Two compact bias inputs, independently updated and timestamped. */
+.bias-inputs-grid{display:grid;grid-template-columns:1fr 1fr;gap:15px;margin-top:15px}
+.bias-input-content{padding:16px;min-width:0;display:flex;flex-direction:column;gap:12px}
+.bias-breadth-stats{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.bias-breadth-stats>div{display:flex;flex-direction:column;gap:5px;background:#14243a;border:1px solid #31465e;border-radius:10px;padding:11px}
+.bias-breadth-stats small,.bias-yield-metrics small{font-size:11px;color:#91aec9}
+.bias-breadth-stats strong{font-size:30px;color:#e5f0fd;font-variant-numeric:tabular-nums;line-height:1.1}
+#breadth-advances{color:#65dcae}#breadth-declines{color:#fa9aa7}
+.bias-breadth-track{display:flex;width:100%;height:13px;background:#2c4056;overflow:hidden;border-radius:99px}
+.bias-breadth-up{background:#329a79;height:100%;width:0;transition:width .25s ease}
+.bias-breadth-down{background:#b95064;height:100%;width:0;transition:width .25s ease}
+.bias-breadth-averages{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.bias-breadth-averages>div{display:flex;flex-direction:column;gap:5px}
+.bias-breadth-averages span{font-size:11px;color:#a7c0d7}
+.bias-breadth-averages strong{font-size:23px;line-height:1.2;font-variant-numeric:tabular-nums}
+.bias-input-fine{font-size:10px;color:#91acc7;line-height:1.55;margin-top:auto}
+.us02y-live{height:110px;background:#101c2c;border-radius:9px;overflow:hidden}
+.bias-yield-metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.bias-yield-metrics>div{display:flex;flex-direction:column;gap:6px;background:#14243a;padding:10px 8px;border:1px solid #31465e;border-radius:9px}
+.bias-yield-metrics strong{font-size:18px;font-variant-numeric:tabular-nums;white-space:nowrap;color:#eaf5ff}
+.bias-yield-metrics .bp-up{color:#f8b889}.bias-yield-metrics .bp-down{color:#68d9b2}
+@media(max-width:850px){.bias-inputs-grid{grid-template-columns:1fr}}
+@media(max-width:450px){.bias-yield-metrics strong{font-size:15px}.bias-breadth-averages strong{font-size:20px}}
+
 </style>
 
 </head>
@@ -578,7 +603,47 @@ body .private-feed,body #contributie,body .nav a[href="#contributie"]{display:no
      </div>
    </article>
  </div>
- <div class="macro-data-footnote">CPI este variația anuală a indicelui headline neajustat sezonier; Fed Funds reprezintă intervalul-țintă, nu rata efectivă. DXY este o referință CFD, care poate diferi de indicele ICE și poate avea latență. Datele oficiale se publică periodic, nu în timp real.</div>
+ 
+ <div class="bias-inputs-grid" id="bias-inputs">
+  <div class="card breadth-card">
+   <div class="card-h"><strong>Nasdaq-100 · Market Breadth</strong><span id="breadth-date">Se verifică ultima ședință</span></div>
+   <div class="bias-input-content">
+    <div class="bias-breadth-stats">
+     <div><small>Acțiuni în creștere</small><strong id="breadth-advances">—</strong></div>
+     <div><small>Acțiuni în scădere</small><strong id="breadth-declines">—</strong></div>
+    </div>
+    <div class="bias-breadth-track" role="img" aria-label="Participare în creștere și scădere">
+     <span id="breadth-advance-bar" class="bias-breadth-up"></span>
+     <span id="breadth-decline-bar" class="bias-breadth-down"></span>
+    </div>
+    <div class="bias-breadth-averages">
+     <div><span>Peste media mobilă 20D</span><strong id="breadth-ma20">—</strong></div>
+     <div><span>Peste media mobilă 50D</span><strong id="breadth-ma50">—</strong></div>
+    </div>
+    <p class="bias-input-fine" id="breadth-coverage">Participare la închiderea precedentă · calcul bazat pe componentele NDX, nu live</p>
+   </div>
+  </div>
+  <div class="card us02y-card">
+   <div class="card-h"><strong>US02Y · Treasury Yield 2 ani</strong><span>Intraday / istoric oficial</span></div>
+   <div class="bias-input-content">
+    <div class="us02y-live">
+     <div class="tradingview-widget-container" style="height:100%;width:100%">
+      <div class="tradingview-widget-container__widget"></div>
+      <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-single-quote.js" async>
+      {"symbol":"TVC:US02Y","width":"100%","colorTheme":"dark","isTransparent":true,"locale":"en"}
+      </script>
+     </div>
+    </div>
+    <div class="bias-yield-metrics">
+     <div><small>Ultimul randament oficial</small><strong id="us02y-official">—</strong></div>
+     <div><small>Δ ultima ședință</small><strong id="us02y-1d">—</strong></div>
+     <div><small>Δ 5 ședințe</small><strong id="us02y-5d">—</strong></div>
+    </div>
+    <p class="bias-input-fine" id="us02y-asof">FRED DGS2: ultima închidere publicată; cotația TradingView poate avea întârziere</p>
+   </div>
+  </div>
+ </div>
+<div class="macro-data-footnote">CPI este variația anuală a indicelui headline neajustat sezonier; Fed Funds reprezintă intervalul-țintă, nu rata efectivă. DXY este o referință CFD, care poate diferi de indicele ICE și poate avea latență. Datele oficiale se publică periodic, nu în timp real.</div>
 </section>
 <section class="section" id="contributie">
  <div class="section-head"><div><h2 class="section-title">04 / Contribuție sectorială SPX</h2><p class="section-sub">Ponderi sectoriale S&P 500 și randamente ETF. Contribuția este estimată pentru indicele SPX și nu reprezintă exact variația cotației publicate.</p></div><a class="source" target="_blank" rel="noopener" href="https://www.spglobal.com/spdji/en/indices/equity/sp-500/">Structura SPX · S&P DJI ↗</a></div>
@@ -1379,6 +1444,66 @@ setInterval(()=>{if(lastFetched&&Date.now()-lastFetched.getTime()>60*60*1000){do
    }
  }
  load();
+})();
+
+</script>
+<script>
+
+(function(){
+ "use strict";
+ const $=id=>document.getElementById(id);
+ const decimal=(n,dec=1)=>Number(n).toLocaleString("ro-RO",{minimumFractionDigits:dec,maximumFractionDigits:dec});
+ const bp=n=>((n>0?"+":"")+(n===0?"0,0":decimal(n,1)))+" bp";
+ function checkFresh(date,days=8){
+  const t=Date.parse(date+"T00:00:00Z");
+  return Number.isFinite(t)&&Date.now()-t<=days*86400000&&Date.now()>=t;
+ }
+ async function loadBreadth(){
+  try{
+   const response=await fetch("./data/ndx_breadth.json?v="+Date.now(),{cache:"no-store"});
+   if(!response.ok)throw Error("HTTP "+response.status);
+   const b=await response.json();
+   const n=Number(b.covered),universe=Number(b.universeCount),adv=Number(b.advances),dec=Number(b.declines),flat=Number(b.unchanged);
+   if(!Number.isInteger(n)||n<95||!Number.isInteger(universe)||universe<95||n>universe||n/universe<.95||
+      ![adv,dec,flat,b.above20,b.above50].every(x=>Number.isInteger(Number(x)))||
+      adv<0||dec<0||flat<0||adv+dec+flat!==n||
+      Number(b.above20)>n||Number(b.above50)>n||!b.asOf)throw Error("Acoperire/valori incorecte");
+   $("breadth-advances").textContent=String(adv);
+   $("breadth-declines").textContent=String(dec);
+   $("breadth-ma20").textContent=decimal(100*Number(b.above20)/n)+"%";
+   $("breadth-ma50").textContent=decimal(100*Number(b.above50)/n)+"%";
+   $("breadth-advance-bar").style.width=(100*adv/n).toFixed(1)+"%";
+   $("breadth-decline-bar").style.width=(100*dec/n).toFixed(1)+"%";
+   $("breadth-date").textContent=(checkFresh(b.asOf)?"Închiderea ":"⚠ Date vechi: ")+b.asOf;
+   $("breadth-coverage").textContent="Acoperire "+n+"/"+universe+" titluri · Date la închidere (nu live) · "+
+      "Sursa: Yahoo Finance (cercetare), componența Nasdaq-100";
+  }catch(error){
+   $("breadth-date").textContent="Date breadth indisponibile";
+   $("breadth-coverage").textContent="Nu se afișează valori fără acoperire suficientă. "+
+     "Sursa poate limita accesul automat; ultimul raport valid se publică la închiderea SUA.";
+  }
+ }
+ async function loadUS02Y(){
+  try{
+   const response=await fetch("./data/macro_indicators.json?v="+Date.now(),{cache:"no-store"});
+   if(!response.ok)throw Error("HTTP "+response.status);
+   const j=await response.json(),x=j.us02y;
+   if(!x||!Number.isFinite(Number(x.yieldPct))||!Number.isFinite(Number(x.dailyBp))||!Number.isFinite(Number(x.fiveDayBp))||!x.asOf)throw Error("DGS2 invalid");
+   $("us02y-official").textContent=decimal(x.yieldPct,2)+"%";
+   $("us02y-1d").textContent=bp(x.dailyBp);
+   $("us02y-5d").textContent=bp(x.fiveDayBp);
+   for(const [id,v] of [["us02y-1d",x.dailyBp],["us02y-5d",x.fiveDayBp]]){
+    $(id).classList.toggle("bp-up",v>0);
+    $(id).classList.toggle("bp-down",v<0);
+   }
+   $("us02y-asof").textContent=(checkFresh(x.asOf,10)?"":"⚠ Serie oficială veche · ")+
+      "FRED DGS2 · închidere "+x.asOf+" · bp = puncte de bază. Cotația TradingView este separată.";
+  }catch(error){
+   $("us02y-asof").textContent="Seria FRED US02Y indisponibilă; verifică actualizarea.";
+  }
+ }
+ loadBreadth();
+ loadUS02Y();
 })();
 
 </script>

@@ -8,6 +8,7 @@ const weights = JSON.parse(fs.readFileSync('data/sector_weights.json','utf8'));
 const vix = JSON.parse(fs.readFileSync('data/vix_30d.json','utf8'));
 const cot = JSON.parse(fs.readFileSync('data/cot_tff.json','utf8'));
 const macroFixture=JSON.parse(fs.readFileSync('data/macro_indicators.json','utf8'));
+const breadthFixture=JSON.parse(fs.readFileSync('data/ndx_breadth.json','utf8'));
 const sectorMomentumMock={
   asOf:'2026-11-23',
   source:'State Street ETF NAV test fixture',
@@ -40,6 +41,7 @@ async function scenario(withKey) {
         if(url.pathname.endsWith('/data/cot_tff.json')) return response(cot);
         if(url.pathname.endsWith('/data/sector_performance.json')) return response(sectorMomentumMock);
         if(url.pathname.endsWith('/data/macro_indicators.json')) return response(macroFixture);
+        if(url.pathname.endsWith('/data/ndx_breadth.json')) return response(breadthFixture);
         const symbols=(url.searchParams.get('symbol')||'').split(',').filter(Boolean);
         if(url.pathname.endsWith('/quote')) {
           apiCalls.push({type:'quote',symbols});
@@ -132,6 +134,19 @@ async function scenario(withKey) {
   });
   assert.equal(dxyWidgets.length,2,'DXY quote plus miniature history widget');
   assert.equal(doc.querySelectorAll('#macro-indicators .macro-indicator-card').length,3,'Exactly three compact macro cards');
+  await until(()=>doc.getElementById('breadth-advances').textContent===String(breadthFixture.advances),'NDX market breadth');
+  assert.equal(doc.getElementById('breadth-declines').textContent,String(breadthFixture.declines),'NDX declines');
+  assert.equal(doc.getElementById('breadth-ma20').textContent,breadthFixture.above20Pct.toLocaleString('ro-RO',{minimumFractionDigits:1,maximumFractionDigits:1})+'%','Nasdaq MA20 breadth');
+  assert.equal(doc.getElementById('breadth-ma50').textContent,breadthFixture.above50Pct.toLocaleString('ro-RO',{minimumFractionDigits:1,maximumFractionDigits:1})+'%','Nasdaq MA50 breadth');
+  assert.ok(doc.getElementById('breadth-date').textContent.includes(breadthFixture.asOf),'EOD date clearly shown');
+  assert.ok(doc.getElementById('breadth-coverage').textContent.includes('nu live'),'Nasdaq breadth not mislabeled as live');
+  await until(()=>doc.getElementById('us02y-official').textContent!=='—','Official US02Y value');
+  assert.equal(doc.getElementById('us02y-official').textContent,macroFixture.us02y.yieldPct.toLocaleString('ro-RO',{minimumFractionDigits:2,maximumFractionDigits:2})+'%','FRED US02Y official value');
+  assert.equal(doc.getElementById('us02y-5d').textContent,macroFixture.us02y.fiveDayBp.toLocaleString('ro-RO',{minimumFractionDigits:1,maximumFractionDigits:1})+' bp','5-day bp variation');
+  const us02yTV=doc.querySelector('#bias-inputs script[src*="embed-widget-single-quote"]');
+  assert.equal(JSON.parse(us02yTV.textContent).symbol,'TVC:US02Y','Live US02Y widget configured');
+  assert.equal(doc.querySelectorAll('#bias-inputs .card').length,2,'Compact two-card bias inputs');
+
 
 
   assert.equal(doc.querySelectorAll('#sector-pie .sector-pie-slice').length,11,'S&P sector donut has 11 colored slices');
