@@ -88,6 +88,24 @@ async function scenario(withKey) {
   assert.equal(doc.querySelectorAll('#sector-momentum-tbody tr[data-sector-symbol]').length,11,'11 static sector rows');
   assert.equal(doc.querySelector('#contributie')!==null,true,'Legacy calculator remains in DOM');
   assert.ok(html.includes('ZAFA MARKET REBORN'),'Public site renamed');
+  assert.ok(doc.querySelector('#bias-center + #economic-calendar'),
+    'Economic calendar placed immediately after the three bias cards');
+  const calendar=doc.querySelector('#economic-calendar details');
+  assert.ok(calendar,'Calendar uses a native expandable panel');
+  assert.equal(calendar.open,false,'Calendar remains collapsed initially');
+  const frame=calendar.querySelector('iframe');
+  assert.ok(frame,'Investing.com calendar iframe embedded');
+  const url=new URL(frame.src);
+  assert.equal(url.origin,'https://sslecal2.investing.com','Official calendar embed host retained');
+  assert.equal(url.searchParams.get('columns'),'exc_flags,exc_currency,exc_importance,exc_actual,exc_forecast,exc_previous','User-supplied economic columns retained');
+  assert.equal(url.searchParams.get('countries'),'25,32,6,37,72,22,17,39,14,10,35,43,56,36,110,11,26,12,4,5','User-supplied countries retained');
+  assert.equal(url.searchParams.get('timeZone'),'68','User-selected calendar timezone retained');
+  assert.equal(url.searchParams.get('features'),'datepicker,timezone','Official calendar feature flags retained');
+  assert.equal(frame.getAttribute('loading'),'lazy','Economic calendar loads lazily');
+  assert.ok(calendar.querySelector('a[href="https://www.investing.com/"]'),'Provider attribution preserved');
+  assert.ok(html.includes('.economic-calendar-scroll{max-width:100%;overflow-x:auto'),
+    'Horizontal scrolling available on narrow screens');
+
 
   assert.equal(doc.querySelectorAll('#history-tbody tr').length,18,'History table items');
   await until(()=>doc.getElementById('vix-current').textContent!=='—','VIX official last close');

@@ -312,6 +312,27 @@ body .private-feed,body #contributie,body .nav a[href="#contributie"]{display:no
 @media(max-width:1150px){.bias-center-grid{grid-template-columns:1fr 1fr}.bias-state-card:last-child{grid-column:span 2}}
 @media(max-width:660px){.bias-center-grid{grid-template-columns:1fr}.bias-state-card:last-child{grid-column:auto}}
 
+
+/* Official Investing.com calendar embedded below Market Bias; collapsed by default. */
+.economic-calendar-section{margin-top:16px}
+.economic-calendar-details{overflow:hidden}
+.economic-calendar-summary{display:flex;justify-content:space-between;align-items:center;gap:15px;cursor:pointer;padding:16px 18px;list-style:none;background:#142136}
+.economic-calendar-summary::-webkit-details-marker{display:none}
+.economic-calendar-heading{display:flex;flex-direction:column;gap:4px}
+.economic-calendar-title{font-size:14px;font-weight:800;color:#e5effa}
+.economic-calendar-subtitle{font-size:11px;color:#9fbbd5}
+.economic-calendar-expander{display:flex;align-items:center;gap:12px;color:#9bc7f0;font-size:11px;white-space:nowrap}
+.economic-calendar-chevron{font-size:21px;line-height:1;transition:transform .2s ease}
+.economic-calendar-details[open] .economic-calendar-chevron{transform:rotate(180deg)}
+.economic-calendar-details[open] .economic-calendar-expander>span:first-child{display:none}
+.economic-calendar-content{padding:13px 18px 16px;border-top:1px solid #2d4259}
+.economic-calendar-info{font-size:11px;color:#aec0d5;margin:0 0 12px;line-height:1.5}
+.economic-calendar-scroll{max-width:100%;overflow-x:auto;border:1px solid #32475e;border-radius:8px;background:#fff}
+.economic-calendar-scroll iframe{display:block;width:650px;min-width:650px;max-width:none;border:0;background:#fff}
+.economic-calendar-attribution{padding-top:10px;color:#9bb3c9;font:11px/1.55 Arial,Helvetica,sans-serif}
+.economic-calendar-attribution a{color:#83bdf8;font-weight:700}
+@media(max-width:650px){.economic-calendar-summary{padding:13px 12px}.economic-calendar-content{padding:12px}.economic-calendar-expander>span:first-child{display:none}}
+
 </style>
 
 </head>
@@ -370,6 +391,22 @@ body .private-feed,body #contributie,body .nav a[href="#contributie"]{display:no
  </div>
  <div class="bias-context-line" id="bias-context-line">Sinteza va apărea după validarea datelor.</div>
  <p class="bias-center-note">Bias-ul este un filtru de context, nu semnal de intrare. Confirmările sunt reguli experimentale, nu probabilități verificate statistic. CFTC = poziții din raportul săptămânal; Market Breadth = închiderea precedentă; Momentum = NQ futures, feed de cercetare potențial întârziat. Fără date suficiente nu forțăm o direcție.</p>
+</section>
+
+<section class="economic-calendar-section" id="economic-calendar" aria-label="Calendar economic Investing.com">
+ <details class="card economic-calendar-details">
+  <summary class="economic-calendar-summary">
+   <span class="economic-calendar-heading"><span class="economic-calendar-title">Calendar economic · Investing.com</span><span class="economic-calendar-subtitle">Actual · Forecast · Previous · impact economic</span></span>
+   <span class="economic-calendar-expander"><span>Deschide calendarul</span><span class="economic-calendar-chevron" aria-hidden="true">⌄</span></span>
+  </summary>
+  <div class="economic-calendar-content">
+   <p class="economic-calendar-info">Calendarul se actualizează prin Investing.com. Orele și țările respectă setările din widget, iar rezultatele nu modifică automat Daily Bias.</p>
+   <div class="economic-calendar-scroll">
+    <iframe title="Calendar economic în timp real - Investing.com" src="https://sslecal2.investing.com?columns=exc_flags,exc_currency,exc_importance,exc_actual,exc_forecast,exc_previous&amp;features=datepicker,timezone&amp;countries=25,32,6,37,72,22,17,39,14,10,35,43,56,36,110,11,26,12,4,5&amp;calType=day&amp;timeZone=68&amp;lang=1" width="650" height="467" frameborder="0" allowtransparency="true" marginwidth="0" marginheight="0" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe>
+   </div>
+   <div class="economic-calendar-attribution poweredBy"><span>Real Time Economic Calendar provided by <a href="https://www.investing.com/" rel="nofollow noopener noreferrer" target="_blank" class="underline_link">Investing.com</a>.</span></div>
+  </div>
+ </details>
 </section>
 
 <section class="section" id="heatmap">
