@@ -1,10 +1,11 @@
 {
-  "updatedAt": "2026-11-24T21:41:15+00:00",
+  "updatedAt": "2026-11-25T12:15:35+00:00",
   "source": "FRED / U.S. Bureau of Labor Statistics / Federal Reserve",
   "sourceUrls": [
     "https://fred.stlouisfed.org/graph/fredgraph.csv?id=CPIAUCNS&cosd=2021-01-01",
-    "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DFEDTARL&cosd=2023-10-31",
-    "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DFEDTARU&cosd=2023-10-31"
+    "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DFEDTARL&cosd=2023-11-01",
+    "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DFEDTARU&cosd=2023-11-01",
+    "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DGS2&cosd=2026-05-29"
   ],
   "cpi": {
     "asOf": "2026-09",
@@ -166,5 +167,217 @@
       "DFEDTARU"
     ],
     "method": "Federal funds target range, not the effective federal funds rate"
+  },
+  "us02y": {
+    "asOf": "2026-11-23",
+    "yieldPct": 4.63,
+    "dailyBp": 0.0,
+    "fiveDayBp": -20.0,
+    "previousDate": "2026-11-20",
+    "history": [
+      {
+        "date": "2026-09-11",
+        "yieldPct": 4.63
+      },
+      {
+        "date": "2026-09-14",
+        "yieldPct": 4.65
+      },
+      {
+        "date": "2026-09-15",
+        "yieldPct": 4.67
+      },
+      {
+        "date": "2026-09-16",
+        "yieldPct": 4.74
+      },
+      {
+        "date": "2026-09-17",
+        "yieldPct": 4.67
+      },
+      {
+        "date": "2026-09-18",
+        "yieldPct": 4.76
+      },
+      {
+        "date": "2026-09-21",
+        "yieldPct": 4.76
+      },
+      {
+        "date": "2026-09-22",
+        "yieldPct": 4.71
+      },
+      {
+        "date": "2026-09-23",
+        "yieldPct": 4.85
+      },
+      {
+        "date": "2026-09-24",
+        "yieldPct": 4.87
+      },
+      {
+        "date": "2026-09-25",
+        "yieldPct": 4.81
+      },
+      {
+        "date": "2026-09-28",
+        "yieldPct": 4.92
+      },
+      {
+        "date": "2026-09-29",
+        "yieldPct": 4.89
+      },
+      {
+        "date": "2026-09-30",
+        "yieldPct": 4.88
+      },
+      {
+        "date": "2026-10-01",
+        "yieldPct": 4.78
+      },
+      {
+        "date": "2026-10-02",
+        "yieldPct": 4.83
+      },
+      {
+        "date": "2026-10-05",
+        "yieldPct": 4.84
+      },
+      {
+        "date": "2026-10-06",
+        "yieldPct": 4.79
+      },
+      {
+        "date": "2026-10-07",
+        "yieldPct": 4.77
+      },
+      {
+        "date": "2026-10-08",
+        "yieldPct": 4.75
+      },
+      {
+        "date": "2026-10-09",
+        "yieldPct": 4.8
+      },
+      {
+        "date": "2026-10-13",
+        "yieldPct": 4.79
+      },
+      {
+        "date": "2026-10-14",
+        "yieldPct": 4.82
+      },
+      {
+        "date": "2026-10-15",
+        "yieldPct": 4.77
+      },
+      {
+        "date": "2026-10-16",
+        "yieldPct": 4.74
+      },
+      {
+        "date": "2026-10-19",
+        "yieldPct": 4.77
+      },
+      {
+        "date": "2026-10-20",
+        "yieldPct": 4.79
+      },
+      {
+        "date": "2026-10-21",
+        "yieldPct": 4.81
+      },
+      {
+        "date": "2026-10-22",
+        "yieldPct": 4.65
+      },
+      {
+        "date": "2026-10-23",
+        "yieldPct": 4.69
+      },
+      {
+        "date": "2026-10-26",
+        "yieldPct": 4.68
+      },
+      {
+        "date": "2026-10-27",
+        "yieldPct": 4.7
+      },
+      {
+        "date": "2026-10-28",
+        "yieldPct": 4.67
+      },
+      {
+        "date": "2026-10-29",
+        "yieldPct": 4.61
+      },
+      {
+        "date": "2026-10-30",
+        "yieldPct": 4.56
+      },
+      {
+        "date": "2026-11-02",
+        "yieldPct": 4.59
+      },
+      {
+        "date": "2026-11-03",
+        "yieldPct": 4.61
+      },
+      {
+        "date": "2026-11-04",
+        "yieldPct": 4.58
+      },
+      {
+        "date": "2026-11-05",
+        "yieldPct": 4.46
+      },
+      {
+        "date": "2026-11-06",
+        "yieldPct": 4.51
+      },
+      {
+        "date": "2026-11-09",
+        "yieldPct": 4.56
+      },
+      {
+        "date": "2026-11-10",
+        "yieldPct": 4.73
+      },
+      {
+        "date": "2026-11-12",
+        "yieldPct": 4.86
+      },
+      {
+        "date": "2026-11-13",
+        "yieldPct": 4.88
+      },
+      {
+        "date": "2026-11-16",
+        "yieldPct": 4.83
+      },
+      {
+        "date": "2026-11-17",
+        "yieldPct": 4.8
+      },
+      {
+        "date": "2026-11-18",
+        "yieldPct": 4.8
+      },
+      {
+        "date": "2026-11-19",
+        "yieldPct": 4.76
+      },
+      {
+        "date": "2026-11-20",
+        "yieldPct": 4.63
+      },
+      {
+        "date": "2026-11-23",
+        "yieldPct": 4.63
+      }
+    ],
+    "source": "Federal Reserve H.15 via FRED",
+    "series": "DGS2",
+    "method": "Daily 2-year Treasury constant maturity yield, percentage; differences in basis points."
   }
 }
