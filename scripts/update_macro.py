@@ -19,6 +19,12 @@ SERIES = {
     "fedLower": "DFEDTARL",
     "fedUpper": "DFEDTARU",
     "us02y": "DGS2",
+    "eurusd": "DEXUSEU",
+    "usdjpy": "DEXJPUS",
+    "gbpusd": "DEXUSUK",
+    "usdcad": "DEXCAUS",
+    "usdsek": "DEXSDUS",
+    "usdchf": "DEXSZUS",
 }
 
 def fetch_series(series, start):
@@ -133,26 +139,66 @@ def make_us02y(rows):
       "method":"Daily 2-year Treasury constant maturity yield, percentage; differences in basis points."
     }
 
+def make_dxy_indicative(fx_rows):
+    """ICE USDX basket formula applied to FRED daily H.10 exchange rates.
+    Indicative end-of-day reconstruction: not an official ICE spot quote.
+    """
+    points={name:dict(rows) for name,rows in fx_rows.items()}
+    shared=set.intersection(*(set(v) for v in points.values()))
+    history=[]
+    for day in sorted(shared):
+        v={name:rows[day] for name,rows in points.items()}
+        if any(x<=0 for x in v.values()):continue
+        dxy=50.14348112 * (v["eurusd"]**(-.576)) * (v["usdjpy"]**.136) * (
+            v["gbpusd"]**(-.119)) * (v["usdcad"]**.091) * (
+            v["usdsek"]**.042) * (v["usdchf"]**.036)
+        if math.isfinite(dxy) and 50<dxy<180:
+            history.append({"date":day.isoformat(),"value":round_two(dxy)})
+    if len(history)<25:raise ValueError("DXY cannot be reconstructed from sufficient common FX observations")
+    latest=history[-1]
+    age=(datetime.now(timezone.utc).date()-date.fromisoformat(latest["date"])).days
+    if age>18:raise ValueError("DXY FX rates too old: "+latest["date"])
+    return {
+      "asOf":latest["date"],
+      "value":latest["value"],
+      "oneDayPts":round_two(latest["value"]-history[-2]["value"]),
+      "fiveDayPts":round_two(latest["value"]-history[-6]["value"]),
+      "history":history[-65:],
+      "source":"Federal Reserve H.10 FX rates via FRED, ICE USDX index-weight formula",
+      "formula":"50.14348112 * EURUSD^-0.576 * USDJPY^0.136 * GBPUSD^-0.119 * USDCAD^0.091 * USDSEK^0.042 * USDCHF^0.036",
+      "type":"indicative_eod_reconstruction_not_ice_official_or_intraday",
+      "series":{"eurusd":"DEXUSEU","usdjpy":"DEXJPUS","gbpusd":"DEXUSUK",
+                "usdcad":"DEXCAUS","usdsek":"DEXSDUS","usdchf":"DEXSZUS"}
+    }
+
 def main():
     today=datetime.now(timezone.utc).date()
     cpi,url_cpi=fetch_series(SERIES["cpi"],date(today.year-5,1,1))
     low,url_low=fetch_series(SERIES["fedLower"],today-timedelta(days=1120))
     high,url_high=fetch_series(SERIES["fedUpper"],today-timedelta(days=1120))
     us02y,url_us02y=fetch_series(SERIES["us02y"],today-timedelta(days=180))
+    fx_rows={}
+    fx_urls=[]
+    for key in ("eurusd","usdjpy","gbpusd","usdcad","usdsek","usdchf"):
+        rows,url=fetch_series(SERIES[key],today-timedelta(days=235))
+        fx_rows[key]=rows
+        fx_urls.append(url)
     payload={
         "updatedAt":datetime.now(timezone.utc).isoformat(timespec="seconds"),
         "source":"FRED / U.S. Bureau of Labor Statistics / Federal Reserve",
-        "sourceUrls":[url_cpi,url_low,url_high,url_us02y],
+        "sourceUrls":[url_cpi,url_low,url_high,url_us02y,*fx_urls],
         "cpi":make_cpi(cpi),
         "fed":make_fed(low,high),
         "us02y":make_us02y(us02y),
+        "dxy":make_dxy_indicative(fx_rows),
     }
     OUTPUT.parent.mkdir(parents=True,exist_ok=True)
     OUTPUT.write_text(json.dumps(payload,ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
     print("ZAFA macro updated:",payload["cpi"]["asOf"],payload["cpi"]["yoy"],
           "Fed:",payload["fed"]["lower"],payload["fed"]["upper"],
           "changes:",len(payload["fed"]["changes2y"]),
-          "US02Y:",payload["us02y"]["yieldPct"],"change bp:",payload["us02y"]["dailyBp"])
+          "US02Y:",payload["us02y"]["yieldPct"],"change bp:",payload["us02y"]["dailyBp"],
+          "DXY indicative:",payload["dxy"]["value"],"date:",payload["dxy"]["asOf"])
 if __name__=="__main__":
     try:main()
     except Exception as exc:
