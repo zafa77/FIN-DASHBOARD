@@ -285,6 +285,33 @@ body .private-feed,body #contributie,body .nav a[href="#contributie"]{display:no
 @media(max-width:720px){
  .sector-momentum-table td[data-return] .momentum-cell{width:100%;max-width:100%;padding-inline:4px}
 }
+
+/* ZAFA three-horizon directional context; not an execution signal. */
+.zafa-bias-section{margin-top:22px}
+.bias-center-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.bias-state-card{min-width:0;display:flex;flex-direction:column}
+.bias-state-head{background:#142136;border-bottom:1px solid #2c3c51;padding:13px 15px;display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:6px 8px}
+.bias-state-head strong{font-size:13px;color:#e8f2fd}
+.bias-state-head small{font-size:10px;color:#8ba7c2;line-height:1.5}
+.bias-state-body{padding:15px;display:flex;flex-direction:column;gap:9px;flex:1}
+.bias-state-label{font-size:25px;line-height:1.12;font-weight:850;letter-spacing:-.5px;color:#c6d5e6}
+.bias-state-label[data-signal="bullish"]{color:#65e7ba}
+.bias-state-label[data-signal="bearish"]{color:#ff9ca6}
+.bias-state-label[data-signal="mixed"]{color:#e2bc82}
+.bias-state-label[data-signal="unavailable"],.bias-state-label[data-signal="preopen"],.bias-state-label[data-signal="stale"]{font-size:20px;color:#adbfd2}
+.bias-state-count{font-size:10px;color:#91b4d1}
+.bias-state-message{min-height:53px;font-size:12px;line-height:1.55;color:#d1e0ee;margin:2px 0}
+.bias-state-factors{list-style:none;margin:0 0 5px;padding:0;display:flex;flex-direction:column;gap:6px;font-size:11px;line-height:1.5;color:#a8bdd5;min-height:70px}
+.bias-state-factors li{position:relative;padding-left:14px}
+.bias-state-factors li::before{content:"•";position:absolute;left:1px;color:#91a9c2}
+.bias-state-factors li.bull::before{content:"+";color:#67dfb3}
+.bias-state-factors li.bear::before{content:"−";color:#ff9ca6}
+.bias-state-asof{font-size:10px;color:#90aabe;border-top:1px solid #2c4053;padding-top:11px;margin-top:auto;line-height:1.5}
+.bias-context-line{border:1px solid #32485d;border-radius:11px;background:#112032;color:#c9dbe9;padding:13px 16px;margin-top:14px;font-size:12px;line-height:1.55}
+.bias-center-note{font-size:10px;line-height:1.5;color:#879fb5;margin:9px 2px 0}
+@media(max-width:1150px){.bias-center-grid{grid-template-columns:1fr 1fr}.bias-state-card:last-child{grid-column:span 2}}
+@media(max-width:660px){.bias-center-grid{grid-template-columns:1fr}.bias-state-card:last-child{grid-column:auto}}
+
 </style>
 
 </head>
@@ -300,8 +327,50 @@ body .private-feed,body #contributie,body .nav a[href="#contributie"]{display:no
  {"symbols":[{"proName":"OANDA:SPX500USD","title":"US500 CFD · OANDA"},{"proName":"OANDA:NAS100USD","title":"NAS100 CFD · OANDA"},{"proName":"CAPITALCOM:VIX","title":"VIX CFD · Capital.com"}],"showSymbolLogo":true,"colorTheme":"dark","isTransparent":false,"displayMode":"adaptive","locale":"en"}
  </script></div>
 </div>
-<nav class="nav"><a href="#heatmap">01 · Sectoare</a><a href="#macro">02 · VIX & macro</a><a href="#cftc">03 · CFTC / COT</a><a href="#instalare">Setări</a></nav>
+<nav class="nav"><a href="#bias-center">Bias NQ</a><a href="#heatmap">01 · Sectoare</a><a href="#macro">02 · VIX & macro</a><a href="#cftc">03 · CFTC / COT</a><a href="#instalare">Setări</a></nav>
 
+
+
+<section class="section zafa-bias-section" id="bias-center" aria-label="Centrul de bias al pieței Nasdaq">
+ <div class="section-head">
+  <div><h2 class="section-title">ZAFA · Market Bias</h2><p class="section-sub">Context săptămânal, scenariu zilnic și confirmare NQ intraday · reguli explicabile</p></div>
+  <span class="tag" id="bias-center-updated">Se verifică datele...</span>
+ </div>
+ <div class="bias-center-grid">
+  <article class="card bias-state-card" id="bias-weekly-card">
+   <div class="bias-state-head"><strong>Weekly Bias</strong><small>CFTC · Breadth · VIX · Randamente</small></div>
+   <div class="bias-state-body">
+    <strong id="bias-weekly-label" class="bias-state-label" data-signal="pending">Se calculează</strong>
+    <span id="bias-weekly-count" class="bias-state-count">—</span>
+    <p id="bias-weekly-message" class="bias-state-message">Se corelează datele din ultimele ședințe.</p>
+    <ul id="bias-weekly-factors" class="bias-state-factors"></ul>
+    <span id="bias-weekly-asof" class="bias-state-asof">Context săptămânal · fără feed intraday</span>
+   </div>
+  </article>
+  <article class="card bias-state-card" id="bias-daily-card">
+   <div class="bias-state-head"><strong>Daily Bias</strong><small>Pregătire sesiune · 09:30 New York</small></div>
+   <div class="bias-state-body">
+    <strong id="bias-daily-label" class="bias-state-label" data-signal="pending">Se calculează</strong>
+    <span id="bias-daily-count" class="bias-state-count">—</span>
+    <p id="bias-daily-message" class="bias-state-message">Analiza datelor disponibile înainte de sesiune.</p>
+    <ul id="bias-daily-factors" class="bias-state-factors"></ul>
+    <span id="bias-daily-asof" class="bias-state-asof">Scenariu EOD · nu include premarket live</span>
+   </div>
+  </article>
+  <article class="card bias-state-card" id="bias-momentum-card">
+   <div class="bias-state-head"><strong>Momentum Bias</strong><small>NQ 5m · confirmare în sesiunea cash</small></div>
+   <div class="bias-state-body">
+    <strong id="bias-momentum-label" class="bias-state-label" data-signal="pending">Verificare feed</strong>
+    <span id="bias-momentum-count" class="bias-state-count">—</span>
+    <p id="bias-momentum-message" class="bias-state-message">Necesită observații NQ intraday recente.</p>
+    <ul id="bias-momentum-factors" class="bias-state-factors"></ul>
+    <span id="bias-momentum-asof" class="bias-state-asof">Yahoo CME întârziat · nu tick-by-tick</span>
+   </div>
+  </article>
+ </div>
+ <div class="bias-context-line" id="bias-context-line">Sinteza va apărea după validarea datelor.</div>
+ <p class="bias-center-note">Bias-ul este un filtru de context, nu semnal de intrare. Confirmările sunt reguli experimentale, nu probabilități verificate statistic. CFTC = poziții din raportul săptămânal; Market Breadth = închiderea precedentă; Momentum = NQ futures, feed de cercetare potențial întârziat. Fără date suficiente nu forțăm o direcție.</p>
+</section>
 
 <section class="section" id="heatmap">
  <div class="section-head">
@@ -1556,6 +1625,205 @@ setInterval(()=>{if(lastFetched&&Date.now()-lastFetched.getTime()>60*60*1000){do
  }
  loadBreadth();
  loadUS02Y();
+})();
+
+</script>
+<script>
+
+(function(){
+ "use strict";
+ const $=id=>document.getElementById(id);
+ const maxAge=(date,days)=>{
+   if(typeof date!=="string"||!/^\d{4}-\d{2}-\d{2}$/.test(date))return false;
+   const end=Date.parse(date+"T23:59:59Z");
+   const gap=Date.now()-end;
+   return Number.isFinite(end)&&gap>=-48*3600000&&gap<=days*86400000;
+ };
+ const v=(vote,name,detail,asOf,kind)=>({vote,name,detail,asOf,kind});
+ const clampVote=n=>n>0?1:n<0?-1:0;
+ const fmt=(n,d=1)=>Number(n).toLocaleString("ro-RO",{minimumFractionDigits:d,maximumFractionDigits:d});
+ const signed=(n,d=1)=>(n>0?"+":"")+fmt(n,d);
+ const fresh=(d,n)=>maxAge(d,n);
+ function signalsWeekly(data){
+  const out=[],b=data.breadth,m=data.macro,s=data.sectors,vix=data.vix,cot=data.cot;
+  if(b&&fresh(b.asOf,6)&&b.covered>=95&&b.covered/b.universeCount>=.95){
+   const average=(Number(b.above20Pct)+Number(b.above50Pct))/2;
+   const vote=average>=60?1:average<=42?-1:0;
+   out.push(v(vote,"Participare NDX",fmt(average,0)+"% peste MA20/MA50 (medie)",b.asOf,"breadth"));
+  }
+  if(s&&fresh(s.asOf,12)&&s.sectors?.XLK&&s.sectors?.XLC&&s.sectors?.XLY){
+   const sectorReturn=(2*s.sectors.XLK["1M"]+s.sectors.XLC["1M"]+s.sectors.XLY["1M"])/4;
+   out.push(v(sectorReturn>2?1:sectorReturn< -2?-1:0,"Lideri growth","XLK/XLC/XLY: "+signed(sectorReturn)+"% 1M (medie ponderată)",s.asOf,"sectors"));
+  }
+  if(m?.us02y&&fresh(m.us02y.asOf,9)){
+   const bp=m.us02y.fiveDayBp;
+   if(Number.isFinite(bp))out.push(v(bp<=-8?1:bp>=8?-1:0,"US02Y 5 ședințe",signed(bp,0)+" bp",m.us02y.asOf,"rates"));
+  }
+  if(m?.dxy&&fresh(m.dxy.asOf,12)){
+   const pts=m.dxy.fiveDayPts;
+   if(Number.isFinite(pts))out.push(v(pts<=-.4?1:pts>=.4?-1:0,"DXY 5 ședințe",signed(pts,2)+" puncte (indicativ, FRED)",m.dxy.asOf,"dxy"));
+  }
+  const vo=vix?.observations;
+  if(Array.isArray(vo)&&vo.length>=7&&fresh(vix.asOf,6)){
+   const dif=vo.at(-1).close-vo.at(-6).close;
+   out.push(v(dif<=-2?1:dif>=2?-1:0,"VIX 5 ședințe",signed(dif,2)+" puncte",vix.asOf,"vix"));
+  }
+  const rows=cot?.markets?.NQ?.observations;
+  if(Array.isArray(rows)&&rows.length>=2&&fresh(cot.asOf,15)){
+   const p=rows.at(-1).leveragedFunds.netPctOI-rows.at(-2).leveragedFunds.netPctOI;
+   out.push(v(p>=2?1:p<=-2?-1:0,"CFTC NQ · Leveraged Funds",signed(p,1)+" pp net/OI, poziții raportate",cot.asOf,"cot"));
+  }
+  return out;
+ }
+ function signalsDaily(data){
+  const out=[],b=data.breadth,m=data.macro,s=data.sectors,vix=data.vix;
+  if(b&&fresh(b.asOf,6)&&b.covered>=95&&b.covered/b.universeCount>=.95){
+   const ratio=100*b.advances/b.covered;
+   out.push(v(ratio>=60?1:ratio<=40?-1:0,"Nasdaq-100 A/D",b.advances+" ↑ / "+b.declines+" ↓ la ultima închidere",b.asOf,"breadth"));
+  }
+  if(s&&fresh(s.asOf,8)&&s.sectors?.XLK&&s.sectors?.XLC&&s.sectors?.XLY){
+   const r=(2*s.sectors.XLK["1D"]+s.sectors.XLC["1D"]+s.sectors.XLY["1D"])/4;
+   out.push(v(r>=1.25?1:r<=-1.25?-1:0,"Growth · ultima ședință",signed(r,1)+"% XLK/XLC/XLY (NAV EOD)",s.asOf,"sectors"));
+  }
+  if(m?.us02y&&fresh(m.us02y.asOf,9)){
+   const bp=m.us02y.dailyBp;
+   if(Number.isFinite(bp))out.push(v(bp<=-5?1:bp>=5?-1:0,"US02Y 1D",signed(bp,1)+" bp la ultima închidere",m.us02y.asOf,"rates"));
+  }
+  if(m?.dxy&&fresh(m.dxy.asOf,12)){
+   const pts=m.dxy.oneDayPts;
+   if(Number.isFinite(pts))out.push(v(pts<=-.25?1:pts>=.25?-1:0,"DXY 1D",signed(pts,2)+" puncte (indicativ, FRED)",m.dxy.asOf,"dxy"));
+  }
+  const rows=vix?.observations;
+  if(Array.isArray(rows)&&rows.length>=2&&fresh(vix.asOf,6)){
+   const change=rows.at(-1).close-rows.at(-2).close;
+   out.push(v(change<=-1.2?1:change>=1.2?-1:0,"VIX ultima ședință",signed(change,2)+" puncte",vix.asOf,"vix"));
+  }
+  return out;
+ }
+ function labelScore(signals,minValid=4){
+  const positive=signals.filter(x=>x.vote===1).length;
+  const negative=signals.filter(x=>x.vote===-1).length;
+  const neutral=signals.filter(x=>x.vote===0).length;
+  const valid=signals.length;
+  const code=valid<minValid?"unavailable":positive>=3&&positive-negative>=2?"bullish":negative>=3&&negative-positive>=2?"bearish":"mixed";
+  return {code,positive,negative,neutral,valid};
+ }
+ const labelMap={bullish:"BULLISH",bearish:"BEARISH",mixed:"NEUTRU",unavailable:"NECONFIRMAT",preopen:"PREOPEN",closed:"SESIUNE ÎNCHEIATĂ",stale:"FEED ÎNTÂRZIAT"};
+ const nyNow=(now=new Date())=>{
+   const parts=Object.fromEntries(new Intl.DateTimeFormat("en-US",{
+     timeZone:"America/New_York",year:"numeric",month:"2-digit",day:"2-digit",
+     hour:"2-digit",minute:"2-digit",hourCycle:"h23",weekday:"short"
+   }).formatToParts(now).filter(x=>x.type!=="literal").map(x=>[x.type,x.value]));
+   return {date:parts.year+"-"+parts.month+"-"+parts.day,
+           minutes:Number(parts.hour)*60+Number(parts.minute),
+           weekday:parts.weekday};
+ };
+ function momentumAssessment(snapshot,now=new Date()){
+  const ny=nyNow(now);
+  if(ny.weekday==="Sat"||ny.weekday==="Sun"||ny.minutes>=960)
+   return {code:"closed",signals:[],message:"Sesiunea cash NQ este închisă. Nu se prezintă bias intraday vechi drept semnal curent."};
+  if(ny.minutes<570)
+   return {code:"preopen",signals:[],message:"Așteptăm deschiderea cash la 09:30 New York. Contextul premarket nu este o confirmare intraday."};
+  if(ny.minutes<640)
+   return {code:"preopen",signals:[],message:"Se formează primele lumânări NQ 5m. Confirmarea începe numai după minimum 13 lumânări ale sesiunii."};
+  if(!snapshot || snapshot.status!=="active" || snapshot.sessionDate!==ny.date ||
+     snapshot.instrument!=="NQ futures continuous, Yahoo NQ=F" ||
+     !Array.isArray(snapshot.factors)||snapshot.factors.length!==4)
+    return {code:"unavailable",signals:[],message:"Nu există un set NQ intraday valid pentru sesiunea de astăzi. Nu calculăm un bias din widgeturi."};
+  const time=Date.parse(snapshot.dataAsOf);
+  const age=(now.getTime()-time)/60000;
+  if(!Number.isFinite(age)||age<0||age>45)
+    return {code:"stale",signals:[],message:"Ultima lumânare NQ are "+(Number.isFinite(age)?Math.round(age)+" minute":"dată invalidă")+". Date prea vechi pentru confirmarea momentului."};
+  const signs=snapshot.factors.map(f=>v(clampVote(f.vote),f.name,
+          typeof f.value==="number"?signed(f.value,3)+(f.unit||""):"ORB: "+f.value,
+          snapshot.dataAsOf.slice(0,10),f.key));
+  const summary=labelScore(signs,4);
+  return {...summary,signals:signs,
+   message:summary.code==="bullish"?"Impulsul NQ este confirmat de majoritatea condițiilor intraday.":
+           summary.code==="bearish"?"Presiunea descendentă NQ este confirmată de majoritatea condițiilor intraday.":
+           "Impulsul actual nu are suficiente confirmări în aceeași direcție.",
+   dataAsOf:snapshot.dataAsOf,ageMinutes:age};
+ }
+ const colorClass=n=>n>0?"bull":n<0?"bear":"";
+ function show(which,assessment,details){
+  const label=$("bias-"+which+"-label"),count=$("bias-"+which+"-count"),
+        message=$("bias-"+which+"-message"),ul=$("bias-"+which+"-factors"),asof=$("bias-"+which+"-asof");
+  if(!label)return;
+  label.dataset.signal=assessment.code;
+  label.textContent=labelMap[assessment.code]||"NECONFIRMAT";
+  count.textContent=assessment.valid===undefined?"Fără confirmare recentă":
+      assessment.positive+" pro · "+assessment.negative+" contra · "+assessment.neutral+" neutre / "+assessment.valid+" factori";
+  message.textContent=details.message || assessment.message || "Nu avem suficiente confirmări.";
+  ul.replaceChildren();
+  const signals=assessment.signals||[];
+  let ranked=[...signals].filter(x=>x.vote!==0);
+  if(assessment.code==="bullish"||assessment.code==="bearish"){
+   const sign=assessment.code==="bullish"?1:-1;
+   ranked.sort((a,b)=>(b.vote===sign)-(a.vote===sign));
+  }
+  if(!ranked.length)ranked=signals.slice(0,2);
+  for(const f of ranked.slice(0,3)){
+   const li=document.createElement("li");
+   li.className=colorClass(f.vote);
+   li.textContent=f.name+": "+f.detail;
+   ul.append(li);
+  }
+  asof.textContent=details.asof||"";
+ }
+ function horizon(which,signals){
+  const s=labelScore(signals);
+  s.signals=signals;
+  const data=signals.map(x=>x.asOf).filter(x=>x);
+  const earliest=data.length?[...data].sort()[0]:"—";
+  const last=data.length?[...data].sort().at(-1):"—";
+  const macro=which==="weekly";
+  const message=s.code==="unavailable"?"Sunt insuficiente surse recente pentru evaluare. Nu afișăm o direcție inventată.":
+       s.code==="mixed"?"Confirmările sunt slabe sau se contrazic. Nu există un avantaj direcțional clar.":
+       s.code==="bullish"?
+        (macro?"Contextul săptămânal este favorabil riscului, dar nu garantează un LONG.":"Scenariul de pregătire zilnică este pozitiv. Nu include premarketul live."):
+        (macro?"Contextul săptămânal indică prudență față de NQ.":"Scenariul de pregătire zilnică este negativ. Nu include premarketul live.");
+  show(which,s,{message,asof:(macro?"CFTC + EOD • ":"Date EOD • ")+earliest+" → "+last+
+      (macro?" • orientare săptămânală":" • 09:30 NY, nu date premarket")});
+  return s;
+ }
+ const formatNY=iso=>{
+  const date=new Date(iso);
+  return Number.isFinite(date.getTime())?new Intl.DateTimeFormat("ro-RO",{
+   timeZone:"America/New_York",month:"short",day:"2-digit",hour:"2-digit",minute:"2-digit",hour12:false
+  }).format(date)+" NY":"—";
+ };
+ async function fetchJSON(path){
+  try{const r=await fetch("./data/"+path+"?v="+Date.now(),{cache:"no-store"});
+      if(!r.ok)return null;return await r.json()}catch{return null}
+ }
+ async function refresh(){
+  const [breadth,macro,sectors,vix,cot,intraday]=await Promise.all([
+   fetchJSON("ndx_breadth.json"),fetchJSON("macro_indicators.json"),
+   fetchJSON("sector_performance.json"),fetchJSON("vix_30d.json"),
+   fetchJSON("cot_tff.json"),fetchJSON("nq_intraday_bias.json")
+  ]);
+  const data={breadth,macro,sectors,vix,cot};
+  const w=horizon("weekly",signalsWeekly(data));
+  const d=horizon("daily",signalsDaily(data));
+  const m=momentumAssessment(intraday);
+  show("momentum",m,{message:m.message,asof:m.dataAsOf?
+   "Ultima bară "+formatNY(m.dataAsOf)+" · întârziere observată ~"+Math.round(m.ageMinutes)+" min · Yahoo CME delayed":
+   "NQ 5m · feed de cercetare întârziat · nu există confirmare live"});
+  let summary="Weekly: "+(labelMap[w.code]||"NECONFIRMAT")+" · Daily: "+(labelMap[d.code]||"NECONFIRMAT")+" · Momentum: "+(labelMap[m.code]||"NECONFIRMAT")+". ";
+  if(w.code==="unavailable"||d.code==="unavailable")summary+="Datele incomplete împiedică o sinteză direcțională sigură.";
+  else if(w.code!==d.code&&["bullish","bearish"].includes(w.code)&&["bullish","bearish"].includes(d.code))
+   summary+="Daily contrazice Weekly: posibilă mișcare contra tendinței, nu schimbare confirmată de regim.";
+  else if(w.code===d.code&&["bullish","bearish"].includes(w.code))
+   summary+="Contextul săptămânal și cel zilnic concordă; execuția necesită confirmare intraday separată.";
+  else summary+="Semnalele de orizonturi diferite nu sunt aliniate. Nu forțăm o poziție.";
+  if(["bullish","bearish"].includes(m.code)&&m.code!==w.code&&["bullish","bearish"].includes(w.code))
+   summary+=" Impulsul NQ actual este contra contextului Weekly.";
+  $("bias-context-line").textContent=summary;
+  $("bias-center-updated").textContent="Analiză refăcută "+new Intl.DateTimeFormat("ro-RO",{hour:"2-digit",minute:"2-digit",timeZone:"Europe/Bucharest"}).format(new Date())+" RO";
+ }
+ window.ZafaBiasEngine={signalsWeekly,signalsDaily,labelScore,momentumAssessment};
+ refresh();
+ setInterval(refresh,5*60*1000);
 })();
 
 </script>

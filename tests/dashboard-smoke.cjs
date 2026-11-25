@@ -138,6 +138,49 @@ async function scenario(withKey) {
   assert.ok(doc.getElementById('macro-dxy-date').textContent.includes(macroFixture.dxy.asOf.slice(0,4)),
     'DXY last observation date disclosed');
   assert.equal(doc.querySelectorAll('#macro-indicators .macro-indicator-card').length,3,'Exactly three compact macro cards');
+
+  await until(()=>doc.getElementById('bias-weekly-label').dataset.signal!=='pending','weekly bias calculated');
+  await until(()=>doc.getElementById('bias-daily-label').dataset.signal!=='pending','daily bias calculated');
+  await until(()=>doc.getElementById('bias-momentum-label').dataset.signal!=='pending','momentum availability state');
+  const evaluator=dom.window.ZafaBiasEngine;
+  assert.ok(evaluator,'Bias engine exposed for deterministic logic verification');
+  const allData={breadth:breadthFixture,macro:macroFixture,sectors:sectorMomentumMock,vix,cot};
+  const weekly=evaluator.labelScore(evaluator.signalsWeekly(allData));
+  const daily=evaluator.labelScore(evaluator.signalsDaily(allData));
+  assert.equal(doc.getElementById('bias-weekly-label').dataset.signal,weekly.code,'Weekly direction computed from actual EOD factors');
+  assert.equal(doc.getElementById('bias-daily-label').dataset.signal,daily.code,'Daily direction computed from actual EOD factors');
+  assert.ok(weekly.valid>=4 && daily.valid>=4,'At least four actual inputs required for contextual bias');
+  assert.ok(doc.getElementById('bias-context-line').textContent.includes('Weekly:'),
+    'Joint textual weekly/daily/momentum interpretation shown');
+  assert.ok(doc.getElementById('bias-weekly-count').textContent.includes('factori'),
+    'Explainable votes shown, not arbitrary confidence percentages');
+  assert.ok(doc.getElementById('bias-weekly-asof').textContent.includes('CFTC'),
+    'Weekly factors timestamp and CFTC provenance shown');
+  assert.ok(doc.getElementById('bias-daily-asof').textContent.includes('nu date premarket'),
+    'Daily score does not falsely claim premarket activity');
+  const missing=evaluator.labelScore([]);
+  assert.equal(missing.code,'unavailable','Missing inputs never produce bullish/bearish guesses');
+  const fakeMomentum={
+    status:'active',instrument:'NQ futures continuous, Yahoo NQ=F',
+    sessionDate:'2026-11-25',dataAsOf:'2026-11-25T15:45:00+00:00',
+    factors:[
+      {key:'vwap',name:'VWAP',value:0.2,unit:'%',vote:1},
+      {key:'ema',name:'EMA',value:0.3,unit:'%',vote:1},
+      {key:'return30m',name:'30m',value:0.4,unit:'%',vote:1},
+      {key:'openingRange',name:'ORB',value:'inside',unit:'',vote:0}
+    ]
+  };
+  assert.equal(evaluator.momentumAssessment(fakeMomentum,new Date('2026-11-25T16:00:00Z')).code,'bullish',
+    'Three same-direction intraday confirmations produce bullish signal');
+  assert.equal(evaluator.momentumAssessment({...fakeMomentum,factors:fakeMomentum.factors.map(f=>({...f,vote:-f.vote}))},
+    new Date('2026-11-25T16:00:00Z')).code,'bearish','Inverse confirmations produce bearish signal');
+  assert.equal(evaluator.momentumAssessment(fakeMomentum,new Date('2026-11-25T17:00:00Z')).code,'stale',
+    'Bars older than 45 minutes must not produce directional momentum');
+  assert.equal(evaluator.momentumAssessment(fakeMomentum,new Date('2026-11-25T13:30:00Z')).code,'preopen',
+    'Momentum does not falsely treat overnight futures as NY cash-session confirmation');
+  assert.equal(evaluator.momentumAssessment(null,new Date('2026-11-25T16:00:00Z')).code,'unavailable',
+    'No intraday feed means no directional current-momentum bias');
+
   await until(()=>doc.getElementById('breadth-advances').textContent===String(breadthFixture.advances),'NDX market breadth');
   assert.equal(doc.getElementById('breadth-declines').textContent,String(breadthFixture.declines),'NDX declines');
   assert.equal(doc.getElementById('breadth-ma20').textContent,breadthFixture.above20Pct.toLocaleString('ro-RO',{minimumFractionDigits:1,maximumFractionDigits:1})+'%','Nasdaq MA20 breadth');
