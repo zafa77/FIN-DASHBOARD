@@ -1,13 +1,9 @@
 {
   "source": "Cboe VIX daily historical close",
   "sourceUrl": "https://cdn-api.cboe.com/api/global/us_indices/daily_prices/VIX_History.csv",
-  "updatedAt": "2026-11-24T20:41:44+00:00",
-  "asOf": "2026-11-23",
+  "updatedAt": "2026-11-25T05:00:00+00:00",
+  "asOf": "2026-11-24",
   "observations": [
-    {
-      "date": "2026-07-21",
-      "close": 17.05
-    },
     {
       "date": "2026-07-22",
       "close": 16.64
@@ -363,6 +359,10 @@
     {
       "date": "2026-11-23",
       "close": 26.62
+    },
+    {
+      "date": "2026-11-24",
+      "close": 26.36
     }
   ]
 }
