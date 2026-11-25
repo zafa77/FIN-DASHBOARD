@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-25T12:46:21+00:00",
+  "updatedAt": "2026-11-25T23:47:41+00:00",
   "source": "FRED / U.S. Bureau of Labor Statistics / Federal Reserve",
   "sourceUrls": [
     "https://fred.stlouisfed.org/graph/fredgraph.csv?id=CPIAUCNS&cosd=2021-01-01",
@@ -121,7 +121,7 @@
     ]
   },
   "fed": {
-    "asOf": "2026-11-24",
+    "asOf": "2026-11-25",
     "lower": 3.75,
     "upper": 4.0,
     "deltaUpper12mPp": 0.0,
@@ -157,7 +157,7 @@
         "upper": 4.0
       },
       {
-        "date": "2026-11-24",
+        "date": "2026-11-25",
         "lower": 3.75,
         "upper": 4.0
       }
@@ -175,16 +175,12 @@
     "method": "Federal funds target range, not the effective federal funds rate"
   },
   "us02y": {
-    "asOf": "2026-11-23",
+    "asOf": "2026-11-24",
     "yieldPct": 4.63,
     "dailyBp": 0.0,
-    "fiveDayBp": -20.0,
-    "previousDate": "2026-11-20",
+    "fiveDayBp": -17.0,
+    "previousDate": "2026-11-23",
     "history": [
-      {
-        "date": "2026-09-11",
-        "yieldPct": 4.63
-      },
       {
         "date": "2026-09-14",
         "yieldPct": 4.65
@@ -379,6 +375,10 @@
       },
       {
         "date": "2026-11-23",
+        "yieldPct": 4.63
+      },
+      {
+        "date": "2026-11-24",
         "yieldPct": 4.63
       }
     ],
