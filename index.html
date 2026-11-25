@@ -255,6 +255,36 @@ body .private-feed,body #contributie,body .nav a[href="#contributie"]{display:no
 @media(max-width:850px){.bias-inputs-grid{grid-template-columns:1fr}}
 @media(max-width:450px){.bias-yield-metrics strong{font-size:15px}.bias-breadth-averages strong{font-size:20px}}
 
+
+/* Native indicators without blocked external TradingView iframes. */
+.macro-indicators-grid .macro-indicator-card:last-child{min-width:0}
+.us02y-native-chart{height:134px;border:1px solid #2b4158;background:#101c2c;border-radius:10px;padding:3px 9px}
+.us02y-native-chart svg{height:100%;width:100%;display:block}
+.sector-momentum-table th:nth-child(3),
+.sector-momentum-table th:nth-child(4),
+.sector-momentum-table th:nth-child(5),
+.sector-momentum-table td:nth-child(3),
+.sector-momentum-table td:nth-child(4),
+.sector-momentum-table td:nth-child(5){
+  text-align:center!important;
+  vertical-align:middle;
+}
+.sector-momentum-table td[data-return]{padding-inline:9px!important}
+.sector-momentum-table td[data-return] .momentum-cell{
+  width:min(100%,164px);
+  max-width:164px;
+  min-width:0!important;
+  min-height:37px;
+  margin-inline:auto!important;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+}
+.sector-momentum-table td[data-direction]{text-align:center!important}
+@media(max-width:720px){
+ .sector-momentum-table td[data-return] .momentum-cell{width:100%;max-width:100%;padding-inline:4px}
+}
 </style>
 
 </head>
@@ -554,8 +584,8 @@ body .private-feed,body #contributie,body .nav a[href="#contributie"]{display:no
  </div>
 
  <div class="macro-indicators-head">
-   <div><h3>CPI · Fed Funds · DXY</h3><p>Tendințe macro SUA · două serii oficiale și un indicator de piață</p></div>
-   <span class="macro-indicators-source">FRED / BLS / Fed · TradingView</span>
+   <div><h3>CPI · Fed Funds · DXY</h3><p>Tendințe macro SUA · istorice FRED și formula ICE pentru coșul dolarului</p></div>
+   <span class="macro-indicators-source">FRED / BLS / Fed · ICE (metodologie)</span>
  </div>
  <div class="macro-indicators-grid" id="macro-indicators">
    <article class="card macro-indicator-card">
@@ -581,25 +611,14 @@ body .private-feed,body #contributie,body .nav a[href="#contributie"]{display:no
      </div>
    </article>
    <article class="card macro-indicator-card">
-     <div class="macro-indicator-top"><strong>DXY · US Dollar Index</strong><span>CFD TradingView</span></div>
+     <div class="macro-indicator-top"><strong>DXY · Dollar Index estimativ</strong><span>Formula ICE · cursuri FRED</span></div>
      <div class="macro-indicator-body">
-       <div class="macro-dxy-quote">
-        <div class="tradingview-widget-container" style="width:100%;height:100%">
-         <div class="tradingview-widget-container__widget"></div>
-         <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-single-quote.js" async>
-         {"symbol":"TVC:DXY","width":"100%","colorTheme":"dark","isTransparent":true,"locale":"en"}
-         </script>
-        </div>
+       <div id="macro-dxy-value" class="macro-indicator-main">—</div>
+       <div id="macro-dxy-delta" class="macro-indicator-change">Se verifică cursurile valutare...</div>
+       <div class="macro-indicator-chart">
+         <svg id="macro-dxy-chart" viewBox="0 0 360 130" role="img" aria-label="Evoluția zilnică a unui DXY estimativ pe baza coșului ICE și a cursurilor Fed" preserveAspectRatio="xMidYMid meet"></svg>
        </div>
-       <div class="macro-dxy-mini">
-         <div class="tradingview-widget-container" style="width:100%;height:100%">
-          <div class="tradingview-widget-container__widget"></div>
-          <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js" async>
-          {"symbol":"TVC:DXY","width":"100%","height":"100%","locale":"en","dateRange":"1M","colorTheme":"dark","isTransparent":true,"autosize":true,"chartOnly":true,"noTimeScale":true}
-          </script>
-         </div>
-       </div>
-       <div class="macro-indicator-footer">Cotație intraday CFD · <a href="https://www.tradingview.com/symbols/TVC-DXY/" target="_blank" rel="noopener">Detalii DXY ↗</a></div>
+       <div id="macro-dxy-date" class="macro-indicator-footer">Estimare după formula ICE · ultima dată disponibilă, nu intraday</div>
      </div>
    </article>
  </div>
@@ -626,24 +645,19 @@ body .private-feed,body #contributie,body .nav a[href="#contributie"]{display:no
   <div class="card us02y-card">
    <div class="card-h"><strong>US02Y · Treasury Yield 2 ani</strong><span>Intraday / istoric oficial</span></div>
    <div class="bias-input-content">
-    <div class="us02y-live">
-     <div class="tradingview-widget-container" style="height:100%;width:100%">
-      <div class="tradingview-widget-container__widget"></div>
-      <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-single-quote.js" async>
-      {"symbol":"TVC:US02Y","width":"100%","colorTheme":"dark","isTransparent":true,"locale":"en"}
-      </script>
-     </div>
+    <div class="us02y-native-chart">
+       <svg id="us02y-chart" viewBox="0 0 560 132" role="img" aria-label="Evoluția zilnică a randamentului obligațiunilor de stat SUA pe doi ani" preserveAspectRatio="xMidYMid meet"></svg>
     </div>
     <div class="bias-yield-metrics">
      <div><small>Ultimul randament oficial</small><strong id="us02y-official">—</strong></div>
      <div><small>Δ ultima ședință</small><strong id="us02y-1d">—</strong></div>
      <div><small>Δ 5 ședințe</small><strong id="us02y-5d">—</strong></div>
     </div>
-    <p class="bias-input-fine" id="us02y-asof">FRED DGS2: ultima închidere publicată; cotația TradingView poate avea întârziere</p>
+    <p class="bias-input-fine" id="us02y-asof">FRED DGS2 · valori oficiale zilnice, nu intraday</p>
    </div>
   </div>
  </div>
-<div class="macro-data-footnote">CPI este variația anuală a indicelui headline neajustat sezonier; Fed Funds reprezintă intervalul-țintă, nu rata efectivă. DXY este o referință CFD, care poate diferi de indicele ICE și poate avea latență. Datele oficiale se publică periodic, nu în timp real.</div>
+<div class="macro-data-footnote">CPI este variația anuală a indicelui headline neajustat sezonier; Fed Funds reprezintă intervalul-țintă, nu rata efectivă. DXY este o reconstrucție orientativă din cele 6 cursuri valutare FRED și formula ICE; nu reprezintă cotația oficială ICE sau un feed intraday. Datele oficiale se publică periodic, nu în timp real.</div>
 </section>
 <section class="section" id="contributie">
  <div class="section-head"><div><h2 class="section-title">04 / Contribuție sectorială SPX</h2><p class="section-sub">Ponderi sectoriale S&P 500 și randamente ETF. Contribuția este estimată pentru indicele SPX și nu reprezintă exact variația cotației publicate.</p></div><a class="source" target="_blank" rel="noopener" href="https://www.spglobal.com/spdji/en/indices/equity/sp-500/">Structura SPX · S&P DJI ↗</a></div>
@@ -1438,6 +1452,19 @@ setInterval(()=>{if(lastFetched&&Date.now()-lastFetched.getTime()>60*60*1000){do
      $("macro-fed-delta").textContent=(Number.isFinite(fedDiff)?((fedDiff>0?"+":"")+fmt(fedDiff)+" pp vs acum 12 luni · "):"")+"Ultima modificare: "+shortDate(f.lastPolicyChange);
      $("macro-fed-date").textContent="Interval-țintă Fed · la "+shortDate(f.asOf)+" · FRED";
      drawChart("macro-fed-chart",f.changes2y,{range:true});
+     const d=data.dxy;
+     if(d&&Array.isArray(d.history)&&d.history.length>=10&&Number.isFinite(Number(d.value))&&/^\d{4}-\d{2}-\d{2}$/.test(d.asOf)){
+       $("macro-dxy-value").textContent=fmt(d.value);
+       const change=$("macro-dxy-delta");
+       const diff=Number(d.oneDayPts),five=Number(d.fiveDayPts);
+       change.textContent="1D "+(diff>0?"+":"")+fmt(diff)+" pt · 5D "+(five>0?"+":"")+fmt(five)+" pt";
+       change.classList.toggle("up",diff>0);
+       change.classList.toggle("down",diff<0);
+       drawChart("macro-dxy-chart",d.history.map(x=>({date:x.date,yoy:Number(x.value)})));
+       $("macro-dxy-date").textContent="DXY indicativ · ultima dată "+shortDate(d.asOf)+" · FRED H.10 / formula ICE · nu intraday";
+     }else{
+       $("macro-dxy-delta").textContent="Cursurile FRED necesare estimării DXY nu sunt încă disponibile";
+     }
    }catch(err){
      $("macro-cpi-delta").textContent="Date CPI indisponibile; verifică actualizarea FRED";
      $("macro-fed-delta").textContent="Date Fed indisponibile; verifică actualizarea FRED";
@@ -1490,6 +1517,31 @@ setInterval(()=>{if(lastFetched&&Date.now()-lastFetched.getTime()>60*60*1000){do
    const j=await response.json(),x=j.us02y;
    if(!x||!Number.isFinite(Number(x.yieldPct))||!Number.isFinite(Number(x.dailyBp))||!Number.isFinite(Number(x.fiveDayBp))||!x.asOf)throw Error("DGS2 invalid");
    $("us02y-official").textContent=decimal(x.yieldPct,2)+"%";
+
+   if(Array.isArray(x.history)&&x.history.length>3){
+    const svg=$("us02y-chart"),NS="http://www.w3.org/2000/svg";
+    svg.replaceChildren();
+    const rows=x.history.filter(r=>Number.isFinite(Number(r.yieldPct))&&/^\d{4}-\d{2}-\d{2}$/.test(r.date));
+    if(rows.length>=4){
+     const vals=rows.map(r=>Number(r.yieldPct)),minV=Math.min(...vals),maxV=Math.max(...vals);
+     const spread=Math.max(.05,maxV-minV),low=minV-spread*.15,high=maxV+spread*.15;
+     const X=i=>22+i/(rows.length-1)*500;
+     const Y=v=>110-(v-low)/(high-low)*88;
+     const add=(tag,attrs,body)=>{
+      const node=document.createElementNS(NS,tag);
+      for(const [k,val] of Object.entries(attrs))node.setAttribute(k,String(val));
+      if(body!==undefined)node.textContent=body;
+      svg.append(node);return node;
+     };
+     for(let g=0;g<3;g++){const y=22+g*44;add("line",{x1:22,y1:y,x2:522,y2:y,stroke:"#35506c","stroke-width":1,opacity:.6})}
+     const path=rows.map((r,i)=>(i?"L ":"M ")+X(i).toFixed(1)+" "+Y(Number(r.yieldPct)).toFixed(1)).join(" ");
+     add("path",{d:path,stroke:"#7bbafb","stroke-width":3,fill:"none","stroke-linecap":"round","stroke-linejoin":"round"});
+     add("circle",{cx:X(rows.length-1),cy:Y(vals.at(-1)),r:4,fill:"#a8d4ff"});
+     add("text",{x:22,y:128,fill:"#98b4cc","font-size":10},rows[0].date.slice(5));
+     add("text",{x:522,y:128,fill:"#98b4cc","font-size":10,"text-anchor":"end"},rows.at(-1).date.slice(5));
+     add("text",{x:520,y:18,fill:"#b6d8fb","font-size":11,"text-anchor":"end"},decimal(vals.at(-1),2)+"%");
+    }
+   }
    $("us02y-1d").textContent=bp(x.dailyBp);
    $("us02y-5d").textContent=bp(x.fiveDayBp);
    for(const [id,v] of [["us02y-1d",x.dailyBp],["us02y-5d",x.fiveDayBp]]){
@@ -1497,7 +1549,7 @@ setInterval(()=>{if(lastFetched&&Date.now()-lastFetched.getTime()>60*60*1000){do
     $(id).classList.toggle("bp-down",v<0);
    }
    $("us02y-asof").textContent=(checkFresh(x.asOf,10)?"":"⚠ Serie oficială veche · ")+
-      "FRED DGS2 · închidere "+x.asOf+" · bp = puncte de bază. Cotația TradingView este separată.";
+      "FRED DGS2 · ultimul randament publicat "+x.asOf+" · bp = puncte de bază · nu intraday.";
   }catch(error){
    $("us02y-asof").textContent="Seria FRED US02Y indisponibilă; verifică actualizarea.";
   }

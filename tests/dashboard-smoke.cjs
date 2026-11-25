@@ -129,10 +129,14 @@ async function scenario(withKey) {
     macroFixture.fed.upper.toLocaleString('ro-RO',{minimumFractionDigits:2,maximumFractionDigits:2})),
     'Fed target range upper bound displayed');
   assert.ok(doc.querySelectorAll('#macro-fed-chart path').length>=2,'Fed history step chart displayed');
-  const dxyWidgets=[...doc.querySelectorAll('#macro-indicators script[src*="external-embedding/embed-widget-"]')].filter(s=>{
-    try{return JSON.parse(s.textContent).symbol==='TVC:DXY'}catch(e){return false}
-  });
-  assert.equal(dxyWidgets.length,2,'DXY quote plus miniature history widget');
+  assert.equal(doc.querySelectorAll('#macro-indicators script[src*="external-embedding/"]').length,0,
+    'Restricted DXY TradingView iframes removed');
+  await until(()=>doc.querySelectorAll('#macro-dxy-chart path').length===2,'Native DXY chart from FRED basket');
+  assert.equal(doc.getElementById('macro-dxy-value').textContent,
+    macroFixture.dxy.value.toLocaleString('ro-RO',{minimumFractionDigits:2,maximumFractionDigits:2}),
+    'Indicative daily DXY displays calculated FRED/ICE basket value');
+  assert.ok(doc.getElementById('macro-dxy-date').textContent.includes(macroFixture.dxy.asOf.slice(0,4)),
+    'DXY last observation date disclosed');
   assert.equal(doc.querySelectorAll('#macro-indicators .macro-indicator-card').length,3,'Exactly three compact macro cards');
   await until(()=>doc.getElementById('breadth-advances').textContent===String(breadthFixture.advances),'NDX market breadth');
   assert.equal(doc.getElementById('breadth-declines').textContent,String(breadthFixture.declines),'NDX declines');
@@ -143,8 +147,16 @@ async function scenario(withKey) {
   await until(()=>doc.getElementById('us02y-official').textContent!=='—','Official US02Y value');
   assert.equal(doc.getElementById('us02y-official').textContent,macroFixture.us02y.yieldPct.toLocaleString('ro-RO',{minimumFractionDigits:2,maximumFractionDigits:2})+'%','FRED US02Y official value');
   assert.equal(doc.getElementById('us02y-5d').textContent,macroFixture.us02y.fiveDayBp.toLocaleString('ro-RO',{minimumFractionDigits:1,maximumFractionDigits:1})+' bp','5-day bp variation');
-  const us02yTV=doc.querySelector('#bias-inputs script[src*="embed-widget-single-quote"]');
-  assert.equal(JSON.parse(us02yTV.textContent).symbol,'TVC:US02Y','Live US02Y widget configured');
+  assert.equal(doc.querySelectorAll('#bias-inputs script[src*="embed-widget-single-quote"]').length,0,
+    'Restricted US02Y iframe removed');
+  await until(()=>doc.querySelectorAll('#us02y-chart path').length===1,'Native FRED US02Y line chart');
+  assert.ok(doc.getElementById('us02y-asof').textContent.includes('nu intraday'),
+    'Native official yield data clearly labeled non-intraday');
+  for(const key of [3,4,5]){
+    assert.ok(doc.querySelector('#sector-momentum .sector-momentum-table th:nth-child('+key+')'),
+      'Momentum header '+key+' remains for aligned data');
+  }
+  assert.ok(html.includes('td[data-return] .momentum-cell'),'Shared centered alignment for 2W / 1M badges');
   assert.equal(doc.querySelectorAll('#bias-inputs .card').length,2,'Compact two-card bias inputs');
 
 
