@@ -33,4 +33,16 @@ jobs:
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git commit -m 'data: update Nasdaq-100 daily EOD breadth'
-          git push
+          # Other daily jobs (FRED/CFTC) may commit between checkout and publish.
+          # The files are independent: rebase and retry rather than reject an EOD update.
+          for attempt in 1 2 3 4 5; do
+            git fetch origin main
+            git rebase origin/main
+            if git push origin HEAD:main; then
+              echo "Published latest validated breadth"
+              exit 0
+            fi
+            sleep 3
+          done
+          echo "Unable to publish breadth after retries"
+          exit 1
