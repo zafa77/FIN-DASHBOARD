@@ -18,6 +18,7 @@ SERIES = {
     "cpi": "CPIAUCNS",
     "fedLower": "DFEDTARL",
     "fedUpper": "DFEDTARU",
+    "us02y": "DGS2",
 }
 
 def fetch_series(series, start):
@@ -112,23 +113,46 @@ def make_fed(lower_rows,upper_rows):
         "method":"Federal funds target range, not the effective federal funds rate",
     }
 
+def make_us02y(rows):
+    today=datetime.now(timezone.utc).date()
+    if len(rows)<8:raise ValueError("Too few US02Y observations")
+    latest=rows[-1]
+    if (today-latest[0]).days>10:raise ValueError("US02Y FRED series is stale")
+    if latest[1]>25:raise ValueError("Unexpected treasury yield")
+    daily_bp=round((latest[1]-rows[-2][1])*100,1)
+    five_bp=round((latest[1]-rows[-6][1])*100,1)
+    return {
+      "asOf":latest[0].isoformat(),
+      "yieldPct":round_two(latest[1]),
+      "dailyBp":daily_bp,
+      "fiveDayBp":five_bp,
+      "previousDate":rows[-2][0].isoformat(),
+      "history":[{"date":day.isoformat(),"yieldPct":round_two(value)} for day,value in rows[-50:]],
+      "source":"Federal Reserve H.15 via FRED",
+      "series":"DGS2",
+      "method":"Daily 2-year Treasury constant maturity yield, percentage; differences in basis points."
+    }
+
 def main():
     today=datetime.now(timezone.utc).date()
     cpi,url_cpi=fetch_series(SERIES["cpi"],date(today.year-5,1,1))
     low,url_low=fetch_series(SERIES["fedLower"],today-timedelta(days=1120))
     high,url_high=fetch_series(SERIES["fedUpper"],today-timedelta(days=1120))
+    us02y,url_us02y=fetch_series(SERIES["us02y"],today-timedelta(days=180))
     payload={
         "updatedAt":datetime.now(timezone.utc).isoformat(timespec="seconds"),
         "source":"FRED / U.S. Bureau of Labor Statistics / Federal Reserve",
-        "sourceUrls":[url_cpi,url_low,url_high],
+        "sourceUrls":[url_cpi,url_low,url_high,url_us02y],
         "cpi":make_cpi(cpi),
         "fed":make_fed(low,high),
+        "us02y":make_us02y(us02y),
     }
     OUTPUT.parent.mkdir(parents=True,exist_ok=True)
     OUTPUT.write_text(json.dumps(payload,ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
     print("ZAFA macro updated:",payload["cpi"]["asOf"],payload["cpi"]["yoy"],
           "Fed:",payload["fed"]["lower"],payload["fed"]["upper"],
-          "changes:",len(payload["fed"]["changes2y"]))
+          "changes:",len(payload["fed"]["changes2y"]),
+          "US02Y:",payload["us02y"]["yieldPct"],"change bp:",payload["us02y"]["dailyBp"])
 if __name__=="__main__":
     try:main()
     except Exception as exc:
