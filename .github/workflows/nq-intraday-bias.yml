@@ -1,0 +1,44 @@
+name: ZAFA - NQ intraday research bias
+on:
+  push:
+    paths:
+      - 'scripts/update_nq_intraday_bias.py'
+      - '.github/workflows/nq-intraday-bias.yml'
+  workflow_dispatch:
+  schedule:
+    - cron: '*/15 13-22 * * 1-5'
+permissions:
+  contents: write
+jobs:
+  update-nq:
+    runs-on: ubuntu-latest
+    timeout-minutes: 9
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install intraday research data client
+        run: python -m pip install 'pandas>=2.2,<3' 'yfinance>=0.2.55'
+      - name: Compute NQ 5-minute momentum after NY open (no unlicensed live claims)
+        run: python scripts/update_nq_intraday_bias.py
+      - name: Publish only when there is a new completed five-minute bar
+        run: |
+          git add data/nq_intraday_bias.json
+          if git diff --cached --quiet; then
+            echo "No new intraday signal"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m 'data: update NQ delayed intraday bias snapshot'
+          for attempt in 1 2 3 4; do
+            git fetch origin main
+            git rebase origin/main
+            if git push origin HEAD:main; then
+              exit 0
+            fi
+            sleep 3
+          done
+          echo "NQ research snapshot push failed after retries"
+          exit 1
