@@ -1,6 +1,6 @@
 {
-  "asOf": "2026-11-24",
-  "generatedAt": "2026-11-25T12:17:45+00:00",
+  "asOf": "2026-11-25",
+  "generatedAt": "2026-11-26T04:18:16+00:00",
   "source": "Nasdaq-100 component list: Wikipedia; adjusted EOD closes: Yahoo Finance research feed",
   "sources": [
     "https://en.wikipedia.org/wiki/List_of_NASDAQ-100_companies",
@@ -11,11 +11,11 @@
   "universeCount": 101,
   "covered": 100,
   "coveragePct": 99.0,
-  "advances": 53,
-  "declines": 47,
+  "advances": 58,
+  "declines": 42,
   "unchanged": 0,
-  "above20": 37,
-  "above50": 42,
-  "above20Pct": 37.0,
-  "above50Pct": 42.0
+  "above20": 38,
+  "above50": 43,
+  "above20Pct": 38.0,
+  "above50Pct": 43.0
 }
