@@ -2,7 +2,7 @@
   "source": "State Street — SPY daily holdings (SPX proxy)",
   "sourceUrl": "https://www.ssga.com/us/en/intermediary/etfs/state-street-spdr-sp-500-etf-trust-spy",
   "asOf": "2026-11-24",
-  "fetchedAt": "2026-11-25T19:57:35+00:00",
+  "fetchedAt": "2026-11-26T04:19:35+00:00",
   "weights": {
     "XLB": 1.75,
     "XLC": 8.9,
