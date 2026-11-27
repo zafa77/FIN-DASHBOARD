@@ -14,7 +14,7 @@
     "https://www.ssga.com/us/en/intermediary/library-content/products/fund-data/etfs/us/navhist-us-en-xly.xlsx"
   ],
   "asOf": "2026-11-24",
-  "updatedAt": "2026-11-26T19:47:10+00:00",
+  "updatedAt": "2026-11-27T05:01:59+00:00",
   "method": "NAV change, not dividend-adjusted total return or real-time ETF price",
   "windowDates": {
     "previous": "preceding trading close",
