@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-26T02:26:07+00:00",
+  "updatedAt": "2026-11-27T00:00:02+00:00",
   "source": "FRED / U.S. Bureau of Labor Statistics / Federal Reserve",
   "sourceUrls": [
     "https://fred.stlouisfed.org/graph/fredgraph.csv?id=CPIAUCNS&cosd=2021-01-01",
@@ -121,7 +121,7 @@
     ]
   },
   "fed": {
-    "asOf": "2026-11-25",
+    "asOf": "2026-11-26",
     "lower": 3.75,
     "upper": 4.0,
     "deltaUpper12mPp": 0.0,
@@ -157,7 +157,7 @@
         "upper": 4.0
       },
       {
-        "date": "2026-11-25",
+        "date": "2026-11-26",
         "lower": 3.75,
         "upper": 4.0
       }
